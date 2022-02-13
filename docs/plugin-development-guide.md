@@ -34,6 +34,8 @@ The file need to provide this information:
 - Reference resource list
 - Known issues / Caveats
 
+## Definition
+
 ## Registration
 
 Import your plugin definition at: `packages/mask/src/plugin-infra/register.ts`.
@@ -44,12 +46,39 @@ Plugins defined at `packages/plugins/*` and compatible with the isolated dashboa
 
 ## Plugin APIs
 
-- Plugin definition: `packages/plugin-infra/src/types.ts`
+### Database
+
+### Messages
+
+### RPCs
+
+### Metadata
+
+Metadata is JSON compatible data that's can be inserted into a post.
+
+The most common use case of the metadata is the following.
+
+Add a new entry in the composition dialogue, therefore,
+the user can interact with your plugin. When it's finished,
+you can insert your metadata into the post and it will be contained in the encrypted payload.
+When you see metadata in the post payload,
+you should render some UI to reveal the information in the metadata and allow the user to interact with it.
+
+Notice please treat the metadata you received as non trustable data,
+make sure you have validated the formats and the data range.
+We provided a utility to read the data from the post and validate it with JSON schema.
+
+<!-- - Plugin definition: `packages/plugin-infra/src/types.ts`
 - Database: `context.getDatabaseStorage()` (2nd parameter of the `init` method of your `Worker` definition). See example in `packages/plugins/example/src/Worker/index.ts`.
 - Message emitter: `createPluginMessage` in `packages/plugin-infra/src/utils/message.ts`
 - RPC: `createPluginRPC` in `packages/plugin-infra/src/utils/rpc.ts`
 - Metadata reader: `createTypedMessageMetadataReader` in `packages/mask/src/protocols/typed-message/metadata.ts`
-- React renderer with metadata reader: `createRenderWithMetadata` in `packages/mask/src/protocols/typed-message/metadata.ts`
+- React renderer with metadata reader: `createRenderWithMetadata` in `packages/mask/src/protocols/typed-message/metadata.ts` -->
+
+
+### Post Enhancement
+
+### Web3 Tab
 
 ## Architecture
 
@@ -73,22 +102,16 @@ State transition:
 - _Loaded_ => _Activated_ (enable/start the plugin)
 - _Activated_ => _Loaded_ (disable the plugin)
 
-## Metadata guide
-
-Metadata is JSON compatible data that's can be inserted into a post.
-
-The most common use case of the metadata is the following.
-
-Add a new entry in the composition dialogue, therefore,
-the user can interact with your plugin. When it's finished,
-you can insert your metadata into the post and it will be contained in the encrypted payload.
-When you see metadata in the post payload,
-you should render some UI to reveal the information in the metadata and allow the user to interact with it.
-
-Notice please treat the metadata you received as non trustable data,
-make sure you have validated the formats and the data range.
-We provided a utility to read the data from the post and validate it with JSON schema.
-
 ## Form guide
 
-If you want to create a form in your plugin, please follow [Form guide](form-guide.md)
+If you want to create a form in your plugin, please follow [Form guide](form-guide.md).
+
+## Web3
+
+### Constants
+
+### Solidity Contracts
+
+### Third-Party Data Providers
+
+### Helpers
