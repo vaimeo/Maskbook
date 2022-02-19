@@ -87,7 +87,7 @@ export function ERC721ContractSelectPanel(props: ERC721TokenSelectPanelProps) {
     const loading = (loadingFromChain || loadingBalanceFromNFTscan) && !balance
 
     // #region select contract
-    const [id] = useState(uuid())
+    const [id] = useState(uuid)
 
     const { setDialog: setNftContractDialog } = useRemoteControlledDialog(
         WalletMessages.events.selectNftContractDialogUpdated,

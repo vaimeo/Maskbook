@@ -87,7 +87,7 @@ export function DonateDialog(props: DonateDialogProps) {
     // #endregion
 
     // #region select token dialog
-    const [id] = useState(uuid())
+    const [id] = useState(uuid)
     const { setDialog: setSelectTokenDialog } = useRemoteControlledDialog(
         WalletMessages.events.selectTokenDialogUpdated,
         useCallback(

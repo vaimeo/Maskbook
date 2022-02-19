@@ -48,7 +48,7 @@ export const Assets = memo<TokenAssetsProps>(({ network }) => {
     const t = useDashboardI18N()
     const pluginId = usePluginIDContext()
     const { classes } = useStyles()
-    const [id] = useState(uuid())
+    const [id] = useState(uuid)
     const assetTabsLabel: Record<AssetTab, string> = {
         [AssetTab.Token]: t.wallets_assets_token(),
         [AssetTab.Investment]: t.wallets_assets_investment(),

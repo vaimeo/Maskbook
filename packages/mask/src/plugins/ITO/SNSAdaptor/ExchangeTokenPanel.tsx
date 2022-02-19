@@ -80,7 +80,7 @@ export function ExchangeTokenPanel(props: ExchangeTokenPanelProps) {
     const { t } = useI18N()
     const { classes } = useStyles()
     // #region select token dialog
-    const [id] = useState(uuid())
+    const [id] = useState(uuid)
     const { setDialog: setSelectTokenDialog } = useRemoteControlledDialog(
         WalletMessages.events.selectTokenDialogUpdated,
         useCallback(

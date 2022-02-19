@@ -51,7 +51,7 @@ export function UnlockDialog(props: UnlockDialogProps) {
 
     // #region select token
     const [token, setToken] = useState<ERC20TokenDetailed>(tokens[0])
-    const [id] = useState(uuid())
+    const [id] = useState(uuid)
     const { setDialog: setSelectTokenDialog } = useRemoteControlledDialog(
         WalletMessages.events.selectTokenDialogUpdated,
         useCallback(

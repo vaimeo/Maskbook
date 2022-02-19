@@ -138,7 +138,7 @@ export function SwapDialog(props: SwapDialogProps) {
         swapAmount.isZero() ? '' : formatBalance(swapAmount, swapToken?.decimals),
     )
     // #region select token
-    const [id] = useState(uuid())
+    const [id] = useState(uuid)
     const { setDialog: setSelectTokenDialog } = useRemoteControlledDialog(
         WalletMessages.events.selectTokenDialogUpdated,
         useCallback(

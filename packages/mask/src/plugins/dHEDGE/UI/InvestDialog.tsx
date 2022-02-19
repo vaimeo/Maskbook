@@ -54,7 +54,7 @@ const useStyles = makeStyles()((theme) => ({
 export function InvestDialog() {
     const { t } = useI18N()
     const { classes } = useStyles()
-    const [id] = useState(uuid())
+    const [id] = useState(uuid)
     const [pool, setPool] = useState<Pool>()
     const [token, setToken] = useState<FungibleTokenDetailed>()
     const [allowedTokens, setAllowedTokens] = useState<string[]>()

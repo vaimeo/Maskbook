@@ -82,7 +82,7 @@ const useStyles = makeStyles()((theme) => ({
 export function DepositDialog() {
     const { t } = useI18N()
     const { classes } = useStyles()
-    const [id] = useState(uuid())
+    const [id] = useState(uuid)
     const [pool, setPool] = useState<Pool>()
     const [token, setToken] = useState<FungibleTokenDetailed>()
     const [odds, setOdds] = useState<string>()
