@@ -1,4 +1,5 @@
 import type { RequestArguments } from 'web3-core'
+import type { Transaction, TransactionSignature, RpcResponseAndContext, SignatureResult } from '@solana/web3.js'
 import type { JsonRpcPayload, JsonRpcResponse } from 'web3-core-helpers'
 import { createPromise, sendEvent } from './utils'
 
@@ -51,6 +52,12 @@ export const bridgedSolanaProvider: BridgedSolanaProvider = {
     untilAvailable() {
         return createPromise((id) => sendEvent('untilSolanaBridgeOnline', id))
     },
+    signAndSendTransaction(transaction) {
+        return createPromise((id) => sendEvent('solanaBridgeExecute', 'solana.signAndSendTransaction', id, transaction))
+    },
+    confirmTransaction(signature) {
+        return createPromise((id) => sendEvent('solanaBridgeExecute', 'solana.confirmTransaction', id, signature))
+    },
 }
 
 async function watchConnectStatus() {
@@ -84,6 +91,9 @@ export interface BridgedSolanaProvider {
     getProperty(key: 'isPhantom' | 'isConnected'): Promise<boolean | undefined>
     /** Call window.solana.isConnected */
     isConnected: boolean
+    signAndSendTransaction(transaction: Transaction): Promise<{ signature: TransactionSignature }>
+    // https://solana-labs.github.io/solana-web3.js/classes/Connection.html#confirmTransaction
+    confirmTransaction(signature: string): Promise<RpcResponseAndContext<SignatureResult>>
 }
 const bridgedSolana = new Map<string, Set<Function>>()
 /** @internal */

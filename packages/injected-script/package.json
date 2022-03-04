@@ -14,6 +14,7 @@
     "build": "rollup -c"
   },
   "dependencies": {
+    "@solana/web3.js": "^1.30.2",
     "web3-core-helpers": "1.5.2"
   }
 }

@@ -1,4 +1,4 @@
-import { PluginId, useActivatedPlugin, usePluginIDContext } from '@masknet/plugin-infra'
+import { NetworkPluginID, PluginId, useActivatedPlugin, usePluginIDContext } from '@masknet/plugin-infra'
 import { makeStyles } from '@masknet/theme'
 import { EMPTY_LIST } from '@masknet/web3-shared-evm'
 import { DialogContent } from '@mui/material'
@@ -49,18 +49,21 @@ export function TipDialog({ open = false, onClose }: TipDialogProps) {
     const { classes } = useStyles()
 
     const { targetChainId, setTargetChainId } = TargetChainIdContext.useContainer()
+    const isEvm = pluginID === NetworkPluginID.PLUGIN_EVM
 
     return (
         <InjectedDialog open={open} onClose={onClose} title={t('plugin_tip_tip')}>
             <DialogContent className={classes.content}>
-                <div className={classes.abstractTabWrapper}>
-                    <NetworkTab
-                        classes={classes}
-                        chainId={targetChainId}
-                        setChainId={setTargetChainId}
-                        chains={chainIdList}
-                    />
-                </div>
+                {isEvm && (
+                    <div className={classes.abstractTabWrapper}>
+                        <NetworkTab
+                            classes={classes}
+                            chainId={targetChainId}
+                            setChainId={setTargetChainId}
+                            chains={chainIdList}
+                        />
+                    </div>
+                )}
                 <TipForm />
             </DialogContent>
         </InjectedDialog>

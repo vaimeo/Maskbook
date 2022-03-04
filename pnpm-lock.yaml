@@ -283,10 +283,12 @@ importers:
   packages/injected-script:
     specifiers:
       '@rollup/plugin-sucrase': ^4.0.2
+      '@solana/web3.js': ^1.30.2
       rollup: ^2.69.0
       rollup-plugin-terser: ^7.0.2
       web3-core-helpers: 1.5.2
     dependencies:
+      '@solana/web3.js': 1.31.0
       web3-core-helpers: 1.5.2
     devDependencies:
       '@rollup/plugin-sucrase': 4.0.2_rollup@2.69.0
@@ -331,6 +333,7 @@ importers:
       '@masknet/web3-providers': workspace:*
       '@masknet/web3-shared-base': workspace:*
       '@masknet/web3-shared-evm': workspace:*
+      '@masknet/web3-shared-solana': workspace:*
       '@metamask/eth-sig-util': ^4.0.0
       '@msgpack/msgpack': ^2.7.2
       '@nice-labs/emit-file-webpack-plugin': ^1.1.2
@@ -468,6 +471,7 @@ importers:
       '@masknet/web3-providers': link:../web3-providers
       '@masknet/web3-shared-base': link:../web3-shared/base
       '@masknet/web3-shared-evm': link:../web3-shared/evm
+      '@masknet/web3-shared-solana': link:../web3-shared/solana
       '@metamask/eth-sig-util': 4.0.0
       '@msgpack/msgpack': 2.7.2
       '@servie/events': 3.0.0
@@ -1254,13 +1258,19 @@ importers:
 
   packages/web3-shared/solana:
     specifiers:
+      '@masknet/injected-script': workspace:*
       '@masknet/web3-constants': workspace:*
       '@masknet/web3-kit': workspace:*
+      '@solana/web3.js': ^1.30.2
+      bignumber.js: 9.0.2
       react-use: ^17.3.2
       urlcat: ^2.0.4
     dependencies:
+      '@masknet/injected-script': link:../../injected-script
       '@masknet/web3-constants': link:../../web3-constants
       '@masknet/web3-kit': link:../../web3-kit
+      '@solana/web3.js': 1.31.0
+      bignumber.js: 9.0.2
       react-use: 17.3.2_757a802188413a36d4f24237d13b8e90
       urlcat: 2.0.4
 
@@ -6086,7 +6096,7 @@ packages:
     resolution: {integrity: sha512-7nHHx1JNFnrt15e9y8m38I/EJCbaB+bFC3KZVM1+QhybCikFxGMtGA5r7PDC3GEL1R2RZA8yKoLkDKo3vzzqnw==}
     engines: {node: '>=12.20.0'}
     dependencies:
-      '@babel/runtime': 7.16.3
+      '@babel/runtime': 7.17.2
       '@ethersproject/sha2': 5.5.0
       '@solana/buffer-layout': 3.0.0
       bn.js: 5.2.0
@@ -8351,21 +8361,12 @@ packages:
     resolution: {integrity: sha512-Q5Vn3yjTDyCMV50TB6VRIbQNxSE4OmZR86VSbGaNpfUolm0iePBB4KdEEHmxoY5sT2+2DIvXW0rvMDP2nHZ4Mg==}
     dev: true
 
-  /@types/express-serve-static-core/4.17.25:
-    resolution: {integrity: sha512-OUJIVfRMFijZukGGwTpKNFprqCCXk5WjNGvUgB/CxxBR40QWSjsNK86+yvGKlCOGc7sbwfHLaXhkG+NsytwBaQ==}
-    dependencies:
-      '@types/node': 17.0.18
-      '@types/qs': 6.9.7
-      '@types/range-parser': 1.2.4
-    dev: false
-
   /@types/express-serve-static-core/4.17.28:
     resolution: {integrity: sha512-P1BJAEAW3E2DJUlkgq4tOL3RyMunoWXqbSCygWo5ZIWTjUgN1YnaXWW4VWl/oc8vs/XoYibEGBKP0uZyF4AHig==}
     dependencies:
       '@types/node': 17.0.21
       '@types/qs': 6.9.7
       '@types/range-parser': 1.2.4
-    dev: true
 
   /@types/express/4.17.13:
     resolution: {integrity: sha512-6bSZTPaTIACxn48l50SR+axgrqm6qXFIxrdAKaG6PaJk3+zuUr35hBlgT7vOmJcum+OEaIBLtHV/qloEAFITeA==}
@@ -8510,13 +8511,8 @@ packages:
       '@types/lodash': 4.14.178
     dev: true
 
-  /@types/lodash/4.14.177:
-    resolution: {integrity: sha512-0fDwydE2clKe9MNfvXHBHF9WEahRuj+msTuQqOmAApNORFvhMYZKNGGJdCzuhheVjMps/ti0Ak/iJPACMaevvw==}
-    dev: false
-
   /@types/lodash/4.14.178:
     resolution: {integrity: sha512-0d5Wd09ItQWH1qFbEyQ7oTQ3GZrMfth5JkbN3EvTKLXcHLRDSXeLnlvlOn0wvxVIwK5o2M8JzP/OWz7T3NRsbw==}
-    dev: true
 
   /@types/lodash/4.14.179:
     resolution: {integrity: sha512-uwc1x90yCKqGcIOAT6DwOSuxnrAbpkdPsUOZtwrXb4D/6wZs+6qG7QnIawDuZWg0sWpxl+ltIKCaLoMlna678w==}
@@ -17541,12 +17537,12 @@ packages:
       unfetch: 3.1.2
     dev: false
 
-  /isomorphic-ws/4.0.1_ws@7.5.5:
+  /isomorphic-ws/4.0.1_ws@7.5.7:
     resolution: {integrity: sha512-BhBvN2MBpWTaSHdWRb/bwdZJ1WaehQ2L1KngkCkfLUGF0mAWAT1sQUQacEmQ0jXkFw/czDXPNQSL5u2/Krsz1w==}
     peerDependencies:
       ws: '*'
     dependencies:
-      ws: 7.5.5
+      ws: 7.5.7
     dev: false
 
   /isomorphic-ws/4.0.1_ws@8.5.0:
@@ -17670,20 +17666,20 @@ packages:
     hasBin: true
     dependencies:
       '@types/connect': 3.4.35
-      '@types/express-serve-static-core': 4.17.25
-      '@types/lodash': 4.14.177
+      '@types/express-serve-static-core': 4.17.28
+      '@types/lodash': 4.14.178
       '@types/node': 17.0.18
       '@types/ws': 7.4.7
       commander: 2.20.3
       delay: 5.0.0
       es6-promisify: 5.0.0
       eyes: 0.1.8
-      isomorphic-ws: 4.0.1_ws@7.5.5
+      isomorphic-ws: 4.0.1_ws@7.5.7
       json-stringify-safe: 5.0.1
       JSONStream: 1.3.5
       lodash: 4.17.21
       uuid: 3.4.0
-      ws: 7.5.5
+      ws: 7.5.7
     transitivePeerDependencies:
       - bufferutil
       - utf-8-validate
@@ -18477,7 +18473,7 @@ packages:
   /jsonfile/4.0.0:
     resolution: {integrity: sha1-h3Gq4HmbZAdrdmQPygWPnBDjPss=}
     optionalDependencies:
-      graceful-fs: 4.2.8
+      graceful-fs: 4.2.9
 
   /jsonfile/6.1.0:
     resolution: {integrity: sha512-5dgndWOriYSm5cnYaJNhalLNDKOqFwyDB/rr1E9ZsGciGvKPs8R2xYGCacuf3z6K1YKDz182fd+fY3cn3pMqXQ==}
@@ -22493,11 +22489,11 @@ packages:
   /rpc-websockets/7.4.16:
     resolution: {integrity: sha512-0b7OVhutzwRIaYAtJo5tqtaQTWKfwAsKnaThOSOy+VkhVdleNUgb8eZnWSdWITRZZEigV5uPEIDr5KZe4DBrdQ==}
     dependencies:
-      '@babel/runtime': 7.16.5
+      '@babel/runtime': 7.17.2
       circular-json: 0.5.9
       eventemitter3: 4.0.7
       uuid: 8.3.2
-      ws: 7.5.5_bffff4271b89d628e8333ead80d3d8e8
+      ws: 7.5.7_bffff4271b89d628e8333ead80d3d8e8
     optionalDependencies:
       bufferutil: 4.0.6
       utf-8-validate: 5.0.8
@@ -26205,35 +26201,6 @@ packages:
         optional: true
     dev: false
 
-  /ws/7.5.5:
-    resolution: {integrity: sha512-BAkMFcAzl8as1G/hArkxOxq3G7pjUqQ3gzYbLL0/5zNkph70e+lCoxBGnm6AW1+/aiNeV4fnKqZ8m4GZewmH2w==}
-    engines: {node: '>=8.3.0'}
-    peerDependencies:
-      bufferutil: ^4.0.1
-      utf-8-validate: ^5.0.2
-    peerDependenciesMeta:
-      bufferutil:
-        optional: true
-      utf-8-validate:
-        optional: true
-    dev: false
-
-  /ws/7.5.5_bffff4271b89d628e8333ead80d3d8e8:
-    resolution: {integrity: sha512-BAkMFcAzl8as1G/hArkxOxq3G7pjUqQ3gzYbLL0/5zNkph70e+lCoxBGnm6AW1+/aiNeV4fnKqZ8m4GZewmH2w==}
-    engines: {node: '>=8.3.0'}
-    peerDependencies:
-      bufferutil: ^4.0.1
-      utf-8-validate: ^5.0.2
-    peerDependenciesMeta:
-      bufferutil:
-        optional: true
-      utf-8-validate:
-        optional: true
-    dependencies:
-      bufferutil: 4.0.6
-      utf-8-validate: 5.0.8
-    dev: false
-
   /ws/7.5.6:
     resolution: {integrity: sha512-6GLgCqo2cy2A2rjCNFlxQS6ZljG/coZfZXclldI8FB/1G3CCI36Zd8xy2HrFVACi8tfk5XrgLQEk+P0Tnz9UcA==}
     engines: {node: '>=8.3.0'}
@@ -26258,6 +26225,22 @@ packages:
         optional: true
       utf-8-validate:
         optional: true
+    dev: false
+
+  /ws/7.5.7_bffff4271b89d628e8333ead80d3d8e8:
+    resolution: {integrity: sha512-KMvVuFzpKBuiIXW3E4u3mySRO2/mCHSyZDJQM5NQ9Q9KHWHWh0NHgfbRMLLrceUK5qAL4ytALJbpRMjixFZh8A==}
+    engines: {node: '>=8.3.0'}
+    peerDependencies:
+      bufferutil: ^4.0.1
+      utf-8-validate: ^5.0.2
+    peerDependenciesMeta:
+      bufferutil:
+        optional: true
+      utf-8-validate:
+        optional: true
+    dependencies:
+      bufferutil: 4.0.6
+      utf-8-validate: 5.0.8
     dev: false
 
   /ws/8.5.0:
