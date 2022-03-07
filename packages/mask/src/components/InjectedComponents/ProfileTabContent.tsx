@@ -30,9 +30,7 @@ const useStyles = makeStyles()((theme) => ({
     },
 }))
 
-export interface ProfileTabContentProps extends withClasses<'text' | 'button' | 'root'> {
-    clear?: () => void
-}
+export interface ProfileTabContentProps extends withClasses<'text' | 'button' | 'root'> {}
 
 export function ProfileTabContent(props: ProfileTabContentProps) {
     const { t } = useI18N()
@@ -84,7 +82,6 @@ export function ProfileTabContent(props: ProfileTabContentProps) {
 
     useEffect(() => {
         if (hidden || loadingAddressNames) return
-        props.clear?.()
     }, [loadingAddressNames, hidden])
 
     const ContentComponent = useMemo(() => {

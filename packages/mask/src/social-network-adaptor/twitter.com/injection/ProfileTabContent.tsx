@@ -4,23 +4,21 @@ import { ProfileTabContent } from '../../../components/InjectedComponents/Profil
 import { createReactRootShadowed, startWatch } from '../../../utils'
 import {
     searchNewTweetButtonSelector,
-    searchProfileEmptySelector,
-    searchProfileTabPageSelector,
+    searchProfileTabPageInjectedEmptySelector,
+    searchProfileTabPageInjectedSelector,
 } from '../utils/selector'
-import { useClear } from './ProfileTab'
 
 function injectProfileTabContentForEmptyState(signal: AbortSignal) {
-    const watcher = new MutationObserverWatcher(searchProfileEmptySelector())
+    const watcher = new MutationObserverWatcher(searchProfileTabPageInjectedEmptySelector())
     startWatch(watcher, signal)
     createReactRootShadowed(watcher.firstDOMProxy.afterShadow, { signal }).render(<ProfileTabContentAtTwitter />)
 }
 
 function injectProfileTabContentState(signal: AbortSignal) {
-    const watcher = new MutationObserverWatcher(searchProfileTabPageSelector())
+    const watcher = new MutationObserverWatcher(searchProfileTabPageInjectedSelector())
     startWatch(watcher, signal)
     createReactRootShadowed(watcher.firstDOMProxy.afterShadow, { signal }).render(<ProfileTabContentAtTwitter />)
 }
-
 export function injectProfileTabContentAtTwitter(signal: AbortSignal) {
     injectProfileTabContentForEmptyState(signal)
     injectProfileTabContentState(signal)
@@ -33,7 +31,6 @@ function getStyleProps() {
         fontFamily: newTweetButton?.firstChild
             ? window.getComputedStyle(newTweetButton.firstChild as HTMLElement).fontFamily
             : undefined,
-        isPositionStatic: location.pathname.endsWith('/likes') || location.pathname.endsWith('/media'),
     }
 }
 
@@ -42,11 +39,7 @@ const useStyles = makeStyles()((theme) => {
 
     return {
         root: {
-            position: props.isPositionStatic ? 'static' : 'absolute',
-            top: 0,
-            left: 0,
-            right: 0,
-            zIndex: 1,
+            position: 'relative',
         },
         text: {
             paddingTop: 29,
@@ -71,6 +64,5 @@ const useStyles = makeStyles()((theme) => {
 
 export function ProfileTabContentAtTwitter() {
     const { classes } = useStyles()
-    const clear = useClear()
-    return <ProfileTabContent classes={classes} clear={clear} />
+    return <ProfileTabContent classes={classes} />
 }

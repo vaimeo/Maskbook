@@ -25,6 +25,13 @@ export const searchProfileTabListLastChildSelector: () => LiveSelector<E, true> 
 export const searchProfileTabPageSelector: () => LiveSelector<E, true> = () =>
     querySelector<E>('[data-testid="primaryColumn"] [role="navigation"] + * div')
 
+export const searchProfileTabPageNewSelector = () =>
+    querySelector('[data-testid="primaryColumn"] nav[role="navigation"]')
+export const searchProfileTabPageInjectedSelector = () =>
+    querySelector('[data-testid="primaryColumn"] section[role="region"]')
+export const searchProfileTabPageInjectedEmptySelector = () =>
+    querySelector('[data-testid="primaryColumn"] [data-testid="emptyState"]')
+
 export const searchProfileEmptySelector: () => LiveSelector<E, true> = () =>
     querySelector<E>('[data-testid="primaryColumn"] [data-testid="emptyState"]')
 export const searchProfileActiveTabSelector: () => LiveSelector<E, true> = () =>

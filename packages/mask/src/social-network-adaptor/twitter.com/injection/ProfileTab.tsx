@@ -1,14 +1,15 @@
 import Color from 'color'
-import { useCallback } from 'react'
 import { makeStyles } from '@masknet/theme'
 import { MutationObserverWatcher } from '@dimensiondev/holoflows-kit'
-import { createReactRootShadowed, startWatch, untilElementAvailable } from '../../../utils'
+import { createReactRootShadowed, startWatch } from '../../../utils'
 import {
     searchAppBarBackSelector,
     searchNewTweetButtonSelector,
-    searchProfileEmptySelector,
     searchProfileTabListLastChildSelector,
     searchProfileTabListSelector,
+    searchProfileTabPageInjectedEmptySelector,
+    searchProfileTabPageInjectedSelector,
+    searchProfileTabPageNewSelector,
     searchProfileTabPageSelector,
     searchProfileTabSelector,
 } from '../utils/selector'
@@ -92,37 +93,17 @@ export async function clear() {
         const line = v.querySelector('div > div') as HTMLDivElement
         line.style.display = 'none'
     })
-
-    // hide the empty list indicator on the page
-    const eleEmpty = searchProfileEmptySelector().evaluate()
-    if (eleEmpty) eleEmpty.style.display = 'none'
-
-    // hide the content page
-    await untilElementAvailable(searchProfileTabPageSelector())
-
-    const elePage = searchProfileTabPageSelector().evaluate()
-    if (elePage) {
-        elePage.style.visibility = 'hidden'
-        elePage.style.height = '0px'
-    }
-}
-
-export function useClear() {
-    return useCallback(() => clear(), [])
+    const page = searchProfileTabPageNewSelector().evaluate()?.nextElementSibling as HTMLDivElement
+    if (page?.style) page.style.display = 'none'
 }
 
 function reset() {
     const eleTab = searchProfileTabSelector().evaluate()?.querySelector('div') as Element
     if (!eleTab) return
 
-    const eleEmpty = searchProfileEmptySelector().evaluate()
-    if (eleEmpty) eleEmpty.style.display = ''
+    const page = searchProfileTabPageNewSelector().evaluate()?.nextElementSibling as HTMLDivElement
+    if (page?.style) page.style.display = ''
 
-    const elePage = searchProfileTabPageSelector().evaluate()
-    if (elePage) {
-        elePage.style.visibility = 'visible'
-        elePage.style.height = 'auto'
-    }
     const tabList = searchProfileTabListSelector().evaluate()
     tabList.map((v) => {
         const _v = v.querySelector('div') as HTMLDivElement
@@ -148,7 +129,11 @@ export function ProfileTabAtTwitter() {
 
 export function injectProfileTabAtTwitter(signal: AbortSignal) {
     let tabInjected = false
-    const contentWatcher = new MutationObserverWatcher(searchProfileTabPageSelector()).useForeach(() => {
+    const contentWatcher = new MutationObserverWatcher(
+        searchProfileTabPageInjectedEmptySelector().evaluate()
+            ? searchProfileTabPageInjectedEmptySelector()
+            : searchProfileTabPageInjectedSelector(),
+    ).useForeach(() => {
         const elePage = searchProfileTabPageSelector().evaluate()
         if (elePage && !tabInjected) {
             const watcher = new MutationObserverWatcher(searchProfileTabListLastChildSelector())
