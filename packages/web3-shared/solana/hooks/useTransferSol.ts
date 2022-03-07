@@ -1,7 +1,10 @@
-import type BigNumber from 'bignumber.js'
-import { SystemProgram, PublicKey, Transaction } from '@solana/web3.js'
-import { useCallback } from 'react'
 import { bridgedSolanaProvider as solana } from '@masknet/injected-script'
+import { clusterApiUrl, Connection, PublicKey, SystemProgram, Transaction } from '@solana/web3.js'
+import type BigNumber from 'bignumber.js'
+import { useCallback } from 'react'
+import bs58 from 'bs58'
+import { getClusterId } from '../helpers'
+import { ChainId } from '../types'
 
 interface TransferOptions {
     fromPubkey: string
@@ -12,7 +15,13 @@ export function useTransferSol(initOptions: Partial<TransferOptions> = {}) {
     const transfer = useCallback(async (options: Partial<TransferOptions>) => {
         const { fromPubkey, toPubkey, lampports } = { ...initOptions, ...options }
         if (!fromPubkey || !toPubkey || !lampports) return
-        const transaction = new Transaction()
+        const clusterId = getClusterId(ChainId.Devnet)
+        const connection = new Connection(clusterApiUrl(clusterId), 'confirmed')
+
+        const transaction = new Transaction({
+            feePayer: new PublicKey(fromPubkey),
+            recentBlockhash: (await connection.getRecentBlockhash('confirmed')).blockhash,
+        })
         transaction.add(
             SystemProgram.transfer({
                 fromPubkey: new PublicKey(fromPubkey),
@@ -20,8 +29,9 @@ export function useTransferSol(initOptions: Partial<TransferOptions> = {}) {
                 lamports: lampports.toNumber(),
             }),
         )
-        const { signature } = await solana.signAndSendTransaction(transaction)
-        await solana.confirmTransaction(signature)
+        const { publicKey, signature } = await solana.signAndSendTransaction(transaction)
+        transaction.addSignature(new PublicKey(publicKey), bs58.decode(signature))
+        await connection.confirmTransaction(signature)
     }, [])
 
     return transfer

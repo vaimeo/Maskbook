@@ -1,5 +1,6 @@
+import type { Transaction } from '@solana/web3.js'
+import bs58 from 'bs58'
 import type { RequestArguments } from 'web3-core'
-import type { Transaction, TransactionSignature, RpcResponseAndContext, SignatureResult } from '@solana/web3.js'
 import type { JsonRpcPayload, JsonRpcResponse } from 'web3-core-helpers'
 import { createPromise, sendEvent } from './utils'
 
@@ -27,6 +28,23 @@ function send(payload: JsonRpcPayload, callback: (error: Error | null, result?: 
     )
 }
 
+interface SignResult {
+    publicKey: string
+    signature: string
+}
+async function signAndSendTransaction(transaction: Transaction, display: 'hex' = 'hex'): Promise<SignResult> {
+    const serialized = transaction.serializeMessage()
+    const messageInbs58 = bs58.encode(serialized)
+    const result = await request({
+        method: 'signAndSendTransaction',
+        params: {
+            message: messageInbs58,
+            display,
+        },
+    })
+    return result as SignResult
+}
+
 let isConnected = false
 /** Interact with the current solana provider */
 export const bridgedSolanaProvider: BridgedSolanaProvider = {
@@ -52,12 +70,10 @@ export const bridgedSolanaProvider: BridgedSolanaProvider = {
     untilAvailable() {
         return createPromise((id) => sendEvent('untilSolanaBridgeOnline', id))
     },
-    signAndSendTransaction(transaction) {
-        return createPromise((id) => sendEvent('solanaBridgeExecute', 'solana.signAndSendTransaction', id, transaction))
+    signMessage(message: string) {
+        return createPromise((id) => sendEvent('solanaBridgeExecute', 'solana.signMessage', id, message))
     },
-    confirmTransaction(signature) {
-        return createPromise((id) => sendEvent('solanaBridgeExecute', 'solana.confirmTransaction', id, signature))
-    },
+    signAndSendTransaction,
 }
 
 async function watchConnectStatus() {
@@ -91,9 +107,8 @@ export interface BridgedSolanaProvider {
     getProperty(key: 'isPhantom' | 'isConnected'): Promise<boolean | undefined>
     /** Call window.solana.isConnected */
     isConnected: boolean
-    signAndSendTransaction(transaction: Transaction): Promise<{ signature: TransactionSignature }>
-    // https://solana-labs.github.io/solana-web3.js/classes/Connection.html#confirmTransaction
-    confirmTransaction(signature: string): Promise<RpcResponseAndContext<SignatureResult>>
+    signMessage(message: string): Promise<{ publicKey: string; signature: string }>
+    signAndSendTransaction(transaction: Transaction): Promise<SignResult>
 }
 const bridgedSolana = new Map<string, Set<Function>>()
 /** @internal */

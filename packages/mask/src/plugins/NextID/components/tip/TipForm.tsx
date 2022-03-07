@@ -1,4 +1,4 @@
-import { useWeb3State } from '@masknet/plugin-infra'
+import { NetworkPluginID, usePluginIDContext, useWeb3State } from '@masknet/plugin-infra'
 import { SelectTokenDialogEvent, WalletMessages } from '@masknet/plugin-wallet'
 import { useRemoteControlledDialog } from '@masknet/shared'
 import { makeStyles } from '@masknet/theme'
@@ -91,6 +91,9 @@ export const TipForm: FC = memo(() => {
     )
     // #endregion
 
+    const pluginID = usePluginIDContext()
+    const isEvm = pluginID === NetworkPluginID.PLUGIN_EVM
+
     return (
         <Box className={classes.root}>
             <Typography>To</Typography>
@@ -127,7 +130,13 @@ export const TipForm: FC = memo(() => {
                         setTipType(e.target.value as TipType)
                     }}>
                     <FormControlLabel value={TipType.Token} control={<Radio />} label={t('plugin_tip_token')} />
-                    <FormControlLabel value={TipType.NFT} control={<Radio />} label={t('plugin_tip_nft')} />
+                    <FormControlLabel
+                        disabled={!isEvm}
+                        title={isEvm ? '' : 'Coming soon'}
+                        value={TipType.NFT}
+                        control={<Radio />}
+                        label={t('plugin_tip_nft')}
+                    />
                 </RadioGroup>
             </FormControl>
             {tipType === TipType.Token ? (
@@ -150,6 +159,15 @@ export const TipForm: FC = memo(() => {
                 <NFTSection />
             )}
 
+            <ActionButton
+                variant="contained"
+                size="large"
+                className={classes.tipButton}
+                fullWidth
+                disabled={false}
+                onClick={sendTip}>
+                {t('plugin_tip_send')}
+            </ActionButton>
             <EthereumChainBoundary
                 chainId={chainId}
                 noSwitchNetworkTip

@@ -4,8 +4,8 @@
   "main": "./dist/index.js",
   "types": "./dist/index.d.ts",
   "dependencies": {
-    "@masknet/web3-constants": "workspace:*",
     "@masknet/injected-script": "workspace:*",
+    "@masknet/web3-constants": "workspace:*",
     "@masknet/web3-kit": "workspace:*",
     "@solana/web3.js": "^1.30.2",
     "bignumber.js": "9.0.2",

@@ -1,4 +1,4 @@
-import { NetworkPluginID, usePluginIDContext } from '@masknet/plugin-infra'
+import { NetworkPluginID, useAccount, usePluginIDContext } from '@masknet/plugin-infra'
 import { rightShift } from '@masknet/web3-shared-base'
 import {
     EthereumTokenType,
@@ -35,15 +35,20 @@ function useEvmTokenTip(): TipTuple {
 }
 // TODO
 function useSolanaSplTokenTip(): TipTuple {
+    const context = useContext(TipContext)
     const txState: TransactionState = {
         type: TransactionStateType.UNKNOWN,
     }
+    const { amount, recipient } = context
+    const account = useAccount()
     const transferSol = useTransferSol()
     const sendTip = useCallback(async () => {
         await transferSol({
-            fromPubkey: '1',
+            fromPubkey: account,
+            toPubkey: recipient,
+            lampports: rightShift(amount, 9),
         })
-    }, [])
+    }, [account, recipient, amount])
 
     return [txState, sendTip]
 }

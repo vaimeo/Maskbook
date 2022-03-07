@@ -13,7 +13,7 @@ export const TipTaskProvider: FC<Props> = ({ children, task }) => {
     const [recipient, setRecipient] = useState('')
     const [recipients, setRecipients] = useState<string[]>(task.addresses)
     const [tipType, setTipType] = useState<TipType>(TipType.Token)
-    const [amount, setAmount] = useState('0')
+    const [amount, setAmount] = useState('')
     const [erc721Contract, setErc721Contract] = useState<ContextOptions['erc721Contract']>(null)
     const { value: nativeTokenDetailed = null } = useNativeTokenDetailed()
     const [token, setToken] = useState<ContextOptions['token']>(nativeTokenDetailed)
@@ -63,9 +63,7 @@ export function useTip() {
     const tokenTipTuple = useTokenTip()
     const nftTipTuple = useNftTip()
 
-    const sendTipTuple = useMemo(() => {
-        return context.tipType === TipType.Token ? tokenTipTuple : nftTipTuple
-    }, [context.tipType, tokenTipTuple, nftTipTuple])
+    const sendTipTuple = context.tipType === TipType.Token ? tokenTipTuple : nftTipTuple
 
     return {
         ...context,
