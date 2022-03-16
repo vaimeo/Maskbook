@@ -11,7 +11,7 @@ import {
     isTypedMessageText,
     TypedMessageText,
 } from '@masknet/shared-base'
-import { collectNodeText, collectTwitterEmoji } from '../../../utils'
+import { collectNodeText, collectNodeTextNew, collectTwitterEmoji } from '../../../utils'
 
 /**
  * @example
@@ -52,7 +52,8 @@ export const postIdParser = (node: HTMLElement) => {
 
 export const postNameParser = (node: HTMLElement) => {
     const tweetElement = node.querySelector<HTMLElement>('[data-testid="tweet"]') ?? node
-    const nameElement = collectNodeText(tweetElement.querySelector<HTMLElement>('a[role] div[id]'))
+    const child = tweetElement.firstElementChild?.firstElementChild?.lastElementChild?.lastElementChild as HTMLElement
+    const nameElement = collectNodeTextNew(child.querySelector('div[id]') as HTMLElement)
 
     const nameElementInQuoted = nthChild(tweetElement, 0, 0, 0, 0, 0)
     const nameInQuoteTweet = nameElementInQuoted ? collectNodeText(nameElementInQuoted) : ''

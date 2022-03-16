@@ -35,3 +35,18 @@ export function collectNodeText(node: HTMLElement | null | undefined, options: C
         })
         .join('')
 }
+
+export function collectNodeTextNew(node: HTMLElement | null | undefined, options: CollectNodeTextOptions = {}): string {
+    if (!node) return ''
+
+    return [...node.childNodes]
+        .map((each) => {
+            const nickname = (each as HTMLElement).querySelector('a[role] div[dir="auto"] span > span')
+            if (nickname) return nickname.innerHTML ?? ''
+
+            const name = (each as HTMLElement).querySelector('a[role] div[dir="ltr"] span')
+            if (name) return name.innerHTML ?? ''
+            return ''
+        })
+        .join('')
+}
