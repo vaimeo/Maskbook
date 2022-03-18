@@ -310,6 +310,7 @@ importers:
       '@masknet/plugin-cyberconnect': workspace:*
       '@masknet/plugin-dao': workspace:*
       '@masknet/plugin-debugger': workspace:*
+      '@masknet/plugin-eth': workspace:*
       '@masknet/plugin-example': workspace:*
       '@masknet/plugin-file-service': workspace:*
       '@masknet/plugin-flow': workspace:*
@@ -447,6 +448,7 @@ importers:
       '@masknet/plugin-cyberconnect': link:../plugins/CyberConnect
       '@masknet/plugin-dao': link:../plugins/DAO
       '@masknet/plugin-debugger': link:../plugins/Debugger
+      '@masknet/plugin-eth': link:../plugins/ETH
       '@masknet/plugin-example': link:../plugins/example
       '@masknet/plugin-file-service': link:../plugins/FileService
       '@masknet/plugin-flow': link:../plugins/Flow
@@ -683,6 +685,46 @@ importers:
       '@masknet/web3-shared-evm': link:../../web3-shared/evm
       bignumber.js: 9.0.2
       date-fns: 2.28.0
+      react-use: 17.3.2_bc22c48adf1a4e34a005159413cd72b5
+      urlcat: 2.0.4
+
+  packages/plugins/ETH:
+    specifiers:
+      '@dimensiondev/common-protocols': 1.6.0-20210723072221-8f46a92
+      '@ethersphere/bee-js': ^3.3.1
+      '@masknet/icons': workspace:*
+      '@masknet/plugin-infra': workspace:*
+      '@masknet/plugin-wallet': workspace:*
+      '@masknet/shared': workspace:*
+      '@masknet/shared-base': workspace:*
+      '@masknet/shared-base-ui': workspace:*
+      '@masknet/theme': workspace:*
+      '@masknet/typed-message': workspace:*
+      '@msgpack/msgpack': ^2.7.2
+      arweave: ^1.10.3
+      date-fns: ^2.28.0
+      ipfs-http-client: ^54.0.2
+      react-feather: ^2.0.9
+      react-router-dom: ^6.2.2
+      react-use: ^17.3.2
+      urlcat: ^2.0.4
+    dependencies:
+      '@dimensiondev/common-protocols': 1.6.0-20210723072221-8f46a92
+      '@ethersphere/bee-js': 3.3.1
+      '@masknet/icons': link:../../icons
+      '@masknet/plugin-infra': link:../../plugin-infra
+      '@masknet/plugin-wallet': link:../Wallet
+      '@masknet/shared': link:../../shared
+      '@masknet/shared-base': link:../../shared-base
+      '@masknet/shared-base-ui': link:../../shared-base-ui
+      '@masknet/theme': link:../../theme
+      '@masknet/typed-message': link:../../typed-message
+      '@msgpack/msgpack': 2.7.2
+      arweave: 1.10.13
+      date-fns: 2.28.0
+      ipfs-http-client: 54.0.2
+      react-feather: 2.0.9_react@18.0.0-rc.2
+      react-router-dom: 6.2.2_bc22c48adf1a4e34a005159413cd72b5
       react-use: 17.3.2_bc22c48adf1a4e34a005159413cd72b5
       urlcat: 2.0.4
 
