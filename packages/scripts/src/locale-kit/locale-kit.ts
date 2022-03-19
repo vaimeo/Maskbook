@@ -39,7 +39,7 @@ export async function localeKit() {
     const argv = parseArgs<Args>()
     if (process.env.CI) return diagnosis()
 
-    if (argv.removeUnusedKeys) {
+    if ('removeUnusedKeys' in argv && argv.removeUnusedKeys) {
         await removeAllUnusedKeys(await findAllUnusedKeys())
         console.log('Unused keys removed')
     }

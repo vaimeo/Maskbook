@@ -1,13 +1,4 @@
-export {
-    codegen,
-    codegenWatch,
-    i18nCodegen,
-    i18nCodegenWatch,
-    typescript,
-    typescriptWatch,
-    resourceCopy,
-    resourceCopyWatch,
-} from './codegen'
+export * from './codegen'
 export { ciBuild } from './extension'
 export { buildNetlify } from './netlify'
 
