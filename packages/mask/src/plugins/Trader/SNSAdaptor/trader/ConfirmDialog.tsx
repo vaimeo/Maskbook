@@ -16,7 +16,7 @@ import {
     resolveAddressLinkOnExplorer,
 } from '@masknet/web3-shared-evm'
 import { useI18N } from '../../../../utils'
-import { InfoIcon, RetweetIcon, CramIcon } from '@masknet/icons'
+import { RetweetIcon, Icon } from '@masknet/icons'
 import { isZero, multipliedBy } from '@masknet/web3-shared-base'
 import { isDashboardPage } from '@masknet/shared-base'
 import { TargetChainIdContext } from '../../trader/useTargetChainIdContext'
@@ -170,7 +170,7 @@ export function ConfirmDialogUI(props: ConfirmDialogUIProps) {
         if (currentSlippage >= MIN_SLIPPAGE && currentSlippage < MAX_SLIPPAGE) return null
 
         return (
-            <Alert className={classes.alert} icon={<InfoIcon className={classes.alertIcon} />} severity="info">
+            <Alert className={classes.alert} icon={<Icon type="info" className={classes.alertIcon} />} severity="info">
                 {currentSlippage < MIN_SLIPPAGE
                     ? t('plugin_trader_confirm_tips')
                     : t('plugin_trader_price_impact_warning_tips')}
@@ -364,7 +364,7 @@ export function ConfirmDialogUI(props: ConfirmDialogUIProps) {
                             classes={{ action: classes.action }}
                             className={classes.error}
                             severity="error"
-                            icon={<CramIcon className={classes.alertIcon} />}
+                            icon={<Icon type="cram" className={classes.alertIcon} />}
                             action={
                                 <Button variant="contained" color="error" className={classes.accept} onClick={onAccept}>
                                     {t('plugin_trader_accept')}

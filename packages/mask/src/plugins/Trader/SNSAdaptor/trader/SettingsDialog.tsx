@@ -11,7 +11,7 @@ import { ExpandMore } from '@mui/icons-material'
 import { Gas1559Settings } from './Gas1559Settings'
 import { GasPrior1559Settings } from './GasPrior1559Settings'
 import { GasOptionConfig, isEIP1559Supported, useChainId } from '@masknet/web3-shared-evm'
-import { InfoIcon } from '@masknet/icons'
+import { Icon } from '@masknet/icons'
 
 const useStyles = makeStyles()((theme) => {
     return {
@@ -110,7 +110,7 @@ export function SettingsDialog(props: SettingsDialogProps) {
                         <Alert
                             className={classes.alert}
                             severity="info"
-                            icon={<InfoIcon className={classes.warningIcon} />}>
+                            icon={<Icon type="info" className={classes.warningIcon} />}>
                             {t('plugin_trader_slippage_warning')}
                         </Alert>
                     ) : null}

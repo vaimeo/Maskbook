@@ -11,7 +11,7 @@ import { TokenPanelType, TradeInfo } from '../../types'
 import BigNumber from 'bignumber.js'
 import { first, noop } from 'lodash-unified'
 import { FormattedBalance, SelectTokenChip } from '@masknet/shared'
-import { ChevronUpIcon, DropIcon } from '@masknet/icons'
+import { Icon } from '@masknet/icons'
 import classnames from 'classnames'
 import { TraderInfo } from './TraderInfo'
 import { PluginTraderMessages } from '../../messages'
@@ -348,9 +348,10 @@ export const TradeForm = memo<AllTradeFormProps>(
                         ChipProps: {
                             onClick: () => onTokenChipClick(TokenPanelType.Input),
                             deleteIcon: (
-                                <DropIcon
+                                <Icon
+                                    type="drop"
                                     className={classes.dropIcon}
-                                    style={{ fill: !inputToken ? '#ffffff' : undefined }}
+                                    color={inputToken ? undefined : '#fff'}
                                 />
                             ),
                             onDelete: noop,
@@ -393,9 +394,10 @@ export const TradeForm = memo<AllTradeFormProps>(
                             ChipProps={{
                                 onClick: () => onTokenChipClick(TokenPanelType.Output),
                                 deleteIcon: (
-                                    <DropIcon
+                                    <Icon
+                                        type="drop"
                                         className={classes.dropIcon}
-                                        style={{ fill: !outputToken ? '#ffffff' : undefined }}
+                                        color={outputToken ? undefined : '#fff'}
                                     />
                                 ),
                                 onDelete: noop,
@@ -422,7 +424,8 @@ export const TradeForm = memo<AllTradeFormProps>(
                                     </Collapse>
                                 </Box>
                                 <Box width="100%" display="flex" justifyContent="center" marginTop={1.5}>
-                                    <ChevronUpIcon
+                                    <Icon
+                                        type="chevronUp"
                                         className={classnames(
                                             classes.chevron,
                                             isExpand ? classes.reverseChevron : null,
