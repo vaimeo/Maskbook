@@ -78,8 +78,9 @@ function usePluginsWeb3State() {
     )
 }
 
-export function useCurrentWeb3NetworkPluginID() {
-    return useContext(PluginIDContext)
+export function useCurrentWeb3NetworkPluginID(expectedPluginID?: NetworkPluginID) {
+    const pluginID = useContext(PluginIDContext)
+    return expectedPluginID ?? pluginID
 }
 
 const PluginsWeb3StateContext = createContainer(usePluginsWeb3State)
@@ -87,9 +88,9 @@ const PluginsWeb3StateContext = createContainer(usePluginsWeb3State)
 export const usePluginsWeb3StateContext = PluginsWeb3StateContext.useContainer
 
 export function usePluginWeb3StateContext(expectedPluginID?: NetworkPluginID) {
-    const pluginID = useCurrentWeb3NetworkPluginID()
+    const pluginID = useCurrentWeb3NetworkPluginID(expectedPluginID)
     const pluginsWeb3State = usePluginsWeb3StateContext()
-    return pluginsWeb3State[expectedPluginID ?? pluginID] ?? {}
+    return pluginsWeb3State[pluginID] ?? {}
 }
 
 export function PluginsWeb3ContextProvider({

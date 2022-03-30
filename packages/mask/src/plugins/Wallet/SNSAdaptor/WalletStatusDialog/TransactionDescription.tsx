@@ -3,7 +3,6 @@ import {
     ChainId,
     useNativeTokenDetailed,
     EthereumRpcType,
-    useChainId,
     formatBalance,
     NativeTokenDetailed,
     ERC20TokenDetailed,
@@ -11,8 +10,9 @@ import {
     useERC20TokenDetailed,
 } from '@masknet/web3-shared-evm'
 import { pow10 } from '@masknet/web3-shared-base'
-import type Services from '../../../../extension/service'
 import { getContractMethodDescription } from './contractMethodDescription'
+import type { EVM_RPC } from '@masknet/plugin-evm/src/messages'
+import { NetworkPluginID, useChainId } from '@masknet/plugin-infra'
 
 function getTokenAmountDescription(amount = '0', tokenDetailed?: FungibleTokenDetailed, negative?: boolean) {
     const symbol = negative ? '- ' : ''
@@ -27,7 +27,7 @@ function getTransactionDescription(
     chainId: ChainId,
     nativeTokenDetailed?: NativeTokenDetailed | ERC20TokenDetailed,
     tokenDetailed?: ERC20TokenDetailed,
-    computedPayload?: UnboxPromise<ReturnType<typeof Services.Ethereum.getSendTransactionComputedPayload>> | null,
+    computedPayload?: UnboxPromise<ReturnType<typeof EVM_RPC.getSendTransactionComputedPayload>> | null,
 ) {
     if (!computedPayload) return
     const type = computedPayload.type
@@ -115,11 +115,11 @@ function getTransactionDescription(
 
 export interface RecentTransactionDescriptionProps {
     hash: string
-    computedPayload?: UnboxPromise<ReturnType<typeof Services.Ethereum.getSendTransactionComputedPayload>> | null
+    computedPayload?: UnboxPromise<ReturnType<typeof EVM_RPC.getSendTransactionComputedPayload>> | null
 }
 
 export function RecentTransactionDescription(props: RecentTransactionDescriptionProps) {
-    const chainId = useChainId()
+    const chainId = useChainId(NetworkPluginID.PLUGIN_EVM)
     const { hash, computedPayload } = props
     const { loading: getNativeTokenLoading, value: nativeTokenDetailed } = useNativeTokenDetailed()
     let inputTokenAddress: string | undefined = ''

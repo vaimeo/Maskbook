@@ -15,7 +15,6 @@ import {
 import { PopupRoutes } from '@masknet/shared-base'
 import { WalletContext } from '../../hooks/useWalletContext'
 import type { RecentTransaction } from '../../../../../../plugins/Wallet/services'
-import type Services from '../../../../../service'
 import { useI18N } from '../../../../../../utils'
 import { ReplaceType } from '../../type'
 import { ActivityListItem } from './ActivityListItem'
@@ -183,7 +182,7 @@ export const ActivityListUI = memo<ActivityListUIProps>(({ dataSource, chainId }
 })
 
 function getToAddress(
-    computedPayload?: UnboxPromise<ReturnType<typeof Services.Ethereum.getSendTransactionComputedPayload>> | null,
+    computedPayload?: UnboxPromise<ReturnType<typeof EVM_RPC.getSendTransactionComputedPayload>> | null,
 ) {
     if (!computedPayload) return undefined
     switch (computedPayload.type) {

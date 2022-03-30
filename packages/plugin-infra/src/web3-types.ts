@@ -1,5 +1,6 @@
 import type { BigNumber } from 'bignumber.js'
 import type { Subscription } from 'use-subscription'
+import type { ChainId } from '../../web3-shared/evm'
 import type { Pagination, Plugin, Pageable } from './types'
 
 /**
@@ -20,6 +21,13 @@ export enum CurrencyType {
 export enum TokenType {
     Fungible = 'Fungible',
     NonFungible = 'NonFungible',
+}
+
+export enum TransactionStatusType {
+    NOT_DEPEND = 0,
+    SUCCEED = 1,
+    FAILED = 2,
+    CANCELLED = 3,
 }
 
 export type Color =
@@ -61,6 +69,7 @@ export declare namespace Web3Plugin {
         /** Is a mainnet network */
         isMainnet: boolean
     }
+
     export interface ProviderDescriptor {
         /** An unique ID for each wallet provider */
         ID: string
@@ -93,6 +102,7 @@ export declare namespace Web3Plugin {
             [key in CurrencyType]?: number
         }
     }
+
     export interface ChainDetailed {
         name: string
         chainId: number
@@ -101,6 +111,7 @@ export declare namespace Web3Plugin {
         chainName?: string
         network?: string // mainnet
     }
+
     export interface Wallet {
         /** User define wallet name. Default address.prefix(6) */
         name: string
@@ -110,7 +121,12 @@ export declare namespace Web3Plugin {
         hasStoredKeyInfo: boolean
         /** true: Derivable Wallet. false: UnDerivable Wallet */
         hasDerivationPath: boolean
+        /** record created at */
+        createdAt: Date
+        /** record updated at */
+        updatedAt: Date
     }
+
     export interface Asset<T extends Token = Token> {
         id: string
         chainId: number
@@ -137,19 +153,30 @@ export declare namespace Web3Plugin {
         resolvedAddress?: string
     }
 
-    export interface Transaction {
-        id: string
-        type: string
-        title: string
-        from: string
-        to: string
-        timestamp: string
-        /** 0: failed 1: succeed */
-        status: 0 | 1
-        /** estimated tx fee */
-        fee: {
-            [key in CurrencyType]?: string
-        }
+    // export interface Transaction {
+    //     id: string
+    //     type: string
+    //     title: string
+    //     from: string
+    //     to: string
+    //     timestamp: string
+    //     /** 0: failed 1: succeed */
+    //     status: 0 | 1
+    //     /** estimated tx fee */
+    //     fee: {
+    //         [key in CurrencyType]?: string
+    //     }
+    // }
+
+    export interface RecentTransaction {
+        /** ID */
+        ID: string
+        /** status type */
+        status: TransactionStatusType
+        /** record created at */
+        createdAt: Date
+        /** record updated at */
+        updatedAt: Date
     }
 
     export interface Token {
@@ -211,8 +238,16 @@ export declare namespace Web3Plugin {
         tokens: Token[]
     }
 
-    export type DomainAddressBook = {
+    export interface DomainBook {
         [chainId: number]: Record<string, string> | undefined
+    }
+
+    export interface AddressBook {
+        [chainId: number]: string[]
+    }
+
+    export interface AddressList {
+        [address: string]: string[]
     }
 
     export namespace ObjectCapabilities {
@@ -234,6 +269,8 @@ export declare namespace Web3Plugin {
             collectibleType?: Subscription<string | undefined>
             /** The transaction data provider. */
             transactionType?: Subscription<string | undefined>
+            /** The token list data provider. */
+            tokenListType?: Subscription<string | undefined>
             /** The currency of estimated values and prices. */
             currencyType?: Subscription<CurrencyType>
             /** The tracked token prices which stored as address and price pairs. */
@@ -247,7 +284,7 @@ export declare namespace Web3Plugin {
             /** The user added non-fungible tokens. */
             nonFungibleTokens?: Subscription<NonFungibleToken[]>
         }
-        export interface AddressBook {
+        export interface AddressBookState {
             getAllAddress: (chainId: number) => Promise<string[]>
             addAddress: (chainId: number, address: string) => Promise<void>
             removeAddress: (chainId: number, address: string) => Promise<void>
@@ -255,6 +292,7 @@ export declare namespace Web3Plugin {
         export interface AssetState {
             /** Get fungible assets of given account. */
             getFungibleAssets?: (
+                chainId: ChainId,
                 address: string,
                 providerType: string,
                 network: NetworkDescriptor,
@@ -262,6 +300,7 @@ export declare namespace Web3Plugin {
             ) => Promise<Asset<FungibleToken>[]>
             /** Get non-fungible assets of given account. */
             getNonFungibleAssets?: (
+                chainId: ChainId,
                 address: string,
                 pagination: Pagination,
                 providerType?: string,
@@ -269,8 +308,8 @@ export declare namespace Web3Plugin {
             ) => Promise<Pageable<NonFungibleToken>>
         }
         export interface NameServiceState {
-            lookup?: (domain: string) => Promise<string | undefined>
-            reverse?: (address: string) => Promise<string | undefined>
+            lookup?: (chainId: number, domain: string) => Promise<string | undefined>
+            reverse?: (chainId: number, address: string) => Promise<string | undefined>
         }
         export interface TokenState {
             addToken: (token: Token) => Promise<void>
@@ -289,35 +328,34 @@ export declare namespace Web3Plugin {
         }
         export interface TokenListState {
             /** Get the token lists of supported fungible tokens. */
-            getFungibleTokenLists: (
-                address: string,
-                providerType: string,
-                network: NetworkDescriptor,
-                pagination?: Pagination,
-            ) => Promise<TokenList[]>
+            getFungibleTokenLists?: (chainId: number) => Promise<TokenList>
             /** Get the token lists of supported non-fungible tokens. */
-            getNonFungibleTokenLists: (
-                address: string,
-                providerType: string,
-                network: NetworkDescriptor,
-                pagination?: Pagination,
-            ) => Promise<TokenList[]>
+            getNonFungibleTokenLists?: (chainId: number) => Promise<TokenList>
         }
         export interface TransactionState {
             addTransaction?: (chainId: number, id: string, tx: unknown) => Promise<void>
             removeTransaction?: (chainId: number, id: string) => Promise<void>
+            replaceTransaction?: (chainId: number, id: string, newId: string) => Promise<void>
+            updateTransaction?: (chainId: number, id: string, newId: string) => Promise<void>
             clearTransactions?: (chainId: number, address: string) => Promise<void>
             getTransaction?: (chainId: number, id: string) => Promise<unknown>
             getAllTransactions?: (chainId: number, address: string) => Promise<unknown>
-            replaceTransaction?: (chainId: number, id: string, newId: string) => Promise<void>
-            cancelTransaction?: (chainId: number, id: string) => Promise<void>
-            watchTransaction?: (chainId: number, id: string) => Promise<void>
         }
+
+        export interface WalletState {
+            addWallet?: (chainId: number, id: string, wallet: Wallet) => Promise<void>
+            removeWallet?: (chainId: number, id: string) => Promise<void>
+            getAllWallets?: (chainId: number) => Promise<Wallet[]>
+        }
+
         export interface Others {
+            isChainIdValid?: (chainId: number, allowTestnet: boolean) => boolean
+            isValidDomain?: (domain: string) => boolean
+            isSameAddress?: (address?: string, otherAddress?: string) => boolean
+
             getLatestBlockNumber?: (chainId: number) => Promise<number>
             getLatestBalance?: (chainId: number, account: string) => Promise<string>
 
-            isChainIdValid?: (chainId: number, allowTestnet: boolean) => boolean
             getChainDetailed?: (chainId: number) => ChainDetailed | undefined
             getFungibleTokenMetadata?: (token: FungibleToken) => Promise<FungibleTokenMetadata>
             getNonFungibleTokenMetadata?: (token: NonFungibleToken) => Promise<NonFungibleTokenMetadata>
@@ -325,31 +363,30 @@ export declare namespace Web3Plugin {
             formatAddress?: (address: string, size?: number) => string
             formatCurrency?: (value: BigNumber.Value, sign?: string, symbol?: string) => string
             formatBalance?: (value: BigNumber.Value, decimals?: number, significant?: number) => string
+            formatDomainName?: (domain?: string, size?: number) => string | undefined
 
             resolveChainName?: (chainId: number) => string
-            resolveChainFullName?: (chainId: number) => string
             resolveChainColor?: (chainId: number) => string
+            resolveChainFullName?: (chainId: number) => string
 
             resolveTransactionLink?: (chainId: number, transactionId: string) => string
             resolveAddressLink?: (chainId: number, address: string) => string
+            resolveFungibleTokenLink?: (chainId: number, address: string) => string
             resolveNonFungibleTokenLink?: (chainId: number, address: string, tokenId: string) => string
             resolveBlockLink?: (chainId: number, blockNumber: string) => string
-
             resolveDomainLink?: (domain: string) => string
-            isValidDomain?: (domain: string) => boolean
-            formatDomainName?: (domain?: string, size?: number) => string | undefined
 
             getAverageBlockDelay?: (chainId: number, scale?: number) => number
         }
         export interface Capabilities {
-            Shared?: SharedState
-            AddressBook?: AddressBook
+            AddressBook?: AddressBookState
             Asset?: AssetState
             NameService?: NameServiceState
             Provider?: ProviderState
             Token?: TokenState
             TokenList?: TokenListState
             Transaction?: TransactionState
+            Shared?: SharedState
             Utils?: Others
         }
     }

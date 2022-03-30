@@ -108,7 +108,7 @@ export async function activateSocialNetworkUIInner(ui_deferred: SocialNetworkUI.
                     else return PersistentStorages.Plugin.createSubScope(pluginID, defaultValues, signal)
                 },
                 personaSign: Services.Identity.signWithPersona,
-                walletSign: Services.Ethereum.personalSign,
+                walletSign: EVM_RPC.personalSign,
                 currentPersona: createSubscriptionFromAsync(
                     Services.Settings.getCurrentPersonaIdentifier,
                     undefined as PersonaIdentifier | undefined,

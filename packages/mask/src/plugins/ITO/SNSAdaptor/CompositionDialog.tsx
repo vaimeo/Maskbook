@@ -22,6 +22,7 @@ import { omit, set } from 'lodash-unified'
 import { useCompositionContext } from '@masknet/plugin-infra'
 import { MINDS_ID } from '../../../social-network-adaptor/minds.com/base'
 import { activatedSocialNetworkUI } from '../../../social-network'
+import { EVM_RPC } from '@masknet/plugin-evm/src/messages'
 
 interface StyleProps {
     snsId: string
@@ -153,7 +154,7 @@ export function CompositionDialog(props: CompositionDialogProps) {
         async (payload: JSON_PayloadInMask) => {
             if (!payload.password) {
                 const [, title] = payload.message.split(MSG_DELIMITER)
-                payload.password = await Services.Ethereum.personalSign(Web3Utils.sha3(title) ?? '', account)
+                payload.password = await EVM_RPC.personalSign(Web3Utils.sha3(title) ?? '', account)
             }
             if (!payload.password) {
                 alert('Failed to sign the password.')

@@ -4,7 +4,9 @@
   "main": "./dist/index.js",
   "types": "./dist/index.d.ts",
   "dependencies": {
+    "@dimensiondev/mask-wallet-core": "0.1.0-20211013082857-eb62e5f",
     "@masknet/plugin-infra": "workspace:*",
+    "@masknet/shared-base": "workspace:*",
     "@masknet/web3-constants": "workspace:*",
     "@masknet/web3-contracts": "workspace:*",
     "@masknet/web3-shared-base": "workspace:*",
@@ -24,5 +26,5 @@
   },
   "devDependencies": {
     "@types/lru-cache": "^7.6.1"
-  }
+}
 }
