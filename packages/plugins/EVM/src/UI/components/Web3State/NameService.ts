@@ -14,13 +14,13 @@ export class NameServiceState implements Web3Plugin.ObjectCapabilities.NameServi
 
     static ZERO_X_ERROR_ADDRESS = '0x'
 
-    private async getDomainAddressBook(chainId: ChainId, addressOrDomain: string) {
-        const domainAddressBook = await EVM_RPC.getStorageValue('memory', 'domainAddressBook')
+    private async getDomainBook(chainId: ChainId, addressOrDomain: string) {
+        const domainAddressBook = await EVM_RPC.getStorageValue('memory', 'domainBook')
         return domainAddressBook[chainId]?.[addressOrDomain]
     }
 
-    private async setDomainAddressBook(chainId: ChainId, addressOrDomain: string, domainOrAddress: string) {
-        return EVM_RPC.setStorageValue('memory', 'domainAddressBook', {
+    private async setDomainBook(chainId: ChainId, addressOrDomain: string, domainOrAddress: string) {
+        return EVM_RPC.setStorageValue('memory', 'domainBook', {
             [chainId]: {
                 [addressOrDomain]: domainOrAddress,
                 [domainOrAddress]: addressOrDomain,
@@ -31,19 +31,20 @@ export class NameServiceState implements Web3Plugin.ObjectCapabilities.NameServi
     async lookup(chainId: ChainId, domain: string) {
         if (chainId !== ChainId.Mainnet) return
 
-        const cachedAddress = await this.getDomainAddressBook(chainId, domain)
+        const cachedAddress = await this.getDomainBook(chainId, domain)
         if (cachedAddress && isValidAddress(cachedAddress)) return cachedAddress
 
         const address = await this.ens.lookup(domain)
 
         if (
             isZeroAddress(address) ||
-            isSameAddress(address, NameServiceState.ZERO_X_ERROR_ADDRESS) ||
-            !isValidAddress(address)
+            !isValidAddress(address) ||
+            isSameAddress(address, NameServiceState.ZERO_X_ERROR_ADDRESS)
         )
             return
 
-        if (address) await this.setDomainAddressBook(chainId, domain, address)
+        // set cache
+        if (address) await this.setDomainBook(chainId, domain, address)
 
         return address
     }
@@ -52,14 +53,15 @@ export class NameServiceState implements Web3Plugin.ObjectCapabilities.NameServi
         if (chainId !== ChainId.Mainnet) return
         if (!isValidAddress(address)) return
 
-        const cachedDomain = await this.getDomainAddressBook(chainId, address)
+        const cachedDomain = await this.getDomainBook(chainId, address)
         if (cachedDomain) return cachedDomain
 
         const domain = await this.ens.reverse(address)
 
-        if (isZeroAddress(domain) || isSameAddress(domain, NameServiceState.ZERO_X_ERROR_ADDRESS)) return
+        if (!domain || isZeroAddress(domain) || isSameAddress(domain, NameServiceState.ZERO_X_ERROR_ADDRESS)) return
 
-        if (domain) await this.setDomainAddressBook(chainId, address, domain)
+        // set cache
+        await this.setDomainBook(chainId, address, domain)
 
         return domain
     }

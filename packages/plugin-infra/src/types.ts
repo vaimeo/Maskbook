@@ -699,7 +699,6 @@ export interface Pagination {
 }
 
 export interface Pageable<T> {
-    currentPage: number
     hasNextPage: boolean
     data: T[]
 }

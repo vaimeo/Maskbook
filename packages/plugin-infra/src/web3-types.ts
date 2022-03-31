@@ -1,6 +1,5 @@
 import type { BigNumber } from 'bignumber.js'
 import type { Subscription } from 'use-subscription'
-import type { ChainId } from '../../web3-shared/evm'
 import type { Pagination, Plugin, Pageable } from './types'
 
 /**
@@ -97,6 +96,17 @@ export declare namespace Web3Plugin {
         name: string
     }
 
+    export interface GasPriceEstimated {
+        estimatedSeconds: number
+        price: number
+    }
+
+    export interface GasPrice {
+        fast: GasPriceEstimated
+        normal: GasPriceEstimated
+        slow: GasPriceEstimated
+    }
+
     export interface CryptoPrice {
         [token: string]: {
             [key in CurrencyType]?: number
@@ -109,10 +119,12 @@ export declare namespace Web3Plugin {
         fullName?: string
         shortName?: string
         chainName?: string
-        network?: string // mainnet
+        /** network name */
+        network?: 'mainnet' | Omit<string, 'mainnet'>
     }
 
     export interface Wallet {
+        id: string
         /** User define wallet name. Default address.prefix(6) */
         name: string
         /** The address of wallet */
@@ -127,22 +139,6 @@ export declare namespace Web3Plugin {
         updatedAt: Date
     }
 
-    export interface Asset<T extends Token = Token> {
-        id: string
-        chainId: number
-        balance: string
-        /** estimated price */
-        price?: {
-            [key in CurrencyType]?: string
-        }
-        /** estimated value */
-        value?: {
-            [key in CurrencyType]?: string
-        }
-        logoURI?: string
-        token: T
-    }
-
     export interface AddressName {
         id: string
         /** eg. vitalik.eth */
@@ -152,25 +148,29 @@ export declare namespace Web3Plugin {
         /** eg. 0xd8dA6BF26964aF9D7eEd9e03E53415D37aA96045 */
         resolvedAddress?: string
     }
-
-    // export interface Transaction {
-    //     id: string
-    //     type: string
-    //     title: string
-    //     from: string
-    //     to: string
-    //     timestamp: string
-    //     /** 0: failed 1: succeed */
-    //     status: 0 | 1
-    //     /** estimated tx fee */
-    //     fee: {
-    //         [key in CurrencyType]?: string
-    //     }
-    // }
+    export interface Transaction {
+        id: string
+        type?: string
+        filterType?: string
+        from: string
+        to: string
+        /** unix timestamp */
+        timestamp: number
+        /** 0: failed 1: succeed */
+        status: 0 | 1
+        /** transferred tokens */
+        tokens: (Token & {
+            amount: string
+            direction: string
+        })[]
+        /** estimated tx fee */
+        fee?: {
+            [key in CurrencyType]?: string
+        }
+    }
 
     export interface RecentTransaction {
-        /** ID */
-        ID: string
+        id: string
         /** status type */
         status: TransactionStatusType
         /** record created at */
@@ -194,9 +194,7 @@ export declare namespace Web3Plugin {
         logoURI?: string | string[]
     }
 
-    export interface NonFungibleContract {
-        id: string
-        chainId: number
+    export interface NonFungibleContract extends Token {
         name: string
         symbol: string
         address: string
@@ -232,18 +230,38 @@ export declare namespace Web3Plugin {
         contract?: NonFungibleContract
     }
 
+    export interface FungibleAsset {
+        id: string
+        chainId: number
+        balance: string
+        /** estimated price */
+        price?: {
+            [key in CurrencyType]?: string
+        }
+        /** estimated value */
+        value?: {
+            [key in CurrencyType]?: string
+        }
+        logoURI?: string
+        token: FungibleToken
+    }
+
+    export interface NonFungibleAsset {
+        token: NonFungibleToken
+    }
+
     export interface TokenList {
         name: string
         description?: string
         tokens: Token[]
     }
 
-    export interface DomainBook {
-        [chainId: number]: Record<string, string> | undefined
-    }
-
     export interface AddressBook {
         [chainId: number]: string[]
+    }
+
+    export interface DomainBook {
+        [chainId: number]: Record<string, string> | undefined
     }
 
     export interface AddressList {
@@ -291,21 +309,13 @@ export declare namespace Web3Plugin {
         }
         export interface AssetState {
             /** Get fungible assets of given account. */
-            getFungibleAssets?: (
-                chainId: ChainId,
-                address: string,
-                providerType: string,
-                network: NetworkDescriptor,
-                pagination?: Pagination,
-            ) => Promise<Asset<FungibleToken>[]>
+            getFungibleAssets?: (address: string, pagination?: Pagination) => Promise<Pageable<FungibleAsset>>
             /** Get non-fungible assets of given account. */
             getNonFungibleAssets?: (
-                chainId: ChainId,
+                chainId: number,
                 address: string,
-                pagination: Pagination,
-                providerType?: string,
-                network?: NetworkDescriptor,
-            ) => Promise<Pageable<NonFungibleToken>>
+                pagination?: Pagination,
+            ) => Promise<Pageable<NonFungibleAsset>>
         }
         export interface NameServiceState {
             lookup?: (chainId: number, domain: string) => Promise<string | undefined>
@@ -349,14 +359,18 @@ export declare namespace Web3Plugin {
         }
 
         export interface Others {
+            /** detect if a chain id is supported  */
             isChainIdValid?: (chainId: number, allowTestnet: boolean) => boolean
+            /** detech if a domain is valid */
             isValidDomain?: (domain: string) => boolean
+            /** compare two addresses */
             isSameAddress?: (address?: string, otherAddress?: string) => boolean
 
             getLatestBlockNumber?: (chainId: number) => Promise<number>
             getLatestBalance?: (chainId: number, account: string) => Promise<string>
-
             getChainDetailed?: (chainId: number) => ChainDetailed | undefined
+            getAverageBlockDelay?: (chainId: number, scale?: number) => number
+
             getFungibleTokenMetadata?: (token: FungibleToken) => Promise<FungibleTokenMetadata>
             getNonFungibleTokenMetadata?: (token: NonFungibleToken) => Promise<NonFungibleTokenMetadata>
 
@@ -365,18 +379,18 @@ export declare namespace Web3Plugin {
             formatBalance?: (value: BigNumber.Value, decimals?: number, significant?: number) => string
             formatDomainName?: (domain?: string, size?: number) => string | undefined
 
+            /** chain customization */
             resolveChainName?: (chainId: number) => string
             resolveChainColor?: (chainId: number) => string
             resolveChainFullName?: (chainId: number) => string
 
+            /** explorer */
             resolveTransactionLink?: (chainId: number, transactionId: string) => string
             resolveAddressLink?: (chainId: number, address: string) => string
-            resolveFungibleTokenLink?: (chainId: number, address: string) => string
-            resolveNonFungibleTokenLink?: (chainId: number, address: string, tokenId: string) => string
             resolveBlockLink?: (chainId: number, blockNumber: string) => string
             resolveDomainLink?: (domain: string) => string
-
-            getAverageBlockDelay?: (chainId: number, scale?: number) => number
+            resolveFungibleTokenLink?: (chainId: number, address: string) => string
+            resolveNonFungibleTokenLink?: (chainId: number, address: string, tokenId: string) => string
         }
         export interface Capabilities {
             AddressBook?: AddressBookState

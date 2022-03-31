@@ -3,7 +3,7 @@ import { base } from '../../base'
 import { Web3UI } from '../components/Web3UI'
 import { createWeb3State } from '../components/Web3State'
 import { GlobalInjection } from '../components/GlobalInjection'
-import { MemoryDefaultValue, PersistentDefaultValue, setupStorage } from '../../storage'
+import { MemoryDefaultValue, PersistentDefaultValue, setupStorage } from '../../services/Storage'
 
 const sns: Plugin.SNSAdaptor.Definition = {
     ...base,

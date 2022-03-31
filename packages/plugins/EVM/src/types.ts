@@ -7,7 +7,6 @@ import type {
     EthereumRPC_Computed,
     EthereumTransactionConfig,
     GasOptions,
-    RecentTransaction,
 } from '@masknet/web3-shared-evm'
 
 export interface MemoryStorage {
@@ -15,15 +14,15 @@ export interface MemoryStorage {
     chainOptions: Record<EnhanceableSite | ExtensionSite, ChainOptions>
     /** cached gas options */
     gasOptions: GasOptions | null
+    /** list of address */
+    addressBook: Web3Plugin.AddressBook
     /** cached domain names and addresses */
-    domainAddressBook: Web3Plugin.DomainBook
+    domainBook: Web3Plugin.DomainBook
     /** cached token prices */
     tokenPrices: CryptoPrice
 }
 
 export interface PersistentStorage {
-    /** list of address */
-    addressBook: Web3Plugin.AddressBook
     /** list of wallets */
     wallets: (Web3Plugin.Wallet & {
         /** yep: removable, nope: unremovable */

@@ -5,4 +5,4 @@
 // export * from './NameService'
 export * from './Protocol'
 
-export { getStorageValue, getStorageSubscription, setStorageValue } from '../storage'
+export { getStorageValue, setStorageValue, getStorageSubscription } from './Storage'

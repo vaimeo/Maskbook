@@ -66,7 +66,7 @@ const useStyles = makeStyles()((theme) => ({
 }))
 
 export interface TokenTableRowProps {
-    asset: Web3Plugin.Asset<Web3Plugin.FungibleToken>
+    asset: Web3Plugin.FungibleAsset<Web3Plugin.FungibleToken>
     onSwap(): void
     onSend(): void
 }

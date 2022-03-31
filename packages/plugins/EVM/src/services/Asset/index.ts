@@ -50,7 +50,7 @@ export const getFungibleAssetsFn =
         )
         const { BALANCE_CHECKER_ADDRESS } = getEthereumConstants(chainId)
         const dataFromProvider = await context.getAssetsList(address, FungibleAssetProvider.DEBANK)
-        const assetsFromProvider: Web3Plugin.Asset<Web3Plugin.FungibleToken>[] = dataFromProvider.map((x) => ({
+        const assetsFromProvider: Web3Plugin.FungibleAsset<Web3Plugin.FungibleToken>[] = dataFromProvider.map((x) => ({
             id: x.token.address,
             chainId: x.token.chainId,
             balance: x.balance,
@@ -92,7 +92,7 @@ export const getFungibleAssetsFn =
         }
 
         const assetFromChain = balanceList.map(
-            (balance, idx): Web3Plugin.Asset<Web3Plugin.FungibleToken> => ({
+            (balance, idx): Web3Plugin.FungibleAsset<Web3Plugin.FungibleToken> => ({
                 id: trustedTokens[idx].address,
                 chainId,
                 token: {
@@ -129,7 +129,7 @@ export const getFungibleAssetsFn =
             price: PriceRecord
         }[]
 
-        const nativeTokens: Web3Plugin.Asset<Web3Plugin.FungibleToken>[] = networks
+        const nativeTokens: Web3Plugin.FungibleAsset<Web3Plugin.FungibleToken>[] = networks
             .filter(
                 (t) =>
                     t.isMainnet &&

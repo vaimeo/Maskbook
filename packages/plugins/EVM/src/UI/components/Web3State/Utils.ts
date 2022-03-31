@@ -21,44 +21,46 @@ import {
 } from '@masknet/web3-shared-evm'
 import { EVM_RPC } from '../../../messages'
 
-export async function createUtilsState(): Promise<Web3Plugin.ObjectCapabilities.Others> {
-    return {
-        isValidDomain,
-        isSameAddress,
+export class UtilState {
+    async create(): Promise<Web3Plugin.ObjectCapabilities.Others> {
+        return {
+            isChainIdValid,
+            isValidDomain,
+            isSameAddress,
 
-        getLatestBalance: (chainId: ChainId, account: string) => {
-            return EVM_RPC.getBalance(account, {
-                chainId,
-            })
-        },
-        getLatestBlockNumber: (chainId: ChainId) => {
-            return EVM_RPC.getBlockNumber({
-                chainId,
-            })
-        },
+            getLatestBalance: (chainId: ChainId, account: string) => {
+                return EVM_RPC.getBalance(account, {
+                    chainId,
+                })
+            },
+            getLatestBlockNumber: (chainId: ChainId) => {
+                return EVM_RPC.getBlockNumber({
+                    chainId,
+                })
+            },
+            getChainDetailed,
+            getAverageBlockDelay: (chainId: ChainId) => {
+                return 15 * 1000
+            },
 
-        getChainDetailed,
-        isChainIdValid,
+            formatAddress: formatEthereumAddress,
+            formatCurrency,
+            formatBalance,
+            formatDomainName,
 
-        formatAddress: formatEthereumAddress,
-        formatCurrency,
-        formatBalance,
+            resolveChainName,
+            resolveChainFullName,
+            resolveChainColor,
 
-        resolveChainName,
-        resolveChainFullName,
-        resolveChainColor,
-
-        resolveTransactionLink: resolveTransactionLinkOnExplorer,
-        resolveAddressLink: resolveAddressLinkOnExplorer,
-        resolveBlockLink: resolveBlockLinkOnExplorer,
-
-        resolveDomainLink,
-        formatDomainName,
-
-        resolveNonFungibleTokenLink: (chainId: ChainId, address: string, tokenId: string) =>
-            resolveCollectibleLink(chainId as ChainId, NonFungibleAssetProvider.OPENSEA, {
-                contractDetailed: { address: address },
-                tokenId: tokenId,
-            } as unknown as any),
+            resolveTransactionLink: resolveTransactionLinkOnExplorer,
+            resolveAddressLink: resolveAddressLinkOnExplorer,
+            resolveBlockLink: resolveBlockLinkOnExplorer,
+            resolveDomainLink,
+            resolveNonFungibleTokenLink: (chainId: ChainId, address: string, tokenId: string) =>
+                resolveCollectibleLink(chainId as ChainId, NonFungibleAssetProvider.OPENSEA, {
+                    contractDetailed: { address: address },
+                    tokenId: tokenId,
+                } as unknown as any),
+        }
     }
 }

@@ -12,7 +12,7 @@ import {
     ChainOptions,
     DomainProvider,
 } from '@masknet/web3-shared-evm'
-import type { MemoryStorage, PersistentStorage } from '../types'
+import type { MemoryStorage, PersistentStorage } from '../../types'
 
 export const MemoryDefaultValue: MemoryStorage = {
     chainOptions: [...getEnumAsArray(EnhanceableSite), ...getEnumAsArray(ExtensionSite)].reduce((accumulator, site) => {
@@ -30,12 +30,12 @@ export const MemoryDefaultValue: MemoryStorage = {
         return accumulator
     }, {} as Record<EnhanceableSite | ExtensionSite, ChainOptions>),
     gasOptions: null,
-    domainAddressBook: {},
+    addressBook: {},
+    domainBook: {},
     tokenPrices: {},
 }
 
 export const PersistentDefaultValue: PersistentStorage = {
-    addressBook: [],
     wallets: [],
     transactions: [],
     fungibleTokens: [],

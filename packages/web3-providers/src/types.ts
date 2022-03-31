@@ -7,8 +7,8 @@ import type {
     ERC721TokenDetailed,
     NativeTokenDetailed,
 } from '@masknet/web3-shared-evm'
-import type { CurrencyType } from '@masknet/plugin-infra'
-import { api } from '@dimensiondev/mask-wallet-core/proto'
+import type { CurrencyType, Web3Plugin } from '@masknet/plugin-infra'
+import type { api } from '@dimensiondev/mask-wallet-core/proto'
 
 export namespace ExplorerAPI {
     export type Transaction = Web3Transaction & {
@@ -89,20 +89,27 @@ export namespace RSS3BaseAPI {
 }
 
 export namespace PriceAPI {
-    export interface CryptoPrice {
-        [token: string]: {
-            [key in CurrencyType]?: string
-        }
-    }
-
     export interface Provider {
-        getTokenPrice(
-            tokenId: string,
-            currency: CurrencyType,
-        ): Promise<{
-            [key in CurrencyType]?: string
-        }>
-        getTokensPrice(tokenIds: string[], currency: CurrencyType): Promise<CryptoPrice>
+        getTokenPrice(tokenId: string, currency: CurrencyType): Promise<Web3Plugin.CryptoPrice['']>
+        getTokensPrice(tokenIds: string[], currency: CurrencyType): Promise<Web3Plugin.CryptoPrice>
+    }
+}
+
+export namespace HistoryAPI {
+    export interface Provider {
+        getTransactions(chainId: number, address: string): Promise<Web3Plugin.Transaction[]>
+    }
+}
+
+export namespace GasPriceAPI {
+    export interface Provider {
+        getGasPrice(chainId: number): Promise<Web3Plugin.GasPrice>
+    }
+}
+
+export namespace FungibleTokenAPI {
+    export interface Provider {
+        getAssets(address: string): Promise<Web3Plugin.FungibleAsset[]>
     }
 }
 

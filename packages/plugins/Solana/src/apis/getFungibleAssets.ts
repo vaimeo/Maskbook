@@ -45,7 +45,7 @@ async function getSplTokenList(chainId: ChainId, account: string) {
     const tokenListProvider = new TokenListProvider()
     const provider = await tokenListProvider.resolve()
     const tokenList = provider.filterByChainId(chainId).getList()
-    const splTokens: Web3Plugin.Asset[] = []
+    const splTokens: Web3Plugin.FungibleAsset[] = []
     data.result.forEach((x) => {
         const info = x.account.data.parsed.info
         const token = tokenList.find((y) => y.address === info.mint)
@@ -68,7 +68,7 @@ export async function getFungibleAssets(
     provider: string,
     network: Web3Plugin.NetworkDescriptor,
     pagination?: Pagination,
-): Promise<Web3Plugin.Asset<Web3Plugin.FungibleToken>[]> {
+): Promise<Web3Plugin.FungibleAsset<Web3Plugin.FungibleToken>[]> {
     const allSettled = await Promise.allSettled([
         getSolanaBalance(network.chainId, address).then((x) => [x]),
         getSplTokenList(network.chainId, address),
@@ -77,5 +77,5 @@ export async function getFungibleAssets(
     return allSettled
         .map((x) => (x.status === 'fulfilled' ? x.value : null))
         .flat()
-        .filter(Boolean) as Web3Plugin.Asset<Web3Plugin.FungibleToken>[]
+        .filter(Boolean) as Web3Plugin.FungibleAsset<Web3Plugin.FungibleToken>[]
 }

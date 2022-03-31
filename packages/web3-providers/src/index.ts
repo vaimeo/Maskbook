@@ -11,6 +11,9 @@ import { TokenListAPI } from './token-list'
 import { TokenPriceAPI } from './token-price'
 import { InstagramAPI } from './instagram'
 import { MaskAPI } from './mask'
+import { DeBankAPI } from './debank'
+import { ZerionAPI } from './zerion'
+import { MetaSwapAPI } from './metaswap'
 
 export * from './types'
 export * from './hooks'
@@ -30,9 +33,11 @@ export const Instagram = new InstagramAPI()
 export const TokenList = new TokenListAPI()
 export const TokenPrice = new TokenPriceAPI()
 export const Mask = new MaskAPI()
+export const DeBank = new DeBankAPI()
+export const Zerion = new ZerionAPI()
+export const MetaSwap = new MetaSwapAPI()
 
 // Method for provider proxy
 export { getOpenSeaNFTList, getOpenSeaCollectionList } from './opensea'
-export { getAssetListFromDebank } from './debank'
 export { getRaribleNFTList } from './rarible'
 export { getNFTScanNFTList, getNFTScanNFTs } from './NFTScan'
