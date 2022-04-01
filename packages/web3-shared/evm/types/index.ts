@@ -1,6 +1,7 @@
 import type { RequestArguments, TransactionConfig as TransactionConfig_ } from 'web3-core'
-import type { NonPayableTransactionObject, PayableTransactionObject } from '@masknet/web3-contracts/types/types'
 import type { JsonRpcPayload, JsonRpcResponse } from 'web3-core-helpers'
+import type { CurrencyType } from '@masknet/plugin-infra'
+import type { NonPayableTransactionObject, PayableTransactionObject } from '@masknet/web3-contracts/types/types'
 
 export interface SendOverrides {
     chainId?: ChainId
@@ -22,10 +23,6 @@ export interface ExternalProvider {
         payload: JsonRpcPayload,
         callback: (error: Error | null, response?: JsonRpcResponse | undefined) => void,
     ) => void
-}
-
-export enum CurrencyType {
-    USD = 'usd',
 }
 
 export type ChainIdOptionalRecord<T> = { [k in ChainId]?: T }
@@ -529,13 +526,9 @@ export enum TransactionStatusType {
 export interface ChainOptions {
     chainId: ChainId
     account: string
+    currencyType: CurrencyType
     providerType: ProviderType
     networkType: NetworkType
-    assetType: FungibleAssetProvider
-    nameType: DomainProvider
-    collectibleType: NonFungibleAssetProvider
-    transationType: TransactionDataProvider
-    currencyType: CurrencyType
 }
 
 export interface GasOptions {

@@ -18,7 +18,7 @@ const matchExtensionSitePathname: Record<ExtensionSite, RegExp> = {
     [ExtensionSite.Popup]: /popup\.html/i,
 }
 
-export function getEnhanceableSiteType() {
+function getEnhanceableSiteType() {
     for (const [type, regexp] of Object.entries(matchEnhanceableSiteHost)) {
         if (host.match(regexp)) return type as EnhanceableSite
         continue
@@ -26,10 +26,14 @@ export function getEnhanceableSiteType() {
     return
 }
 
-export function getExtensionSiteType() {
+function getExtensionSiteType() {
     for (const [type, regexp] of Object.entries(matchExtensionSitePathname)) {
-        if (pathname.match(regexp)) return type as EnhanceableSite
+        if (pathname.match(regexp)) return type as ExtensionSite
         continue
     }
     return
+}
+
+export function getSiteType() {
+    return getEnhanceableSiteType() ?? getExtensionSiteType()
 }

@@ -29,12 +29,19 @@ export function createWeb3State(signal: AbortSignal): Web3Plugin.ObjectCapabilit
             }),
             wallets: createSubscriptionFromUser((user): Web3Plugin.Wallet[] => {
                 if (!user?.addr) return []
+
+                const now = new Date()
+                const address = user?.addr ?? ''
+
                 return [
                     {
+                        id: address,
                         name: 'Flow',
-                        address: user?.addr,
+                        address,
                         hasDerivationPath: false,
                         hasStoredKeyInfo: false,
+                        createdAt: now,
+                        updatedAt: now,
                     },
                 ]
             }),

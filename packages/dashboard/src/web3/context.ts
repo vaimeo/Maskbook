@@ -87,7 +87,7 @@ export const Web3Context: Web3ProviderType = {
     getCollectionsNFT: PluginServices.Wallet.getCollectionsNFT,
     getAddressNamesList: PluginServices.Wallet.getAddressNames,
     getTransactionList: PluginServices.Wallet.getTransactionList,
-    fetchERC20TokensFromTokenLists: TokenList.fetchERC20TokensFromTokenLists,
+    fetchERC20TokensFromTokenLists: TokenList.fetchFungibleTokensFromTokenLists,
     providerSocket: getProxyWebsocketInstance((info) =>
         PluginMessages.Wallet.events.socketMessageUpdated.sendToAll(info),
     ),

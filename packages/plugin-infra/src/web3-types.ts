@@ -1,5 +1,6 @@
 import type { BigNumber } from 'bignumber.js'
 import type { Subscription } from 'use-subscription'
+import type { EnhanceableSite, ExtensionSite } from '../../shared-base/src/Site'
 import type { Pagination, Plugin, Pageable } from './types'
 
 /**
@@ -96,16 +97,13 @@ export declare namespace Web3Plugin {
         name: string
     }
 
-    export interface GasPriceEstimated {
-        estimatedSeconds: number
-        price: number
-    }
-
-    export interface GasPrice {
-        fast: GasPriceEstimated
-        normal: GasPriceEstimated
-        slow: GasPriceEstimated
-    }
+    export type GasPrice = Record<
+        'fast' | 'normal' | 'slow',
+        {
+            price: number
+            estimatedSeconds: number
+        }
+    >
 
     export interface CryptoPrice {
         [token: string]: {
@@ -171,6 +169,7 @@ export declare namespace Web3Plugin {
 
     export interface RecentTransaction {
         id: string
+        chainId: number
         /** status type */
         status: TransactionStatusType
         /** record created at */
@@ -179,60 +178,67 @@ export declare namespace Web3Plugin {
         updatedAt: Date
     }
 
+    export interface Account {
+        address: string
+        nickname?: string
+        avatarURL?: string
+        link?: string
+    }
+
     export interface Token {
         id: string
         chainId: number
+        type: TokenType
+        /** a sub type for casting later */
+        subType: string | number
+        address: string
     }
 
     export interface FungibleToken extends Token {
-        id: string
-        type: TokenType.Fungible
-        address: string
         decimals?: number
         name: string
         symbol: string
         logoURI?: string | string[]
     }
 
-    export interface NonFungibleContract extends Token {
-        name: string
-        symbol: string
-        address: string
-        iconURL?: string
-        balance?: number
-    }
-
-    export interface FungibleTokenMetadata {
-        name: string
-        symbol: string
-        decimals: number
-        iconURL?: string
-        token: FungibleToken
-    }
-
-    export interface NonFungibleTokenMetadata {
-        name: string
-        description: string
-        mediaType: string
-        iconURL?: string
-        assetURL?: string
-    }
-
     export interface NonFungibleToken extends Token {
-        // chainId_contractAddress_tokenId
-        id: string
         tokenId: string
-        type: TokenType.NonFungible
-        name: string
-        description?: string
-        owner?: string
-        metadata?: NonFungibleTokenMetadata
-        contract?: NonFungibleContract
+        metadata?: {
+            name?: string
+            symbol?: string
+            description?: string
+            tokenURI?: string
+            mediaURL?: string
+            imageURL?: string
+        }
+        contract?: {
+            /** a type for casting later */
+            type: string | number
+            chainId: number
+            address: string
+            name: string
+            symbol: string
+            baseURI?: string
+            iconURL?: string
+            balance?: number
+        }
+        collection?: {
+            name: string
+            slug: string
+            description?: string
+            iconURL?: string
+            /** verified by provider */
+            verified?: boolean
+            /** unix timestamp */
+            createdAt?: number
+        }
     }
 
-    export interface FungibleAsset {
-        id: string
-        chainId: number
+    /**
+     * A fungible token but with more metadata
+     */
+    export interface FungibleAsset extends FungibleToken {
+        /** currently balance */
         balance: string
         /** estimated price */
         price?: {
@@ -242,17 +248,71 @@ export declare namespace Web3Plugin {
         value?: {
             [key in CurrencyType]?: string
         }
-        logoURI?: string
-        token: FungibleToken
     }
 
-    export interface NonFungibleAsset {
-        token: NonFungibleToken
+    /**
+     * A non-fungible token but with more metadata
+     */
+    export interface NonFungibleAsset extends NonFungibleToken {
+        /** the creator data */
+        creator?: Account
+        /** the owner data */
+        owner?: Account
+        /** estimated price */
+        price?: {
+            [key in CurrencyType]?: string
+        }
+        /** traits of the digital asset */
+        traits?: {
+            type?: string
+            value?: string
+        }[]
+        /** token on auction */
+        auction?: {
+            isAuction: boolean
+            /** unix timestamp */
+            startAt?: number
+            /** unix timestamp */
+            endAt?: number
+            /** tokens available to make an order */
+            orderTokens?: FungibleToken[]
+            /** tokens available to make an offer */
+            offerTokens?: FungibleToken[]
+        }
+        orders?: {
+            quantity: number
+            /** buy or sell */
+            side?: string | number
+            /** the account make the order */
+            maker?: Account
+            /** the account fullfil the order */
+            taker?: Account
+            /** unix timestamp */
+            createdAt?: number
+            /** unix timestamp */
+            expiredAt?: number
+            /** current price */
+            price?: {
+                [key in CurrencyType]?: string
+            }
+            paymentToken?: FungibleToken
+        }[]
+        events?: {
+            type: string
+            /** unix timestamp */
+            timestamp: number
+            /** relate token price */
+            price?: {
+                [key in CurrencyType]?: string
+            }
+            paymentToken?: FungibleToken
+        }[]
     }
 
     export interface TokenList {
         name: string
         description?: string
+        /** fungile or non-fungile tokens */
         tokens: Token[]
     }
 
@@ -261,55 +321,31 @@ export declare namespace Web3Plugin {
     }
 
     export interface DomainBook {
+        /** name and address pairs bidirectional */
         [chainId: number]: Record<string, string> | undefined
     }
 
     export interface AddressList {
-        [address: string]: string[]
+        /** account and blocked token addresses */
+        [address: string]: string[] | undefined
     }
 
     export namespace ObjectCapabilities {
-        export interface SharedState {
-            allowTestnet?: Subscription<boolean>
-            /** The ID of currently chosen sub-network. */
-            chainId?: Subscription<number>
-            /** The address of the currently chosen wallet. */
-            account?: Subscription<string>
-            /** The network type. */
-            networkType?: Subscription<string | undefined>
-            /** The wallet provider type. */
-            providerType?: Subscription<string | undefined>
-            /** The asset data provider. */
-            assetType?: Subscription<string | undefined>
-            /** The address name data provider. */
-            nameType?: Subscription<string | undefined>
-            /** The collectible data provider. */
-            collectibleType?: Subscription<string | undefined>
-            /** The transaction data provider. */
-            transactionType?: Subscription<string | undefined>
-            /** The token list data provider. */
-            tokenListType?: Subscription<string | undefined>
-            /** The currency of estimated values and prices. */
-            currencyType?: Subscription<CurrencyType>
-            /** The tracked token prices which stored as address and price pairs. */
-            prices?: Subscription<CryptoPrice>
-            /** The currently stored wallet by MaskWallet. */
-            wallets?: Subscription<Wallet[]>
-            /** The default derivable wallet. */
-            walletPrimary?: Subscription<Wallet | null>
-            /** The user added fungible tokens. */
-            fungibleTokens?: Subscription<FungibleToken[]>
-            /** The user added non-fungible tokens. */
-            nonFungibleTokens?: Subscription<NonFungibleToken[]>
+        export interface PreferenceState {
+            updatePreference?: <T>(site: EnhanceableSite | ExtensionSite, preference: T) => Promise<void>
+            resetPreference?: (site: EnhanceableSite | ExtensionSite) => Promise<void>
         }
         export interface AddressBookState {
-            getAllAddress: (chainId: number) => Promise<string[]>
             addAddress: (chainId: number, address: string) => Promise<void>
             removeAddress: (chainId: number, address: string) => Promise<void>
         }
         export interface AssetState {
             /** Get fungible assets of given account. */
-            getFungibleAssets?: (address: string, pagination?: Pagination) => Promise<Pageable<FungibleAsset>>
+            getFungibleAssets?: (
+                chainId: number,
+                address: string,
+                pagination?: Pagination,
+            ) => Promise<Pageable<FungibleAsset>>
             /** Get non-fungible assets of given account. */
             getNonFungibleAssets?: (
                 chainId: number,
@@ -322,19 +358,10 @@ export declare namespace Web3Plugin {
             reverse?: (chainId: number, address: string) => Promise<string | undefined>
         }
         export interface TokenState {
-            addToken: (token: Token) => Promise<void>
-            removeToken: (token: Token) => Promise<void>
-            trustToken: (token: Token) => Promise<void>
-            blockToken: (token: Token) => Promise<void>
-        }
-        export interface ProviderState {
-            /** Get latest transactions of given account. */
-            getTransactions: (
-                address: string,
-                providerType: string,
-                network: NetworkDescriptor,
-                pagination?: Pagination,
-            ) => Promise<Transaction[]>
+            addToken?: (token: Token) => Promise<void>
+            removeToken?: (token: Token) => Promise<void>
+            trustToken?: (address: string, token: Token) => Promise<void>
+            blockToken?: (address: string, token: Token) => Promise<void>
         }
         export interface TokenListState {
             /** Get the token lists of supported fungible tokens. */
@@ -343,13 +370,25 @@ export declare namespace Web3Plugin {
             getNonFungibleTokenLists?: (chainId: number) => Promise<TokenList>
         }
         export interface TransactionState {
-            addTransaction?: (chainId: number, id: string, tx: unknown) => Promise<void>
-            removeTransaction?: (chainId: number, id: string) => Promise<void>
-            replaceTransaction?: (chainId: number, id: string, newId: string) => Promise<void>
-            updateTransaction?: (chainId: number, id: string, newId: string) => Promise<void>
+            getTransaction?: (chainId: number, address: string, id: string) => Promise<RecentTransaction | null>
+            getAllTransactions?: (chainId: number, address: string) => Promise<RecentTransaction[]>
+            addTransaction?: (chainId: number, address: string, id: string, payload: unknown) => Promise<void>
+            replaceTransaction?: (
+                chainId: number,
+                address: string,
+                id: string,
+                newId: string,
+                payload: unknown,
+            ) => Promise<void>
+            updateTransaction?: (
+                chainId: number,
+                address: string,
+                id: string,
+                status: Exclude<TransactionStatusType, TransactionStatusType.NOT_DEPEND>,
+            ) => Promise<void>
+            removeTransaction?: (chainId: number, address: string, id: string) => Promise<void>
+            /** clear all transactions relate to account under given chain */
             clearTransactions?: (chainId: number, address: string) => Promise<void>
-            getTransaction?: (chainId: number, id: string) => Promise<unknown>
-            getAllTransactions?: (chainId: number, address: string) => Promise<unknown>
         }
 
         export interface WalletState {
@@ -358,6 +397,35 @@ export declare namespace Web3Plugin {
             getAllWallets?: (chainId: number) => Promise<Wallet[]>
         }
 
+        export interface SharedState {
+            allowTestnet?: Subscription<boolean>
+            /** The ID of currently chosen sub-network. */
+            chainId?: Subscription<number>
+            /** The address of the currently chosen wallet. */
+            account?: Subscription<string>
+            /** The network type. */
+            networkType?: Subscription<string | undefined>
+            /** The wallet provider type. */
+            providerType?: Subscription<string | undefined>
+            /** The currency of estimated values and prices. */
+            currencyType?: Subscription<CurrencyType>
+            /** The tracked addresses of currently chosen sub-network */
+            addressBook?: Subscription<string[]>
+            /** The tracked domains of currently chosen sub-network */
+            domainBook?: Subscription<Record<string, string>>
+            /** The tracked transactions of currently chosen sub-network */
+            transactions?: Subscription<RecentTransaction[]>
+            /** The tracked token prices which stored as address and price pairs. */
+            prices?: Subscription<CryptoPrice>
+            /** The currently stored wallet by MaskWallet. */
+            wallets?: Subscription<Wallet[]>
+            /** The default derivable wallet. */
+            walletPrimary?: Subscription<Wallet | null>
+            /** The user added fungible tokens. */
+            fungibleTokens?: Subscription<FungibleToken[]>
+            /** The user added non-fungible tokens. */
+            nonFungibleTokens?: Subscription<NonFungibleToken[]>
+        }
         export interface Others {
             /** detect if a chain id is supported  */
             isChainIdValid?: (chainId: number, allowTestnet: boolean) => boolean
@@ -370,9 +438,6 @@ export declare namespace Web3Plugin {
             getLatestBalance?: (chainId: number, account: string) => Promise<string>
             getChainDetailed?: (chainId: number) => ChainDetailed | undefined
             getAverageBlockDelay?: (chainId: number, scale?: number) => number
-
-            getFungibleTokenMetadata?: (token: FungibleToken) => Promise<FungibleTokenMetadata>
-            getNonFungibleTokenMetadata?: (token: NonFungibleToken) => Promise<NonFungibleTokenMetadata>
 
             formatAddress?: (address: string, size?: number) => string
             formatCurrency?: (value: BigNumber.Value, sign?: string, symbol?: string) => string
@@ -396,7 +461,7 @@ export declare namespace Web3Plugin {
             AddressBook?: AddressBookState
             Asset?: AssetState
             NameService?: NameServiceState
-            Provider?: ProviderState
+            Preference?: PreferenceState
             Token?: TokenState
             TokenList?: TokenListState
             Transaction?: TransactionState

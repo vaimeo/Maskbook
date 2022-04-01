@@ -13,6 +13,7 @@ export function createFungibleToken(
         id: address,
         chainId,
         type: TokenType.Fungible,
+        subType: TokenType.Fungible,
         address,
         name,
         symbol,
@@ -27,14 +28,11 @@ export function createFungibleAsset(
     price?: { [key in CurrencyType]?: string },
 ): Web3Plugin.FungibleAsset {
     return {
-        id: token.address,
-        chainId: token.chainId,
+        ...token,
         balance: leftShift(balance, 8).toFixed(),
-        token,
-        logoURI,
+        price,
         value: {
             [CurrencyType.USD]: multipliedBy(price?.usd ?? 0, leftShift(balance, 8)).toFixed(),
         },
-        price,
     }
 }

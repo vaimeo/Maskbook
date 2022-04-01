@@ -1,11 +1,13 @@
 import { EthereumMethodType, EthereumRpcType, isSameAddress, isZeroAddress } from '@masknet/web3-shared-evm'
-import { WalletRPC } from '../../../../plugins/Wallet/messages'
 import { getSendTransactionComputedPayload } from '../rpc'
 import type { Context, Middleware } from '../types'
+import { AddressBookState } from '../../../state'
 
 type ComputedPayload = UnboxPromise<ReturnType<typeof getSendTransactionComputedPayload>>
 
 export class AddressBook implements Middleware<Context> {
+    private addressBook = new AddressBookState()
+
     private getFrom(computedPayload: ComputedPayload) {
         if (!computedPayload) return
         const tx = computedPayload?._tx
@@ -34,7 +36,8 @@ export class AddressBook implements Middleware<Context> {
             const from = this.getFrom(computedPayload)
             const to = this.getTo(computedPayload)
 
-            if (!isSameAddress(from, to) && !isZeroAddress(to) && to) await WalletRPC.addAddress(context.chainId, to)
+            if (!isSameAddress(from, to) && !isZeroAddress(to) && to)
+                await this.addressBook.addAddress(context.chainId, to)
         } catch {
             // to scan the context for available recipient address, allow to fail silently.
         }

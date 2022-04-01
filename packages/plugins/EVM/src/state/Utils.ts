@@ -19,7 +19,7 @@ import {
     resolveDomainLink,
     formatDomainName,
 } from '@masknet/web3-shared-evm'
-import { EVM_RPC } from '../../../messages'
+import { EVM_RPC } from '../messages'
 
 export class UtilState {
     async create(): Promise<Web3Plugin.ObjectCapabilities.Others> {

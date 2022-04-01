@@ -8,6 +8,7 @@ import {
     PLUGIN_NETWORKS,
     PLUGIN_APPLICATION_CATEGORIES,
 } from './constants'
+import { languages } from './locales/languages'
 
 export const base: Plugin.Shared.Definition = {
     ID: PLUGIN_ID,
@@ -20,6 +21,7 @@ export const base: Plugin.Shared.Definition = {
         networks: { type: 'opt-out', networks: {} },
         target: 'stable',
     },
+    i18n: languages,
     declareApplicationCategories: PLUGIN_APPLICATION_CATEGORIES,
     declareWeb3Networks: PLUGIN_NETWORKS,
     declareWeb3Providers: PLUGIN_PROVIDERS,

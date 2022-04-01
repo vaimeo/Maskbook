@@ -70,6 +70,18 @@ export function mapSubscription<T, Q>(sub: Subscription<T>, mapper: (val: T) => 
     }
 }
 
+export function mergeSubscription<T>(...subs: Subscription<unknown>[]) {
+    return {
+        getCurrentValue() {
+            return subs.map((x) => x.getCurrentValue()) as unknown as T
+        },
+        subscribe: (callback: () => void) => {
+            const unsubs = subs.map((x) => x.subscribe(callback))
+            return () => unsubs.forEach((x) => x())
+        },
+    }
+}
+
 export function SubscriptionFromValueRef<T>(ref: ValueRef<T>): Subscription<T> {
     return SubscriptionDebug({
         getCurrentValue: () => ref.value,

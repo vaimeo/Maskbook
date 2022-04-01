@@ -1,4 +1,5 @@
 import { unreachable } from '@dimensiondev/kit'
+import { CurrencyType } from '@masknet/plugin-infra'
 import { leftShift, multipliedBy, rightShift, toFixed } from '@masknet/web3-shared-base'
 import {
     Asset,
@@ -6,7 +7,6 @@ import {
     NonFungibleAssetProvider,
     createERC20Token,
     createNativeToken,
-    CurrencyType,
     EthereumTokenType,
     ERC721TokenDetailed,
     formatEthereumAddress,

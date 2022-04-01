@@ -1,7 +1,7 @@
 import type Web3 from 'web3'
+import type { RequestArguments } from 'web3-core'
 import { ChainId, ExternalProvider } from '@masknet/web3-shared-evm'
 import type { Provider } from '../types'
-import type { RequestArguments } from 'web3-core'
 
 export class CustomNetworkProvider implements Provider {
     request<T extends unknown>(requestArguments: RequestArguments): Promise<T> {

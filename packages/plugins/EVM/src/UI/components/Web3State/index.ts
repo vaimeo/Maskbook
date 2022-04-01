@@ -1,17 +1,25 @@
 import type { Web3Plugin } from '@masknet/plugin-infra'
-import { AddressBookState } from './AddressBook'
-import { NameServiceState } from './NameService'
-import { TokenListState } from './TokenList'
-import { SharedState } from './Shared'
-import { UtilState } from './Utils'
-import { AssetState } from './Asset'
+import {
+    AddressBookState,
+    AssetState,
+    NameServiceState,
+    PreferenceState,
+    SharedState,
+    TokenListState,
+    TokenState,
+    TransactionState,
+    UtilState,
+} from '../../../state'
 
 export async function createWeb3State(signal: AbortSignal): Promise<Web3Plugin.ObjectCapabilities.Capabilities> {
     return {
         AddressBook: new AddressBookState(),
-        NameService: new NameServiceState(),
-        TokenList: new TokenListState(),
         Asset: new AssetState(),
+        NameService: new NameServiceState(),
+        Preference: new PreferenceState(),
+        Token: new TokenState(),
+        TokenList: new TokenListState(),
+        Transaction: new TransactionState(),
         Shared: await new SharedState().create(),
         Utils: await new UtilState().create(),
     }

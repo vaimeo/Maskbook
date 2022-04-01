@@ -1,8 +1,8 @@
 import React, { createContext, useContext, useMemo } from 'react'
 import { createContainer } from 'unstated-next'
 import { useSubscription } from 'use-subscription'
-import { CurrencyType, NetworkPluginID, Web3Plugin } from '../web3-types'
 import { createConstantSubscription } from '@masknet/shared-base'
+import { CurrencyType, NetworkPluginID, Web3Plugin } from '../web3-types'
 
 // constant subscriptions
 const ZERO = createConstantSubscription(0)
@@ -33,10 +33,6 @@ function usePluginWeb3State(pluginID: string, context: Record<string, Web3Plugin
     const account = useSubscription(Shared?.account ?? EMPTY_STRING)
     const networkType = useSubscription(Shared?.networkType ?? EMPTY_STRING)
     const providerType = useSubscription(Shared?.providerType ?? EMPTY_STRING)
-    const assetType = useSubscription(Shared?.assetType ?? EMPTY_STRING)
-    const nameType = useSubscription(Shared?.nameType ?? EMPTY_STRING)
-    const collectibleType = useSubscription(Shared?.collectibleType ?? EMPTY_STRING)
-    const transactionType = useSubscription(Shared?.transactionType ?? EMPTY_STRING)
     const currencyType = useSubscription(Shared?.currencyType ?? USD_CURRENCY)
     const prices = useSubscription(Shared?.prices ?? NULL)
     const walletPrimary = useSubscription(Shared?.walletPrimary ?? NULL)
@@ -50,10 +46,6 @@ function usePluginWeb3State(pluginID: string, context: Record<string, Web3Plugin
         account,
         networkType,
         providerType,
-        assetType,
-        nameType,
-        collectibleType,
-        transactionType,
         currencyType,
         prices,
         walletPrimary,

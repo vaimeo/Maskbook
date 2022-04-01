@@ -3,7 +3,7 @@ import { defer } from '@dimensiondev/kit'
 import { EthereumMethodType } from '@masknet/web3-shared-evm'
 import { BaseProvider } from './Base'
 import type { Provider } from '../types'
-import type { EVM_Messages } from '../../../messages'
+import { EVM_Messages } from '../../../messages'
 
 export class BridgedProvider extends BaseProvider implements Provider {
     private id = 0

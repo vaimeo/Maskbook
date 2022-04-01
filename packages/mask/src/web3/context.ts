@@ -164,7 +164,7 @@ function createWeb3Context(disablePopup = false, isMask = false): Web3ProviderTy
             return addressNames
         },
         getTransactionList: WalletRPC.getTransactionList,
-        fetchERC20TokensFromTokenLists: TokenList.fetchERC20TokensFromTokenLists,
+        fetchERC20TokensFromTokenLists: TokenList.fetchFungibleTokensFromTokenLists,
         providerSocket: getProxyWebsocketInstance((info) => WalletMessages.events.socketMessageUpdated.sendToAll(info)),
     }
 }

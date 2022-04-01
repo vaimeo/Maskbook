@@ -5,11 +5,13 @@ import {
     getReceiptStatus,
     TransactionStatusType,
 } from '@masknet/web3-shared-evm'
-import { WalletRPC } from '../../../../plugins/Wallet/messages'
 import type { Context, Middleware } from '../types'
 import { sendTransaction } from '../network'
+import { TransactionState } from '../../../state'
 
 export class RecentTransaction implements Middleware<Context> {
+    private transaction = new TransactionState()
+
     async fn(context: Context, next: () => Promise<void>) {
         let replacedHash
 
@@ -34,7 +36,7 @@ export class RecentTransaction implements Middleware<Context> {
                 case EthereumMethodType.ETH_SEND_TRANSACTION:
                     if (!context.config || typeof context.result !== 'string') return
                     if (replacedHash)
-                        await WalletRPC.replaceRecentTransaction(
+                        await this.transaction.replaceTransaction(
                             context.chainId,
                             context.account,
                             replacedHash,
@@ -42,7 +44,7 @@ export class RecentTransaction implements Middleware<Context> {
                             context.config,
                         )
                     else
-                        await WalletRPC.addRecentTransaction(
+                        await this.transaction.addTransaction(
                             context.chainId,
                             context.account,
                             context.result,
@@ -53,7 +55,7 @@ export class RecentTransaction implements Middleware<Context> {
                     const receipt = context.result as TransactionReceipt | null
                     const status = getReceiptStatus(receipt)
                     if (receipt?.transactionHash && status !== TransactionStatusType.NOT_DEPEND) {
-                        await WalletRPC.updateRecentTransaction(
+                        await this.transaction.updateTransaction(
                             context.chainId,
                             context.account,
                             receipt.transactionHash,

@@ -1,12 +1,14 @@
 import ENS from 'ethjs-ens'
 import type { Web3Plugin } from '@masknet/plugin-infra'
 import { ChainId, createExternalProvider, isSameAddress, isValidAddress, isZeroAddress } from '@masknet/web3-shared-evm'
-import { EVM_RPC } from '../../../messages'
+import { EVM_RPC } from '../messages'
+import { getStorageValue, setStorageValue } from '../storage'
 
 export class NameServiceState implements Web3Plugin.ObjectCapabilities.NameServiceState {
     private provider = createExternalProvider(EVM_RPC.request, () => ({
         chainId: ChainId.Mainnet,
     }))
+
     private ens = new ENS({
         provider: this.provider,
         network: ChainId.Mainnet,
@@ -15,12 +17,12 @@ export class NameServiceState implements Web3Plugin.ObjectCapabilities.NameServi
     static ZERO_X_ERROR_ADDRESS = '0x'
 
     private async getDomainBook(chainId: ChainId, addressOrDomain: string) {
-        const domainAddressBook = await EVM_RPC.getStorageValue('memory', 'domainBook')
+        const domainAddressBook = await getStorageValue('memory', 'domainBook')
         return domainAddressBook[chainId]?.[addressOrDomain]
     }
 
     private async setDomainBook(chainId: ChainId, addressOrDomain: string, domainOrAddress: string) {
-        return EVM_RPC.setStorageValue('memory', 'domainBook', {
+        return setStorageValue('memory', 'domainBook', {
             [chainId]: {
                 [addressOrDomain]: domainOrAddress,
                 [domainOrAddress]: addressOrDomain,

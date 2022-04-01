@@ -20,7 +20,6 @@ import {
 import { FormattedAddress, useSnackbarCallback, WalletIcon } from '@masknet/shared'
 import { WalletMessages, WalletRPC } from '../../plugins/Wallet/messages'
 import { useI18N } from '../../utils'
-import Services from '../../extension/service'
 import { ActionButtonPromise } from '../../extension/options-page/DashboardComponents/ActionButton'
 import { EVM_RPC } from '@masknet/plugin-evm/src/messages'
 

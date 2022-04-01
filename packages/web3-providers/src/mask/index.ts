@@ -1,4 +1,5 @@
 import { OnDemandWorker } from '@masknet/shared-base'
+import { api } from '@dimensiondev/mask-wallet-core/proto'
 import type { MaskBaseAPI } from '..'
 
 enum ErrorCode {
@@ -57,6 +58,11 @@ function send<I extends keyof MaskBaseAPI.Request, O extends keyof MaskBaseAPI.R
 }
 
 export class MaskAPI implements MaskBaseAPI.Provider {
+    Coin = api.Coin
+    StoredKeyType = api.StoredKeyType
+    StoredKeyImportType = api.StoredKeyImportType
+    StoredKeyExportType = api.StoredKeyExportType
+
     public loadStoredKey = send('param_load_stored_key', 'resp_load_stored_key')
     public createStoredKey = send('param_create_stored_key', 'resp_create_stored_key')
     public importPrivateKey = send('param_import_private_key', 'resp_import_private_key')

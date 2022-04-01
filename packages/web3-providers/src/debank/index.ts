@@ -1,5 +1,5 @@
 import urlcat from 'urlcat'
-import type { Web3Plugin } from '@masknet/plugin-infra'
+import type { Pageable, Web3Plugin } from '@masknet/plugin-infra'
 import { ChainId, formatGweiToWei, getDeBankConstants } from '@masknet/web3-shared-evm'
 import { formatAssets, formatTransactions } from './format'
 import type { WalletTokenRecord, HistoryResponse, GasPriceDictResponse } from './type'
@@ -24,15 +24,15 @@ function gasModifier(gasDict: GasPriceDictResponse, chain: string) {
 }
 
 export class DeBankAPI implements FungibleTokenAPI.Provider, HistoryAPI.Provider, GasPriceAPI.Provider {
-    async getGasPrice(chainId: number): Promise<Web3Plugin.GasPrice> {
+    async getGasPrice(chainId: ChainId): Promise<Web3Plugin.GasPrice> {
         const { CHAIN_ID = '' } = getDeBankConstants(chainId)
         if (!CHAIN_ID) throw new Error('Failed to get gas price.')
 
         const response = await fetch(urlcat(DEBANK_API, '/chain/gas_price_dict_v2', { chain: CHAIN_ID }))
-        const result = await response.json()
+        const result = (await response.json()) as GasPriceDictResponse
         if (result.error_code !== 0) throw new Error('Failed to get gas price.')
 
-        const responseModified = gasModifier(result as GasPriceDictResponse, CHAIN_ID)
+        const responseModified = gasModifier(result, CHAIN_ID)
         return {
             fast: {
                 price: responseModified.data.fast.price,
@@ -49,7 +49,7 @@ export class DeBankAPI implements FungibleTokenAPI.Provider, HistoryAPI.Provider
         }
     }
 
-    async getAssets(address: string): Promise<Web3Plugin.FungibleAsset[]> {
+    async getAssets(chainId: ChainId, address: string): Promise<Pageable<Web3Plugin.FungibleAsset>> {
         const response = await fetch(
             urlcat(DEBANK_OPEN_API, '/v1/user/token_list', {
                 is_all: true,
@@ -57,17 +57,25 @@ export class DeBankAPI implements FungibleTokenAPI.Provider, HistoryAPI.Provider
                 id: address.toLowerCase(),
             }),
         )
+        const result = (await response.json()) as WalletTokenRecord[] | undefined
         try {
-            const result = ((await response.json()) ?? []) as WalletTokenRecord[]
-            return formatAssets(
-                result.map((x) => ({
-                    ...x,
-                    id: x.id === 'bsc' ? 'bnb' : x.id,
-                    chain: x.chain === 'bsc' ? 'bnb' : x.chain,
-                })),
-            )
+            return {
+                data: formatAssets(
+                    (result ?? []).map((x) => ({
+                        ...x,
+
+                        // rename bsc to bnb
+                        id: x.id === 'bsc' ? 'bnb' : x.id,
+                        chain: x.chain === 'bsc' ? 'bnb' : x.chain,
+                    })),
+                ),
+                hasNextPage: false,
+            }
         } catch {
-            return []
+            return {
+                data: [],
+                hasNextPage: false,
+            }
         }
     }
 

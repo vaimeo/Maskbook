@@ -11,7 +11,7 @@ export function useHistory(
     size: number,
     address?: string,
     tokenId?: string,
-): AsyncStateRetry<{ data: NonFungibleTokenAPI.History[]; hasNextPage: boolean }> {
+): AsyncStateRetry<{ data: NonFungibleTokenAPI.AssetHistory[]; hasNextPage: boolean }> {
     const chainId = useChainId(NetworkPluginID.PLUGIN_EVM)
     return useAsyncRetry(async () => {
         if (!address || !tokenId)

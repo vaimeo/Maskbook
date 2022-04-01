@@ -34,13 +34,16 @@ export interface PersistentStorage {
         /** the Mask SDK stored key info */
         storedKeyInfo?: MaskBaseAPI.StoredKeyInfo
     })[]
-    /** list of transactions */
-    transactions: (Web3Plugin.RecentTransaction & {
-        /** list of transactions that race at the time */
-        candidates: Record<string, EthereumTransactionConfig>
-        /** computed ethereum RPC */
-        computedPayload?: EthereumRPC_Computed
-    })[]
+    /** list of transactions owned by accounts */
+    transactions: {
+        /** chain id + account */
+        [key in string]?: (Web3Plugin.RecentTransaction & {
+            /** list of transactions that race at the time */
+            candidates: Record<string, EthereumTransactionConfig>
+            /** computed ethereum RPC */
+            computedPayload?: EthereumRPC_Computed
+        })[]
+    }
     /** list of fungible tokens */
     fungibleTokens: Web3Plugin.FungibleToken[]
     /** list of non-fungible tokens */

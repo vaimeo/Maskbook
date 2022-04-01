@@ -1,18 +1,9 @@
 import type { Subscription } from 'use-subscription'
 import { getEnumAsArray } from '@dimensiondev/kit'
-import { EnhanceableSite, ExtensionSite, ScopedStorage } from '@masknet/shared-base'
-import {
-    ChainId,
-    NetworkType,
-    ProviderType,
-    FungibleAssetProvider,
-    NonFungibleAssetProvider,
-    TransactionDataProvider,
-    CurrencyType,
-    ChainOptions,
-    DomainProvider,
-} from '@masknet/web3-shared-evm'
-import type { MemoryStorage, PersistentStorage } from '../../types'
+import { CurrencyType } from '@masknet/plugin-infra'
+import { EMPTY_LIST, EMPTY_OBJECT, EnhanceableSite, ExtensionSite, ScopedStorage } from '@masknet/shared-base'
+import { ChainId, NetworkType, ProviderType, ChainOptions } from '@masknet/web3-shared-evm'
+import type { MemoryStorage, PersistentStorage } from '../types'
 
 export const MemoryDefaultValue: MemoryStorage = {
     chainOptions: [...getEnumAsArray(EnhanceableSite), ...getEnumAsArray(ExtensionSite)].reduce((accumulator, site) => {
@@ -21,27 +12,23 @@ export const MemoryDefaultValue: MemoryStorage = {
             account: '',
             providerType: ProviderType.MaskWallet,
             networkType: NetworkType.Ethereum,
-            assetType: FungibleAssetProvider.DEBANK,
-            nameType: DomainProvider.ENS,
-            collectibleType: NonFungibleAssetProvider.OPENSEA,
-            transationType: TransactionDataProvider.SCANNER,
             currencyType: CurrencyType.USD,
         }
         return accumulator
-    }, {} as Record<EnhanceableSite | ExtensionSite, ChainOptions>),
+    }, EMPTY_OBJECT as Record<EnhanceableSite | ExtensionSite, ChainOptions>),
     gasOptions: null,
-    addressBook: {},
-    domainBook: {},
-    tokenPrices: {},
+    addressBook: EMPTY_OBJECT,
+    domainBook: EMPTY_OBJECT,
+    tokenPrices: EMPTY_OBJECT,
 }
 
 export const PersistentDefaultValue: PersistentStorage = {
-    wallets: [],
-    transactions: [],
-    fungibleTokens: [],
-    nonFungibleTokens: [],
-    fungibleTokenBlockedBy: {},
-    nonFungibleTokenBlockedBy: {},
+    wallets: EMPTY_LIST,
+    transactions: EMPTY_OBJECT,
+    fungibleTokens: EMPTY_LIST,
+    nonFungibleTokens: EMPTY_LIST,
+    fungibleTokenBlockedBy: EMPTY_OBJECT,
+    nonFungibleTokenBlockedBy: EMPTY_OBJECT,
 }
 
 const storage: {
@@ -60,6 +47,19 @@ export function setupStorage<
     storage[type] = _
 }
 
+export function getStorageSubscription<
+    T extends 'memory' | 'persistent',
+    N extends T extends 'memory' ? keyof MemoryStorage : keyof PersistentStorage,
+    V extends N extends keyof MemoryStorage
+        ? MemoryStorage[N]
+        : N extends keyof PersistentStorage
+        ? PersistentStorage[N]
+        : never,
+>(type: T, name: N): Subscription<V> {
+    // @ts-ignore
+    return storage[type].storage[name].subscription
+}
+
 export async function getStorageValue<
     T extends 'memory' | 'persistent',
     N extends T extends 'memory' ? keyof MemoryStorage : keyof PersistentStorage,
@@ -71,19 +71,6 @@ export async function getStorageValue<
 >(type: T, name: N): Promise<V> {
     // @ts-ignore
     return storage[type].storage[name]
-}
-
-export async function getStorageSubscription<
-    T extends 'memory' | 'persistent',
-    N extends T extends 'memory' ? keyof MemoryStorage : keyof PersistentStorage,
-    V extends N extends keyof MemoryStorage
-        ? MemoryStorage[N]
-        : N extends keyof PersistentStorage
-        ? PersistentStorage[N]
-        : never,
->(type: T, name: N): Promise<Subscription<V>> {
-    // @ts-ignore
-    return storage[type].storage[name].subscription
 }
 
 export async function setStorageValue<
