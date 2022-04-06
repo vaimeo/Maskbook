@@ -34,7 +34,10 @@ function usePluginWeb3State(pluginID: string, context: Record<string, Web3Plugin
     const networkType = useSubscription(Shared?.networkType ?? EMPTY_STRING)
     const providerType = useSubscription(Shared?.providerType ?? EMPTY_STRING)
     const currencyType = useSubscription(Shared?.currencyType ?? USD_CURRENCY)
-    const prices = useSubscription(Shared?.prices ?? NULL)
+    const tokenPrices = useSubscription(Shared?.tokenPrices ?? NULL)
+    const addressBook = useSubscription(Shared?.addressBook ?? EMPTY_ARRAY)
+    const domainBook = useSubscription(Shared?.domainBook ?? EMPTY_OBJECT)
+    const transactions = useSubscription(Shared?.transactions ?? EMPTY_ARRAY)
     const walletPrimary = useSubscription(Shared?.walletPrimary ?? NULL)
     const wallets = useSubscription(Shared?.wallets ?? EMPTY_ARRAY)
     const fungibleTokens = useSubscription(Shared?.fungibleTokens ?? EMPTY_ARRAY)
@@ -42,12 +45,15 @@ function usePluginWeb3State(pluginID: string, context: Record<string, Web3Plugin
 
     return {
         allowTestnet,
+        addressBook,
+        domainBook,
         chainId,
         account,
         networkType,
         providerType,
         currencyType,
-        prices,
+        tokenPrices,
+        transactions,
         walletPrimary,
         wallets,
         fungibleTokens,

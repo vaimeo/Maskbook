@@ -416,7 +416,7 @@ export declare namespace Web3Plugin {
             /** The tracked transactions of currently chosen sub-network */
             transactions?: Subscription<RecentTransaction[]>
             /** The tracked token prices which stored as address and price pairs. */
-            prices?: Subscription<CryptoPrice>
+            tokenPrices?: Subscription<CryptoPrice>
             /** The currently stored wallet by MaskWallet. */
             wallets?: Subscription<Wallet[]>
             /** The default derivable wallet. */
