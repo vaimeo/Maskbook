@@ -7,7 +7,7 @@ import { ArrowRightIcon, CircleCloseIcon, InteractionCircleIcon, LoaderIcon, Upl
 import { RecentTransactionDescription } from '../../../../../../plugins/Wallet/SNSAdaptor/WalletStatusDialog/TransactionDescription'
 import formatDateTime from 'date-fns/format'
 import { useI18N } from '../../../../../../utils'
-import { NetworkPluginID, useReverseAddress, useWeb3State } from '@masknet/plugin-infra'
+import { NetworkPluginID, useReverseDomain, useWeb3State } from '@masknet/plugin-infra'
 
 const useStyles = makeStyles()({
     item: {
@@ -71,7 +71,7 @@ export const ActivityListItem = memo<ActivityListItemProps>(
         const { t } = useI18N()
         const { classes } = useStyles()
         const { Utils } = useWeb3State()
-        const { value: domain } = useReverseAddress(toAddress, NetworkPluginID.PLUGIN_EVM)
+        const { value: domain } = useReverseDomain(toAddress, NetworkPluginID.PLUGIN_EVM)
 
         const transactionIcon = useMemo(() => {
             switch (transaction.status) {

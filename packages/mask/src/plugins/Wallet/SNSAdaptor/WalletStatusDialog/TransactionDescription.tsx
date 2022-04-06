@@ -9,14 +9,14 @@ import {
     FungibleTokenDetailed,
     useERC20TokenDetailed,
 } from '@masknet/web3-shared-evm'
-import { pow10 } from '@masknet/web3-shared-base'
+import { scale10 } from '@masknet/web3-shared-base'
 import { getContractMethodDescription } from './contractMethodDescription'
 import type { EVM_RPC } from '@masknet/plugin-evm/src/messages'
 import { NetworkPluginID, useChainId } from '@masknet/plugin-infra'
 
 function getTokenAmountDescription(amount = '0', tokenDetailed?: FungibleTokenDetailed, negative?: boolean) {
     const symbol = negative ? '- ' : ''
-    const value = pow10(9 + (tokenDetailed?.decimals ?? 18)).isGreaterThanOrEqualTo(amount)
+    const value = scale10(1, 9 + (tokenDetailed?.decimals ?? 18)).isGreaterThanOrEqualTo(amount)
         ? formatBalance(amount, tokenDetailed?.decimals ?? 0, 4)
         : 'infinite'
     const token = tokenDetailed?.symbol?.trim()

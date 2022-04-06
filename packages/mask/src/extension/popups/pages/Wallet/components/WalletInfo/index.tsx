@@ -8,7 +8,7 @@ import { useNavigate, useLocation, useMatch } from 'react-router-dom'
 import { PopupRoutes } from '@masknet/shared-base'
 import { formatEthereumAddress, useWallet } from '@masknet/web3-shared-evm'
 import { CopyIconButton } from '../../../../components/CopyIconButton'
-import { NetworkPluginID, useReverseAddress, useWeb3State } from '@masknet/plugin-infra'
+import { NetworkPluginID, useReverseDomain, useWeb3State } from '@masknet/plugin-infra'
 
 const useStyles = makeStyles()({
     container: {
@@ -68,7 +68,7 @@ export const WalletInfo = memo(() => {
     const navigate = useNavigate()
     const address = new URLSearchParams(useLocation().search).get('address')
 
-    const { value: domain } = useReverseAddress(address ?? wallet?.address, NetworkPluginID.PLUGIN_EVM)
+    const { value: domain } = useReverseDomain(address ?? wallet?.address, NetworkPluginID.PLUGIN_EVM)
     const { Utils } = useWeb3State()
 
     const excludePath = useMatch(PopupRoutes.WalletSettings)

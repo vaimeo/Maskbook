@@ -7,7 +7,7 @@ import { WalletQRCodeContainer } from '../../../../components/WalletQRCodeContai
 import { useCopyToClipboard } from 'react-use'
 import { useCurrentSelectedWalletNetwork } from '../../api'
 import { NetworkType, resolveNetworkAddressPrefix } from '@masknet/web3-shared-evm'
-import { useReverseAddress, useWeb3State } from '@masknet/plugin-infra'
+import { useReverseDomain, useWeb3State } from '@masknet/plugin-infra'
 
 const useStyles = makeStyles()((theme) => ({
     paper: {
@@ -37,7 +37,7 @@ export interface ReceiveDialogProps {
 
 export const ReceiveDialog = memo<ReceiveDialogProps>(({ open, chainName, walletAddress, onClose }) => {
     const currentSelectedWalletNetwork = useCurrentSelectedWalletNetwork()
-    const { value: domain } = useReverseAddress(walletAddress)
+    const { value: domain } = useReverseDomain(walletAddress)
     const { Utils } = useWeb3State()
     return (
         <ReceiveDialogUI

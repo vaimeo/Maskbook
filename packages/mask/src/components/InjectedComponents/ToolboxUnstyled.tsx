@@ -20,7 +20,7 @@ import {
     useChainIdValid,
     useChainDetailed,
     useWeb3State,
-    useReverseAddress,
+    useReverseDomain,
 } from '@masknet/plugin-infra'
 import { useCallback, useEffect, useMemo } from 'react'
 import { WalletIcon } from '@masknet/shared'
@@ -194,7 +194,7 @@ function useToolbox() {
 
     const isWalletValid = !!account && selectedWallet && chainIdValid
 
-    const { value: domain } = useReverseAddress(account)
+    const { value: domain } = useReverseDomain(account)
 
     function renderButtonText() {
         if (!account) return t('mask_network')

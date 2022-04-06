@@ -1,5 +1,5 @@
 import { memo } from 'react'
-import { NetworkPluginID, useReverseAddress, useWeb3State } from '@masknet/plugin-infra'
+import { NetworkPluginID, useReverseDomain, useWeb3State } from '@masknet/plugin-infra'
 
 interface ReverseAddressProps {
     address: string
@@ -9,7 +9,7 @@ interface ReverseAddressProps {
 }
 
 export const ReversedAddress = memo<ReverseAddressProps>(({ address, pluginId, domainSize, size = 5 }) => {
-    const { value: domain } = useReverseAddress(address, pluginId)
+    const { value: domain } = useReverseDomain(address, pluginId)
     const { Utils } = useWeb3State(pluginId)
 
     if (!domain || !Utils?.formatDomainName) return <>{Utils?.formatAddress?.(address, size) ?? address}</>

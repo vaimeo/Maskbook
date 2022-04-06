@@ -10,7 +10,7 @@ import {
     useWallet,
     useWeb3State,
     Web3Plugin,
-    useReverseAddress,
+    useReverseDomain,
 } from '@masknet/plugin-infra'
 import { EMPTY_LIST } from '@masknet/shared-base'
 import { PluginMessages } from '../../../../API'
@@ -80,7 +80,7 @@ export const WalletStateBar = memo(() => {
 
     const [menu, openMenu] = useNetworkSelector()
 
-    const { value: domain } = useReverseAddress(wallet?.address)
+    const { value: domain } = useReverseDomain(wallet?.address)
 
     if (!wallet) {
         return <Button onClick={openConnectWalletDialog}>{t.wallets_connect_wallet_connect()}</Button>

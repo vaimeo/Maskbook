@@ -9,7 +9,7 @@ import { SwapBox } from './SwapBox'
 import { SwapWeb3Context } from '../../../../web3/context'
 import { PopupRoutes } from '@masknet/shared-base'
 import { useI18N, usePopupsMaskFullPageTheme } from '../../../../utils'
-import { NetworkPluginID, useReverseAddress } from '@masknet/plugin-infra'
+import { NetworkPluginID, useReverseDomain } from '@masknet/plugin-infra'
 import { TargetChainIdContext } from '../../../../plugins/Trader/trader/useTargetChainIdContext'
 import { AllProviderTradeContext } from '../../../../plugins/Trader/trader/useAllProviderTradeContext'
 
@@ -78,7 +78,7 @@ export default function SwapPage() {
         })
     }, [chainId])
 
-    const { value: domain } = useReverseAddress(wallet?.address, NetworkPluginID.PLUGIN_EVM)
+    const { value: domain } = useReverseDomain(wallet?.address, NetworkPluginID.PLUGIN_EVM)
 
     applyMaskColorVars(document.body, Appearance.light)
 

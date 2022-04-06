@@ -12,7 +12,7 @@ import {
 import { TransactionIcon } from '../TransactionIcon'
 import { LinkOutIcon } from '@masknet/icons'
 import classNames from 'classnames'
-import { useReverseAddress, useWeb3State } from '@masknet/plugin-infra'
+import { useReverseDomain, useWeb3State } from '@masknet/plugin-infra'
 
 const useStyles = makeStyles()((theme) => ({
     type: {
@@ -58,7 +58,7 @@ export interface HistoryTableRowProps {
 }
 
 export const HistoryTableRow = memo<HistoryTableRowProps>(({ transaction, selectedChainId }) => {
-    const { value: domain } = useReverseAddress(transaction.toAddress)
+    const { value: domain } = useReverseDomain(transaction.toAddress)
 
     const transactionType = useMemo(() => {
         if (transaction.type === TransactionType.CREATE_RED_PACKET) {

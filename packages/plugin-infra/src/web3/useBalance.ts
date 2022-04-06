@@ -2,7 +2,7 @@ import { useAsyncRetry } from 'react-use'
 import { useAccount, useChainId } from '.'
 import { NetworkPluginID, useWeb3State } from '..'
 
-export function useBalance(pluginID?: NetworkPluginID, expectedChainId?: number, expectedAccount?: string) {
+export function useBalance(expectedChainId?: number, expectedAccount?: string, pluginID?: NetworkPluginID) {
     const { Utils } = useWeb3State()
     const defaultChainId = useChainId(pluginID)
     const defaultAccount = useAccount(pluginID)

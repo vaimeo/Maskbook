@@ -14,7 +14,7 @@ import {
     useNetworkDescriptor,
     useProviderDescriptor,
     useProviderType,
-    useReverseAddress,
+    useReverseDomain,
     useWallet,
 } from '@masknet/plugin-infra'
 import { FormattedAddress, useSnackbarCallback, WalletIcon } from '@masknet/shared'
@@ -107,7 +107,7 @@ export function WalletStatusBox(props: WalletStatusBox) {
     const networkDescriptor = useNetworkDescriptor()
     const { Utils } = useWeb3State() ?? {}
 
-    const { value: domain } = useReverseAddress(account)
+    const { value: domain } = useReverseDomain(account)
 
     // #region copy addr to clipboard
     const [, copyToClipboard] = useCopyToClipboard()

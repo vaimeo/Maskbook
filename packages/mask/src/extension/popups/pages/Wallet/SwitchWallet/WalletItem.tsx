@@ -2,7 +2,7 @@ import type { Wallet } from '@masknet/web3-shared-evm'
 import { formatEthereumAddress } from '@masknet/web3-shared-evm'
 import { makeStyles } from '@masknet/theme'
 import { memo } from 'react'
-import { NetworkPluginID, useReverseAddress, useWeb3State } from '@masknet/plugin-infra'
+import { NetworkPluginID, useReverseDomain, useWeb3State } from '@masknet/plugin-infra'
 import { MaskWalletIcon, SuccessIcon } from '@masknet/icons'
 import { ListItem, ListItemText, Typography } from '@mui/material'
 import { FormattedAddress } from '@masknet/shared'
@@ -54,7 +54,7 @@ export interface WalletItemProps {
 export const WalletItem = memo<WalletItemProps>(({ wallet, onClick, isSelected }) => {
     const { classes } = useStyles()
     const { Utils } = useWeb3State()
-    const { value: domain } = useReverseAddress(wallet.address, NetworkPluginID.PLUGIN_EVM)
+    const { value: domain } = useReverseDomain(wallet.address, NetworkPluginID.PLUGIN_EVM)
 
     return (
         <ListItem className={classes.item} onClick={onClick} style={{ paddingRight: isSelected ? 10 : 42 }}>

@@ -28,7 +28,7 @@ import { useI18N } from '../../../../../utils'
 import { WalletRPC } from '../../../../../plugins/Wallet/messages'
 import { useNativeTokenPrice, useTokenPrice } from '../../../../../plugins/Wallet/hooks/useTokenPrice'
 import { LoadingPlaceholder } from '../../../components/LoadingPlaceholder'
-import { NetworkPluginID, useReverseAddress, useWeb3State } from '@masknet/plugin-infra'
+import { NetworkPluginID, useReverseDomain, useWeb3State } from '@masknet/plugin-infra'
 import { CopyIconButton } from '../../../components/CopyIconButton'
 import { EVM_RPC } from '@masknet/plugin-evm/src/messages'
 
@@ -296,7 +296,7 @@ const ContractInteraction = memo(() => {
         }
     }, [request, requestLoading])
 
-    const { value: domain } = useReverseAddress(to, NetworkPluginID.PLUGIN_EVM)
+    const { value: domain } = useReverseDomain(to, NetworkPluginID.PLUGIN_EVM)
     const { Utils } = useWeb3State()
     return requestLoading ? (
         <LoadingPlaceholder />

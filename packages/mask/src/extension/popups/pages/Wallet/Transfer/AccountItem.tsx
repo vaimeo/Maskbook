@@ -3,7 +3,7 @@ import { MenuItem, Typography } from '@mui/material'
 import { FormattedAddress } from '@masknet/shared'
 import { formatEthereumAddress } from '@masknet/web3-shared-evm'
 import { makeStyles } from '@masknet/theme'
-import { NetworkPluginID, useReverseAddress, useWeb3State } from '@masknet/plugin-infra'
+import { NetworkPluginID, useReverseDomain, useWeb3State } from '@masknet/plugin-infra'
 
 const useStyles = makeStyles()({
     menuItem: {
@@ -37,7 +37,7 @@ export interface AccountItemProps {
 export const AccountItem = memo<AccountItemProps>(({ account, onClick }) => {
     const { classes } = useStyles()
     const { Utils } = useWeb3State()
-    const { value: domain } = useReverseAddress(account.address, NetworkPluginID.PLUGIN_EVM)
+    const { value: domain } = useReverseDomain(account.address, NetworkPluginID.PLUGIN_EVM)
 
     return (
         <MenuItem className={classes.menuItem} onClick={onClick}>
