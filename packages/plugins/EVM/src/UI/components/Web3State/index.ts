@@ -3,7 +3,7 @@ import {
     AddressBookState,
     AssetState,
     NameServiceState,
-    PreferenceState,
+    AccountState,
     SharedState,
     TokenListState,
     TokenState,
@@ -13,10 +13,10 @@ import {
 
 export async function createWeb3State(signal: AbortSignal): Promise<Web3Plugin.ObjectCapabilities.Capabilities> {
     return {
+        Account: new AccountState(),
         AddressBook: new AddressBookState(),
         Asset: new AssetState(),
         NameService: new NameServiceState(),
-        Preference: new PreferenceState(),
         Token: new TokenState(),
         TokenList: new TokenListState(),
         Transaction: new TransactionState(),

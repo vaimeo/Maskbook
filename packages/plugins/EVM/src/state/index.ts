@@ -1,6 +1,6 @@
 export * from './AddressBook'
 export * from './Asset'
-export * from './Preference'
+export * from './Account'
 export * from './Token'
 export * from './TokenList'
 export * from './Transaction'

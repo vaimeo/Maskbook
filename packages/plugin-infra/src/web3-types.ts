@@ -331,9 +331,9 @@ export declare namespace Web3Plugin {
     }
 
     export namespace ObjectCapabilities {
-        export interface PreferenceState {
-            updatePreference?: <T>(site: EnhanceableSite | ExtensionSite, preference: T) => Promise<void>
-            resetPreference?: (site: EnhanceableSite | ExtensionSite) => Promise<void>
+        export interface AccountState {
+            updateAccount?: <T>(site: EnhanceableSite | ExtensionSite, options: Partial<T>) => Promise<void>
+            resetAccount?: (site: EnhanceableSite | ExtensionSite) => Promise<void>
         }
         export interface AddressBookState {
             addAddress: (chainId: number, address: string) => Promise<void>
@@ -458,10 +458,10 @@ export declare namespace Web3Plugin {
             resolveNonFungibleTokenLink?: (chainId: number, address: string, tokenId: string) => string
         }
         export interface Capabilities {
+            Account?: AccountState
             AddressBook?: AddressBookState
             Asset?: AssetState
             NameService?: NameServiceState
-            Preference?: PreferenceState
             Token?: TokenState
             TokenList?: TokenListState
             Transaction?: TransactionState

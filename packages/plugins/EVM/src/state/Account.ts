@@ -9,8 +9,8 @@ import {
 } from '@masknet/web3-shared-evm'
 import { getStorageValue, setStorageValue } from '../storage'
 
-export class PreferenceState implements Web3Plugin.ObjectCapabilities.PreferenceState {
-    async updatePreference(
+export class AccountState implements Web3Plugin.ObjectCapabilities.AccountState {
+    async updateAccount(
         site: EnhanceableSite | ExtensionSite,
         options: {
             account?: string
@@ -54,7 +54,7 @@ export class PreferenceState implements Web3Plugin.ObjectCapabilities.Preference
         // }
     }
 
-    async resetPreference(site: EnhanceableSite | ExtensionSite) {
+    async resetAccount(site: EnhanceableSite | ExtensionSite) {
         const chainOptions = await getStorageValue('memory', 'chainOptions')
 
         chainOptions[site] = {
