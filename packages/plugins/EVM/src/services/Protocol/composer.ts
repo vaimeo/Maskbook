@@ -9,13 +9,13 @@ import {
     EthereumMethodType,
     EthereumTransactionConfig,
 } from '@masknet/web3-shared-evm'
-import {
-    currentAccountSettings,
-    currentChainIdSettings,
-    currentMaskWalletAccountSettings,
-    currentMaskWalletChainIdSettings,
-    currentProviderSettings,
-} from '../../../plugins/Wallet/settings'
+// import {
+//     currentAccountSettings,
+//     currentChainIdSettings,
+//     currentMaskWalletAccountSettings,
+//     currentMaskWalletChainIdSettings,
+//     currentProviderSettings,
+// } from '../../../plugins/Wallet/settings'
 import { getError, hasError } from './error'
 import type { Context, Middleware } from './types'
 
@@ -91,8 +91,12 @@ class RequestContext implements Context {
         return getPayloadChainId(this.request) ?? this.sendOverrides?.chainId ?? this._chainId
     }
 
+    get site() {
+        return this.requestOptions?.site
+    }
+
     get providerType() {
-        return this.sendOverrides?.providerType ?? this._providerType
+        return this.requestOptions?.providerType ?? this._providerType
     }
 
     get method() {

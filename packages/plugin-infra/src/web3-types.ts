@@ -1,5 +1,6 @@
 import type { BigNumber } from 'bignumber.js'
 import type { Subscription } from 'use-subscription'
+import type { MaskBaseAPI } from '@masknet/web3-providers'
 import type { EnhanceableSite, ExtensionSite } from '../../shared-base/src/Site'
 import type { Pagination, Plugin, Pageable } from './types'
 
@@ -105,7 +106,7 @@ export declare namespace Web3Plugin {
         }
     >
 
-    export interface CryptoPrice {
+    export interface CryptoPrices {
         [token: string]: {
             [key in CurrencyType]?: number
         }
@@ -131,6 +132,14 @@ export declare namespace Web3Plugin {
         hasStoredKeyInfo: boolean
         /** true: Derivable Wallet. false: UnDerivable Wallet */
         hasDerivationPath: boolean
+        /** yep: removable, nope: unremovable */
+        configurable?: boolean
+        /** the derivation path when wallet was created */
+        derivationPath?: string
+        /** the derivation path when wallet last was derived */
+        latestDerivationPath?: string
+        /** the Mask SDK stored key info */
+        storedKeyInfo?: MaskBaseAPI.StoredKeyInfo
         /** record created at */
         createdAt: Date
         /** record updated at */
@@ -316,128 +325,152 @@ export declare namespace Web3Plugin {
         tokens: Token[]
     }
 
-    export interface AddressBook {
-        [chainId: number]: string[]
-    }
-
-    export interface DomainBook {
-        /** name and address pairs bidirectional */
-        [chainId: number]: Record<string, string> | undefined
-    }
-
-    export interface AddressList {
-        /** account and blocked token addresses */
-        [address: string]: string[] | undefined
-    }
-
     export namespace ObjectCapabilities {
-        export interface AccountState {
-            updateAccount?: <T>(site: EnhanceableSite | ExtensionSite, options: Partial<T>) => Promise<void>
+        export interface AccountState<
+            ChainId,
+            ProviderType,
+            NetworkType,
+            Account = {
+                account: string
+                chainId: ChainId
+                providerType: ProviderType
+                networkType: NetworkType
+                currencyType: CurrencyType
+            },
+        > {
+            /** Is testnets valid */
+            allowTestnet?: Subscription<boolean>
+            /** The ID of currently chosen sub-network. */
+            chainId?: Subscription<ChainId>
+            /** The address of the currently chosen wallet. */
+            account?: Subscription<string>
+            /** The network type. */
+            networkType?: Subscription<NetworkType | undefined>
+            /** The wallet provider type. */
+            providerType?: Subscription<ProviderType | undefined>
+            /** The currency of estimated values and prices. */
+            currencyType?: Subscription<CurrencyType>
+
+            getAccount?: (site: EnhanceableSite | ExtensionSite) => Promise<Account>
+            updateAccount?: (site: EnhanceableSite | ExtensionSite, options: Partial<Account>) => Promise<void>
             resetAccount?: (site: EnhanceableSite | ExtensionSite) => Promise<void>
         }
-        export interface AddressBookState {
-            addAddress: (chainId: number, address: string) => Promise<void>
-            removeAddress: (chainId: number, address: string) => Promise<void>
+        export interface AddressBookState<ChainId> {
+            /** The tracked addresses of currently chosen sub-network */
+            addressBook?: Subscription<string[]>
+
+            addAddress: (chainId: ChainId, address: string) => Promise<void>
+            removeAddress: (chainId: ChainId, address: string) => Promise<void>
         }
-        export interface AssetState {
+        export interface AssetState<ChainId> {
             /** Get fungible assets of given account. */
             getFungibleAssets?: (
-                chainId: number,
+                chainId: ChainId,
                 address: string,
                 pagination?: Pagination,
             ) => Promise<Pageable<FungibleAsset>>
             /** Get non-fungible assets of given account. */
             getNonFungibleAssets?: (
-                chainId: number,
+                chainId: ChainId,
                 address: string,
                 pagination?: Pagination,
             ) => Promise<Pageable<NonFungibleAsset>>
         }
-        export interface NameServiceState {
-            lookup?: (chainId: number, domain: string) => Promise<string | undefined>
-            reverse?: (chainId: number, address: string) => Promise<string | undefined>
+        export interface NameServiceState<ChainId> {
+            /** The tracked domains of currently chosen sub-network */
+            domainBook?: Subscription<Record<string, string>>
+
+            lookup?: (chainId: ChainId, domain: string) => Promise<string | undefined>
+            reverse?: (chainId: ChainId, address: string) => Promise<string | undefined>
+        }
+        export interface TokenPriceState<ChainId> {
+            /** The tracked token prices which stored as address and price pairs. */
+            tokenPrices?: Subscription<CryptoPrices>
+
+            /** get price of a token */
+            getTokenPrice?: (chainId: ChainId, currency: CurrencyType, id: string) => CryptoPrices[keyof CryptoPrices]
+            /** get prices of tokens */
+            getTokenPrices?: (chainId: ChainId, currency: CurrencyType, ids: string[]) => CryptoPrices
+        }
+        export interface TokenListState<ChainId> {
+            /** Get the token lists of supported fungible tokens. */
+            getFungibleTokenLists?: (chainId: ChainId) => Promise<TokenList>
+            /** Get the token lists of supported non-fungible tokens. */
+            getNonFungibleTokenLists?: (chainId: ChainId) => Promise<TokenList>
         }
         export interface TokenState {
+            /** The user added fungible tokens. */
+            fungibleTokens?: Subscription<FungibleToken[]>
+            /** The user added non-fungible tokens. */
+            nonFungibleTokens?: Subscription<NonFungibleToken[]>
+
             addToken?: (token: Token) => Promise<void>
             removeToken?: (token: Token) => Promise<void>
             trustToken?: (address: string, token: Token) => Promise<void>
             blockToken?: (address: string, token: Token) => Promise<void>
         }
-        export interface TokenListState {
-            /** Get the token lists of supported fungible tokens. */
-            getFungibleTokenLists?: (chainId: number) => Promise<TokenList>
-            /** Get the token lists of supported non-fungible tokens. */
-            getNonFungibleTokenLists?: (chainId: number) => Promise<TokenList>
-        }
-        export interface TransactionState {
-            getTransaction?: (chainId: number, address: string, id: string) => Promise<RecentTransaction | null>
-            getAllTransactions?: (chainId: number, address: string) => Promise<RecentTransaction[]>
-            addTransaction?: (chainId: number, address: string, id: string, payload: unknown) => Promise<void>
+        export interface TransactionState<ChainId, TransactionConfig> {
+            /** The tracked transactions of currently chosen sub-network */
+            transactions?: Subscription<RecentTransaction[]>
+
+            addTransaction?: (
+                chainId: ChainId,
+                address: string,
+                id: string,
+                transaction: TransactionConfig,
+            ) => Promise<void>
             replaceTransaction?: (
-                chainId: number,
+                chainId: ChainId,
                 address: string,
                 id: string,
                 newId: string,
-                payload: unknown,
+                transaction: TransactionConfig,
             ) => Promise<void>
             updateTransaction?: (
-                chainId: number,
+                chainId: ChainId,
                 address: string,
                 id: string,
                 status: Exclude<TransactionStatusType, TransactionStatusType.NOT_DEPEND>,
             ) => Promise<void>
-            removeTransaction?: (chainId: number, address: string, id: string) => Promise<void>
+            removeTransaction?: (chainId: ChainId, address: string, id: string) => Promise<void>
             /** clear all transactions relate to account under given chain */
-            clearTransactions?: (chainId: number, address: string) => Promise<void>
+            clearTransactions?: (chainId: ChainId, address: string) => Promise<void>
         }
-
+        export interface ProtocolState<ChainId, RequestArguments, TransactionConfig> {
+            request?: <T>(chainId: ChainId, requestArguments: RequestArguments) => Promise<T>
+            /** Sign a plain message, some chain support multiple sign methods */
+            signMessage?: (address: string, message: string, signType?: string) => Promise<string>
+            /** Sign a transaction, and the result could send as a raw transaction */
+            signTransaction?: (address: string, transaction: TransactionConfig) => Promise<string>
+            /** Get transaction status */
+            getTransactionStatus?: (chainId: ChainId, id: string) => Promise<TransactionStatusType>
+            /** Send transaction and get tx id */
+            sendTransaction?: (chainId: ChainId, transaction: TransactionConfig) => Promise<string>
+            /** Send transaction and wait until it confirmed */
+            sendAndConfirmTransaction?: (chainId: ChainId, transaction: TransactionConfig) => Promise<string>
+        }
         export interface WalletState {
-            addWallet?: (chainId: number, id: string, wallet: Wallet) => Promise<void>
-            removeWallet?: (chainId: number, id: string) => Promise<void>
-            getAllWallets?: (chainId: number) => Promise<Wallet[]>
-        }
-
-        export interface SharedState {
-            allowTestnet?: Subscription<boolean>
-            /** The ID of currently chosen sub-network. */
-            chainId?: Subscription<number>
-            /** The address of the currently chosen wallet. */
-            account?: Subscription<string>
-            /** The network type. */
-            networkType?: Subscription<string | undefined>
-            /** The wallet provider type. */
-            providerType?: Subscription<string | undefined>
-            /** The currency of estimated values and prices. */
-            currencyType?: Subscription<CurrencyType>
-            /** The tracked addresses of currently chosen sub-network */
-            addressBook?: Subscription<string[]>
-            /** The tracked domains of currently chosen sub-network */
-            domainBook?: Subscription<Record<string, string>>
-            /** The tracked transactions of currently chosen sub-network */
-            transactions?: Subscription<RecentTransaction[]>
-            /** The tracked token prices which stored as address and price pairs. */
-            tokenPrices?: Subscription<CryptoPrice>
             /** The currently stored wallet by MaskWallet. */
             wallets?: Subscription<Wallet[]>
             /** The default derivable wallet. */
             walletPrimary?: Subscription<Wallet | null>
-            /** The user added fungible tokens. */
-            fungibleTokens?: Subscription<FungibleToken[]>
-            /** The user added non-fungible tokens. */
-            nonFungibleTokens?: Subscription<NonFungibleToken[]>
+
+            addWallet?: (id: string, wallet: Web3Plugin.Wallet) => Promise<void>
+            removeWallet?: (id: string) => Promise<void>
+            getAllWallets?: () => Promise<Wallet[]>
         }
-        export interface Others {
+        export interface Others<ChainId> {
             /** detect if a chain id is supported  */
-            isChainIdValid?: (chainId: number, allowTestnet: boolean) => boolean
+            isChainIdValid?: (chainId: ChainId, allowTestnet: boolean) => boolean
             /** detech if a domain is valid */
             isValidDomain?: (domain: string) => boolean
             /** compare two addresses */
             isSameAddress?: (address?: string, otherAddress?: string) => boolean
 
-            getLatestBlockNumber?: (chainId: number) => Promise<number>
-            getLatestBalance?: (chainId: number, account: string) => Promise<string>
-            getChainDetailed?: (chainId: number) => ChainDetailed | undefined
-            getAverageBlockDelay?: (chainId: number, scale?: number) => number
+            getLatestBlockNumber?: (chainId: ChainId) => Promise<number>
+            getLatestBalance?: (chainId: ChainId, account: string) => Promise<string>
+            getChainDetailed?: (chainId: ChainId) => ChainDetailed | undefined
+            getAverageBlockDelay?: (chainId: ChainId, scale?: number) => number
 
             formatAddress?: (address: string, size?: number) => string
             formatCurrency?: (value: BigNumber.Value, sign?: string, symbol?: string) => string
@@ -445,28 +478,30 @@ export declare namespace Web3Plugin {
             formatDomainName?: (domain?: string, size?: number) => string | undefined
 
             /** chain customization */
-            resolveChainName?: (chainId: number) => string
-            resolveChainColor?: (chainId: number) => string
-            resolveChainFullName?: (chainId: number) => string
+            resolveChainName?: (chainId: ChainId) => string
+            resolveChainColor?: (chainId: ChainId) => string
+            resolveChainFullName?: (chainId: ChainId) => string
 
             /** explorer */
-            resolveTransactionLink?: (chainId: number, transactionId: string) => string
-            resolveAddressLink?: (chainId: number, address: string) => string
-            resolveBlockLink?: (chainId: number, blockNumber: string) => string
+            resolveTransactionLink?: (chainId: ChainId, id: string) => string
+            resolveAddressLink?: (chainId: ChainId, address: string) => string
+            resolveBlockLink?: (chainId: ChainId, blockNumber: string) => string
             resolveDomainLink?: (domain: string) => string
-            resolveFungibleTokenLink?: (chainId: number, address: string) => string
-            resolveNonFungibleTokenLink?: (chainId: number, address: string, tokenId: string) => string
+            resolveFungibleTokenLink?: (chainId: ChainId, address: string) => string
+            resolveNonFungibleTokenLink?: (chainId: ChainId, address: string, tokenId: string) => string
         }
-        export interface Capabilities {
-            Account?: AccountState
-            AddressBook?: AddressBookState
-            Asset?: AssetState
-            NameService?: NameServiceState
+        export interface Capabilities<ChainId, ProviderType, NetworkType, RequestArguments, TransactionConfig> {
+            Account?: AccountState<ChainId, ProviderType, NetworkType>
+            AddressBook?: AddressBookState<ChainId>
+            Asset?: AssetState<ChainId>
+            NameService?: NameServiceState<ChainId>
             Token?: TokenState
-            TokenList?: TokenListState
-            Transaction?: TransactionState
-            Shared?: SharedState
-            Utils?: Others
+            TokenPrice?: TokenPriceState<ChainId>
+            TokenList?: TokenListState<ChainId>
+            Transaction?: TransactionState<ChainId, TransactionConfig>
+            Protocol?: ProtocolState<ChainId, RequestArguments, TransactionConfig>
+            Wallet?: WalletState
+            Utils?: Others<ChainId>
         }
     }
     export namespace UI {

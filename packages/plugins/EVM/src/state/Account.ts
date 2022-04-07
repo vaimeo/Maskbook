@@ -1,24 +1,45 @@
-import { Web3Plugin, CurrencyType } from '@masknet/plugin-infra'
-import type { EnhanceableSite, ExtensionSite } from '@masknet/shared-base'
+import { getEnumAsArray } from '@dimensiondev/kit'
+import { AccountState, CurrencyType, Plugin } from '@masknet/plugin-infra'
+import { EnhanceableSite, ExtensionSite } from '@masknet/shared-base'
 import {
+    ChainId,
     getChainIdFromNetworkType,
     getNetworkTypeFromChainId,
-    ChainId,
     NetworkType,
     ProviderType,
 } from '@masknet/web3-shared-evm'
-import { getStorageValue, setStorageValue } from '../storage'
+import type { State } from '.'
 
-export class AccountState implements Web3Plugin.ObjectCapabilities.AccountState {
-    async updateAccount(
-        site: EnhanceableSite | ExtensionSite,
-        options: {
-            account?: string
-            chainId?: ChainId
-            networkType?: NetworkType
-            providerType?: ProviderType
-        },
-    ) {
+export interface AccountStorage {
+    chainId: ChainId
+    account: string
+    currencyType: CurrencyType
+    providerType: ProviderType
+    networkType: NetworkType
+}
+
+const DEFAULT_CHAIN_OPTINOS: AccountStorage = {
+    account: '',
+    chainId: ChainId.Mainnet,
+    currencyType: CurrencyType.USD,
+    networkType: NetworkType.Ethereum,
+    providerType: ProviderType.MaskWallet,
+}
+
+export class Account extends AccountState<ChainId, ProviderType, NetworkType, AccountStorage> {
+    constructor(override context: Plugin.Shared.SharedContext, protected state: State) {
+        const defaultValue = [...getEnumAsArray(EnhanceableSite), ...getEnumAsArray(ExtensionSite)].reduce(
+            (accumulator, site) => {
+                accumulator[site.value] = DEFAULT_CHAIN_OPTINOS
+                return accumulator
+            },
+            {} as Record<EnhanceableSite | ExtensionSite, AccountStorage>,
+        )
+
+        super(context, defaultValue)
+    }
+
+    override async updateAccount(site: EnhanceableSite | ExtensionSite, options: Partial<AccountStorage>) {
         if (options.chainId && !options.networkType) options.networkType = getNetworkTypeFromChainId(options.chainId)
         if (!options.chainId && options.networkType) options.chainId = getChainIdFromNetworkType(options.networkType)
 
@@ -37,13 +58,10 @@ export class AccountState implements Web3Plugin.ObjectCapabilities.AccountState 
         //     await updateWallet(account, {})
         // }
 
-        const chainOptions = await getStorageValue('memory', 'chainOptions')
-
-        chainOptions[site] = {
-            ...chainOptions[site],
+        await super.updateAccount(site, {
+            ...this.storage[site].value,
             ...options,
-        }
-        await setStorageValue('memory', 'chainOptions', chainOptions)
+        })
 
         // if (providerType === ProviderType.MaskWallet) {
         //     await updateMaskAccount({
@@ -52,18 +70,5 @@ export class AccountState implements Web3Plugin.ObjectCapabilities.AccountState 
         //         networkType
         //     })
         // }
-    }
-
-    async resetAccount(site: EnhanceableSite | ExtensionSite) {
-        const chainOptions = await getStorageValue('memory', 'chainOptions')
-
-        chainOptions[site] = {
-            account: '',
-            chainId: ChainId.Mainnet,
-            networkType: NetworkType.Ethereum,
-            providerType: ProviderType.MaskWallet,
-            currencyType: CurrencyType.USD,
-        }
-        await setStorageValue('memory', 'chainOptions', chainOptions)
     }
 }

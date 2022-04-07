@@ -597,6 +597,7 @@ importers:
       '@masknet/shared-base-ui': workspace:*
       '@masknet/theme': workspace:*
       '@masknet/typed-message': workspace:*
+      '@masknet/web3-providers': workspace:*
       '@masknet/web3-shared-base': workspace:*
       '@servie/events': ^3.0.0
       '@types/use-subscription': ^1.0.0
@@ -606,6 +607,7 @@ importers:
       react-use: ^17.3.2
       unstated-next: ^1.1.0
       use-subscription: ^1.6.0
+      web3-core-helpers: 1.5.2
     dependencies:
       '@dimensiondev/holoflows-kit': 0.9.0-20210902104757-7c3d0d0
       '@masknet/encryption': link:../encryption
@@ -613,6 +615,7 @@ importers:
       '@masknet/shared-base-ui': link:../shared-base-ui
       '@masknet/theme': link:../theme
       '@masknet/typed-message': link:../typed-message
+      '@masknet/web3-providers': link:../web3-providers
       '@masknet/web3-shared-base': link:../web3-shared/base
       '@servie/events': 3.0.0
       '@types/use-subscription': 1.0.0
@@ -621,6 +624,7 @@ importers:
       react-use: 17.3.2_react-dom@18.0.0+react@18.0.0
       unstated-next: 1.1.0
       use-subscription: 1.6.0_react@18.0.0
+      web3-core-helpers: 1.5.2
     devDependencies:
       react-i18next: 11.16.2_67d9cd14f543534febc666d787b5936c
 
@@ -710,13 +714,14 @@ importers:
       '@metamask/eth-sig-util': ^4.0.0
       bignumber.js: ^9.0.2
       ethereumjs-util: ^7.1.0
+      ethjs-ens: ^2.0.1
       react-use: ^17.3.2
       wallet.ts: ^1.0.1
       web3: 1.5.2
       web3-core: 1.5.2
       web3-core-helpers: 1.5.2
       web3-eth-abi: 1.5.2
-      web3-utils: ^1.7.1
+      web3-utils: 1.5.2
     dependencies:
       '@dimensiondev/metamask-extension-provider': 3.0.6-20210519045409-1835d4d
       '@masknet/icons': link:../../icons
@@ -732,13 +737,14 @@ importers:
       '@metamask/eth-sig-util': 4.0.0
       bignumber.js: 9.0.2
       ethereumjs-util: 7.1.4
+      ethjs-ens: 2.0.1
       react-use: 17.3.2_react-dom@18.0.0+react@18.0.0
       wallet.ts: 1.0.1
       web3: 1.5.2
       web3-core: 1.5.2
       web3-core-helpers: 1.5.2
       web3-eth-abi: 1.5.2
-      web3-utils: 1.7.1
+      web3-utils: 1.5.2
 
   packages/plugins/FileService:
     specifiers:
@@ -26891,19 +26897,6 @@ packages:
       bn.js: 4.12.0
       eth-lib: 0.2.8
       ethereum-bloom-filters: 1.0.10
-      ethjs-unit: 0.1.6
-      number-to-bn: 1.7.0
-      randombytes: 2.1.0
-      utf8: 3.0.0
-    dev: false
-
-  /web3-utils/1.7.1:
-    resolution: {integrity: sha512-fef0EsqMGJUgiHPdX+KN9okVWshbIumyJPmR+btnD1HgvoXijKEkuKBv0OmUqjbeqmLKP2/N9EiXKJel5+E1Dw==}
-    engines: {node: '>=8.0.0'}
-    dependencies:
-      bn.js: 4.12.0
-      ethereum-bloom-filters: 1.0.10
-      ethereumjs-util: 7.1.4
       ethjs-unit: 0.1.6
       number-to-bn: 1.7.0
       randombytes: 2.1.0
