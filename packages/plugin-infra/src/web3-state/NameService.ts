@@ -2,15 +2,18 @@ import type { Subscription } from 'use-subscription'
 import type { Plugin, Web3Plugin } from '@masknet/plugin-infra'
 import { mapSubscription, mergeSubscription, StorageItem } from '@masknet/shared-base'
 
-export class NameServiceState<ChainId extends number>
-    implements Web3Plugin.ObjectCapabilities.NameServiceState<ChainId>
+export class NameServiceState<
+    ChainId extends number,
+    DomainBook extends Record<string, string> = Record<string, string>,
+    DomainBooks extends Record<ChainId, DomainBook> = Record<ChainId, DomainBook>,
+> implements Web3Plugin.ObjectCapabilities.NameServiceState<ChainId, DomainBook>
 {
-    protected storage: StorageItem<Record<ChainId, Record<string, string>>> = null!
-    public domainBook?: Subscription<Record<string, string>>
+    protected storage: StorageItem<DomainBooks> = null!
+    public domainBook?: Subscription<DomainBook>
 
     constructor(
         protected context: Plugin.Shared.SharedContext,
-        protected defaultValue: Record<ChainId, Record<string, string>>,
+        protected defaultValue: DomainBooks,
         protected subscriptions: {
             chainId?: Subscription<ChainId>
         },
@@ -27,10 +30,7 @@ export class NameServiceState<ChainId extends number>
 
         if (this.subscriptions.chainId) {
             this.domainBook = mapSubscription(
-                mergeSubscription<[ChainId, Record<ChainId, Record<string, string>>]>(
-                    this.subscriptions.chainId,
-                    this.storage.subscription,
-                ),
+                mergeSubscription<[ChainId, DomainBooks]>(this.subscriptions.chainId, this.storage.subscription),
                 ([chainId, domainBook]) => domainBook[chainId],
             )
         }

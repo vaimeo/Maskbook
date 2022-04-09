@@ -2,12 +2,12 @@ import Web3 from 'web3'
 import type { RequestArguments } from 'web3-core'
 import { first } from 'lodash-unified'
 import { ChainId, createExternalProvider, ProviderType } from '@masknet/web3-shared-evm'
+import type { EnhanceableSite, ExtensionSite } from '@masknet/shared-base'
 import type { Provider } from '../types'
-import { AccountState } from '../../../state'
+import { getWeb3State } from '../../../state'
 
 export class BaseProvider implements Provider {
     private web3: Web3 | null = null
-    private accountState = new AccountState()
 
     constructor(protected providerType: ProviderType) {}
 
@@ -30,27 +30,33 @@ export class BaseProvider implements Provider {
         return provider
     }
 
-    async onAccountsChanged(accounts: string[]) {
-        if (currentProviderSettings.value !== this.providerType) return
-        await this.accountState.updateAccount(this.site, {
+    async onAccountsChanged(site: EnhanceableSite | ExtensionSite, accounts: string[]) {
+        const { Account } = getWeb3State()
+
+        if (Account?.providerType?.getCurrentValue() !== this.providerType) return
+        await Account.updateAccount?.(site, {
             account: first(accounts),
             providerType: this.providerType,
         })
     }
 
-    async onChainChanged(id: string) {
-        if (currentProviderSettings.value !== this.providerType) return
+    async onChainChanged(site: EnhanceableSite | ExtensionSite, id: string) {
+        const { Account } = getWeb3State()
+
+        if (Account?.providerType?.getCurrentValue() !== this.providerType) return
 
         // learn more: https://docs.metamask.io/guide/ethereum-provider.html#chain-ids and https://chainid.network/
         const chainId = Number.parseInt(id, 16) || ChainId.Mainnet
-        if (currentChainIdSettings.value === chainId) return
-        await this.accountState.updateAccount(this.site, {
+        if (Account.chainId?.getCurrentValue() === chainId) return
+        await Account.updateAccount?.(site, {
             chainId,
         })
     }
 
-    async onDisconnect() {
-        if (currentProviderSettings.value !== this.providerType) return
-        await this.accountState.resetAccount(this.site)
+    async onDisconnect(site: EnhanceableSite | ExtensionSite) {
+        const { Account } = getWeb3State()
+
+        if (Account?.providerType?.getCurrentValue() !== this.providerType) return
+        await Account.resetAccount?.(site)
     }
 }

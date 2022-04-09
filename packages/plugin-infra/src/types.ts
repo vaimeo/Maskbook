@@ -1,13 +1,13 @@
 /* eslint @dimensiondev/unicode-specific-set: ["error", { "only": "code" }] */
 import type React from 'react'
 import type { Option, Result } from 'ts-results'
+import type { Subscription } from 'use-subscription'
 import type { TransactionConfig } from 'web3-core'
 import type { JsonRpcPayload, JsonRpcResponse } from 'web3-core-helpers'
 import type { TypedMessage } from '@masknet/typed-message'
-import type { ScopedStorage, ProfileIdentifier, PersonaIdentifier } from '@masknet/shared-base'
+import type { ScopedStorage, ProfileIdentifier, PersonaIdentifier, PopupRoutes } from '@masknet/shared-base'
 import type { Emitter } from '@servie/events'
 import type { Web3Plugin } from './web3-types'
-import type { Subscription } from 'use-subscription'
 
 export declare namespace Plugin {
     /**
@@ -73,12 +73,24 @@ export namespace Plugin.Shared {
         /** iOS Ethereum send request */
         nativeSend(payload: JsonRpcPayload): Promise<JsonRpcResponse>
         /** Android Ethereum send request */
-        nativeSendJsonString(message: string): Promise<JsonRpcResponse>
+        nativeSendJsonString(message: string): Promise<string>
 
         /** Open popup window */
-        openPopupWindow(): Promise<void>
+        openPopupWindow(route?: PopupRoutes, params?: Record<string, any>): Promise<void>
         /** Close popup window */
         closePopupWindow(): Promise<void>
+
+        /** The selected account of Mask Wallet */
+        account: Subscription<string>
+        /** The selected chainId of Mask Wallet */
+        chainId: Subscription<number>
+
+        /** Prepare to select a Mask Wallet account */
+        selectAccountPrepare(callback: (accounts: string[]) => void): Promise<void>
+        /** Update Mask Wallet account */
+        updateAccount(): Promise<void>
+        /** Reset Mask Wallet account */
+        resetAccount(): Promise<void>
 
         /** Get all wallets */
         wallets: Subscription<Web3Plugin.Wallet[]>
@@ -95,8 +107,10 @@ export namespace Plugin.Shared {
 
         /** Sign transaction */
         signTransaction(address: string, transaction: TransactionConfig): Promise<string>
-        /** Sign message */
+        /** Sign message, aka. eth.sign() */
         signMessage(address: string, message: string): Promise<string>
+        /** Sign personal message, aka. eth.personal.sign() */
+        signPersonalMessage(address: string, message: string): Promise<string>
         /** Sign typed data */
         signTypedData(address: string, message: string): Promise<string>
 
@@ -272,7 +286,7 @@ export namespace Plugin.SNSAdaptor {
         /** This is a chunk of web3 UIs to be rendered into various places of Mask UI. */
         Web3UI?: Web3Plugin.UI.UI
         /** This is the context of the currently chosen network. */
-        Web3State?: Web3Plugin.ObjectCapabilities.Capabilities
+        Web3State?: Web3Plugin.ObjectCapabilities.Capabilities<number, string, string, object, object>
         /** This UI will be an entry to the plugin in the Composition dialog of Mask. */
         CompositionDialogEntry?: CompositionDialogEntry
         /** This UI will be use when there is known badges. */
@@ -433,7 +447,7 @@ export namespace Plugin.Dashboard {
          */
         Web3UI?: Web3Plugin.UI.UI
         /** This is the context of the currently chosen network. */
-        Web3State?: Web3Plugin.ObjectCapabilities.Capabilities
+        Web3State?: Web3Plugin.ObjectCapabilities.Capabilities<number, string, string, object, object>
         /** Plugin DO NOT need to define this. This will be auto set by the plugin host. */
         __general_ui__?: GeneralUI.DefinitionDeferred
     }

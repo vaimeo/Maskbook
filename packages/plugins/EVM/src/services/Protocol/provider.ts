@@ -79,13 +79,13 @@ export async function notifyEvent(
 
     switch (name) {
         case 'accountsChanged':
-            await provider?.onAccountsChanged?.(event as string[])
+            await provider?.onAccountsChanged?.(site, event as string[])
             break
         case 'chainChanged':
-            await provider?.onChainChanged?.(event as string)
+            await provider?.onChainChanged?.(site, event as string)
             break
         case 'disconnect':
-            await provider?.onDisconnect?.()
+            await provider?.onDisconnect?.(site)
             break
         default:
             throw new Error(`Unknown event name: ${name}.`)

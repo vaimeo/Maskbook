@@ -1,6 +1,6 @@
 import { getEnumAsArray } from '@dimensiondev/kit'
-import { AccountState, CurrencyType, Plugin } from '@masknet/plugin-infra'
 import { EnhanceableSite, ExtensionSite } from '@masknet/shared-base'
+import { AccountState, CurrencyType, Plugin } from '@masknet/plugin-infra'
 import {
     ChainId,
     getChainIdFromNetworkType,

@@ -29,9 +29,9 @@ export interface Provider {
     createWeb3(options?: Web3Options): Promise<Web3>
     createExternalProvider(options?: ProviderOptions): Promise<ExternalProvider>
 
-    onAccountsChanged?(accounts: string[]): Promise<void>
-    onChainChanged?(id: string): Promise<void>
-    onDisconnect?(): Promise<void>
+    onAccountsChanged?(site: EnhanceableSite | ExtensionSite, accounts: string[]): Promise<void>
+    onChainChanged?(site: EnhanceableSite | ExtensionSite, id: string): Promise<void>
+    onDisconnect?(site: EnhanceableSite | ExtensionSite): Promise<void>
 }
 
 export interface Context {

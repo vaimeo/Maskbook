@@ -19,22 +19,12 @@ import {
     resolveDomainLink,
     formatDomainName,
 } from '@masknet/web3-shared-evm'
-import { EVM_RPC } from '../messages'
 
 export class UtilState implements Web3Plugin.ObjectCapabilities.Others<ChainId> {
     isChainIdValid = isChainIdValid
     isValidDomain = isValidDomain
     isSameAddress = isSameAddress
-    getLatestBalance = (chainId: ChainId, account: string) => {
-        return EVM_RPC.getBalance(account, {
-            chainId,
-        })
-    }
-    getLatestBlockNumber = (chainId: ChainId) => {
-        return EVM_RPC.getBlockNumber({
-            chainId,
-        })
-    }
+
     getChainDetailed = getChainDetailed
     getAverageBlockDelay = (chainId: ChainId) => {
         return 15 * 1000

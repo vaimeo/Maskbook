@@ -5,7 +5,7 @@ import { ExtensionSite } from '@masknet/shared-base'
 import { ChainId, createExternalProvider, createPayload, getChainRPC, getRPCConstants } from '@masknet/web3-shared-evm'
 import { BaseProvider } from './Base'
 import type { Provider, ProviderOptions, Web3Options } from '../types'
-import { AccountState } from '../../../state'
+import { getWeb3State } from '../../../state'
 
 const WEIGHTS_LENGTH = getRPCConstants(ChainId.Mainnet).RPC_WEIGHTS?.length ?? 4
 
@@ -57,8 +57,8 @@ export class MaskWalletProvider extends BaseProvider implements Provider {
     }
 
     async createProvider({ chainId, url, site = ExtensionSite.Popup }: ProviderOptions = {}) {
-        const { chainId: defaultChainId } = await new AccountState().getAccount(site)
-        url = url ?? getChainRPC(chainId ?? defaultChainId, this.seed)
+        const defaultChainId = getWeb3State().Account?.chainId?.getCurrentValue()
+        url = url ?? getChainRPC(chainId ?? defaultChainId ?? ChainId.Mainnet, this.seed)
         if (!url) throw new Error('Failed to create provider.')
         return this.createProviderInstance(url)
     }

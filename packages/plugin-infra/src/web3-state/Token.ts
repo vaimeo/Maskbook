@@ -13,6 +13,7 @@ export interface TokenStorage {
 
 export class TokenState implements Web3Plugin.ObjectCapabilities.TokenState {
     protected storage: StorageObject<TokenStorage> = null!
+
     public fungibleTokens?: Subscription<Web3Plugin.FungibleToken[]>
     public nonFungibleTokens?: Subscription<Web3Plugin.NonFungibleToken[]>
 

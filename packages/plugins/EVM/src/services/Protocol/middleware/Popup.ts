@@ -1,12 +1,9 @@
 import { defer } from '@dimensiondev/kit'
 import type { JsonRpcPayload } from 'web3-core-helpers'
 import { EthereumMethodType, getPayloadConfig, ProviderType } from '@masknet/web3-shared-evm'
-// import Services from '../../../service'
 import type { Context, Middleware } from '../types'
-// import { WalletRPC } from '../../../../plugins/Wallet/messages'
-// import { hasNativeAPI } from '../../../../../shared/native-rpc'
-// import { openPopupWindow } from '../../../../../background/services/helper'
 import { sendTransaction } from '../network'
+import { getSharedContext } from '../../../context'
 
 export class Popup implements Middleware<Context> {
     private previousRequests: {
@@ -27,6 +24,8 @@ export class Popup implements Middleware<Context> {
     }
 
     async fn(context: Context, next: () => Promise<void>) {
+        const { hasNativeAPI, shiftUnconfirmedRequest, pushUnconfirmedRequest, openPopupWindow, closePopupWindow } =
+            getSharedContext()
         if (context.providerType !== ProviderType.MaskWallet || hasNativeAPI || !context.requestOptions?.popupsWindow) {
             await next()
             return
@@ -35,7 +34,7 @@ export class Popup implements Middleware<Context> {
         switch (context.method) {
             case EthereumMethodType.MASK_CONFIRM_TRANSACTION:
             case EthereumMethodType.MASK_REJECT_TRANSACTION:
-                const payload = await WalletRPC.shiftUnconfirmedRequest()
+                const payload = await shiftUnconfirmedRequest()
                 const previousRequest = this.previousRequests.shift()
 
                 if (!payload) {
@@ -43,7 +42,7 @@ export class Popup implements Middleware<Context> {
                     break
                 }
 
-                await Services.Helper.removePopupWindow()
+                await closePopupWindow()
 
                 if (context.method === EthereumMethodType.MASK_CONFIRM_TRANSACTION) {
                     if (previousRequest) {
@@ -71,7 +70,7 @@ export class Popup implements Middleware<Context> {
                 if (!this.isRiskPayload(context.request)) break
 
                 try {
-                    await WalletRPC.pushUnconfirmedRequest(context.request)
+                    await pushUnconfirmedRequest(context.request)
                     await openPopupWindow()
 
                     const [promise, resume] = defer<void>()

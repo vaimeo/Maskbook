@@ -7,11 +7,9 @@ import {
 } from '@masknet/web3-shared-evm'
 import type { Context, Middleware } from '../types'
 import { sendTransaction } from '../network'
-import { TransactionState } from '../../../state'
+import { getWeb3State } from '../../../state'
 
 export class RecentTransaction implements Middleware<Context> {
-    private transaction = new TransactionState()
-
     async fn(context: Context, next: () => Promise<void>) {
         let replacedHash
 
@@ -36,7 +34,7 @@ export class RecentTransaction implements Middleware<Context> {
                 case EthereumMethodType.ETH_SEND_TRANSACTION:
                     if (!context.config || typeof context.result !== 'string') return
                     if (replacedHash)
-                        await this.transaction.replaceTransaction(
+                        await getWeb3State().Transaction?.replaceTransaction?.(
                             context.chainId,
                             context.account,
                             replacedHash,
@@ -44,7 +42,7 @@ export class RecentTransaction implements Middleware<Context> {
                             context.config,
                         )
                     else
-                        await this.transaction.addTransaction(
+                        await getWeb3State().Transaction?.addTransaction?.(
                             context.chainId,
                             context.account,
                             context.result,
@@ -55,7 +53,7 @@ export class RecentTransaction implements Middleware<Context> {
                     const receipt = context.result as TransactionReceipt | null
                     const status = getReceiptStatus(receipt)
                     if (receipt?.transactionHash && status !== TransactionStatusType.NOT_DEPEND) {
-                        await this.transaction.updateTransaction(
+                        await getWeb3State().Transaction?.updateTransaction?.(
                             context.chainId,
                             context.account,
                             receipt.transactionHash,

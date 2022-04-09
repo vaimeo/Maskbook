@@ -25,6 +25,16 @@ export class ProtocolState
             options,
         )
     }
+    getLatestBalance(chainId: ChainId, account: string) {
+        return EVM_RPC.getBalance(account, {
+            chainId,
+        })
+    }
+    getLatestBlockNumber(chainId: ChainId) {
+        return EVM_RPC.getBlockNumber({
+            chainId,
+        })
+    }
     signMessage(address: string, message: string, signType: SignType = 'personal') {
         switch (signType) {
             case 'personal':

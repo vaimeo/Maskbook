@@ -3,15 +3,15 @@ import type { Subscription } from 'use-subscription'
 import type { Plugin, Web3Plugin } from '@masknet/plugin-infra'
 import { mapSubscription, mergeSubscription, StorageItem } from '@masknet/shared-base'
 
-export class AddressBookState<ChainId extends number>
+export class AddressBookState<ChainId extends number, AddressBook extends Record<ChainId, string[]>>
     implements Web3Plugin.ObjectCapabilities.AddressBookState<ChainId>
 {
-    protected storage: StorageItem<Record<ChainId, string[]>> = null!
+    protected storage: StorageItem<AddressBook> = null!
     public addressBook?: Subscription<string[]>
 
     constructor(
         protected context: Plugin.Shared.SharedContext,
-        protected defaultValue: Record<ChainId, string[]>,
+        protected defaultValue: AddressBook,
         protected subscriptions: {
             chainId?: Subscription<ChainId>
         },
@@ -28,10 +28,7 @@ export class AddressBookState<ChainId extends number>
 
         if (this.subscriptions.chainId) {
             this.addressBook = mapSubscription(
-                mergeSubscription<[ChainId, Record<string, string[]>]>(
-                    this.subscriptions.chainId,
-                    this.storage.subscription,
-                ),
+                mergeSubscription<[ChainId, AddressBook]>(this.subscriptions.chainId, this.storage.subscription),
                 ([chainId, addressBook]) => addressBook[chainId],
             )
         }

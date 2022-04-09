@@ -1,7 +1,7 @@
 import { useAsyncRetry } from 'react-use'
 import type { AsyncStateRetry } from 'react-use/lib/useAsyncRetry'
 import type { NonFungibleAssetProvider } from '@masknet/web3-shared-evm'
-import { NonFungibleTokenAPI } from '@masknet/web3-providers'
+import type { NonFungibleTokenAPI } from '@masknet/web3-providers'
 import { EVM_RPC } from '../messages'
 import { NetworkPluginID, useChainId } from '@masknet/plugin-infra'
 

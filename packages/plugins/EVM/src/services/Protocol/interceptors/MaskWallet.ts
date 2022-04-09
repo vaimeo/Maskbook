@@ -1,41 +1,34 @@
 import { toHex } from 'web3-utils'
-import { toBuffer } from 'ethereumjs-util'
 import { PopupRoutes } from '@masknet/shared-base'
-import { signTypedData, SignTypedDataVersion } from '@metamask/eth-sig-util'
-import { ChainId, EthereumMethodType, ProviderType } from '@masknet/web3-shared-evm'
+import { EthereumMethodType } from '@masknet/web3-shared-evm'
 import type { Context, Middleware } from '../types'
-// import { WalletRPC } from '../../../../plugins/Wallet/messages'
-import { MaskWalletProvider } from '../providers/MaskWallet'
-// import { hasNativeAPI, nativeAPI } from '../../../../../shared/native-rpc'
-// import { currentMaskWalletChainIdSettings } from '../../../../plugins/Wallet/settings'
-// import { openPopupWindow } from '../../../../../background/services/helper'
+import { getWeb3State } from '../../../state'
+import { getSharedContext } from '../../../context'
 
 export class MaskWallet implements Middleware<Context> {
-    private provider = new MaskWalletProvider(ProviderType.MaskWallet)
-
-    private async getPrivateKey(address: string) {
-        const key = await WalletRPC.exportPrivateKey(address)
-        if (!key) throw new Error('Not a valid account.')
-        return key
-    }
-
-    private async createWeb3(chainId: ChainId, key: string) {
-        return this.provider.createWeb3({
-            options: {
-                chainId,
-            },
-            keys: [key],
-        })
-    }
-
     async fn(context: Context, next: () => Promise<void>) {
+        const state = getWeb3State()
+        const {
+            hasNativeAPI,
+            nativeType,
+            nativeSend,
+            nativeSendJsonString,
+            chainId,
+            wallets,
+            openPopupWindow,
+            signMessage,
+            signTransaction,
+            signTypedData,
+            selectAccountPrepare,
+        } = getSharedContext()
+
         // redirect to native app
-        if (hasNativeAPI && nativeAPI) {
+        if (hasNativeAPI) {
             try {
                 const response =
-                    nativeAPI.type === 'Android'
-                        ? JSON.parse(await nativeAPI.api.sendJsonString(JSON.stringify(context.request)))
-                        : await nativeAPI.api.send(context.request)
+                    nativeType === 'Android'
+                        ? JSON.parse(await nativeSendJsonString(JSON.stringify(context.request)))
+                        : await nativeSend(context.request)
 
                 context.end(new Error(response.error), response.result)
             } catch (error) {
@@ -48,19 +41,21 @@ export class MaskWallet implements Middleware<Context> {
 
         switch (context.request.method) {
             case EthereumMethodType.ETH_CHAIN_ID:
-                context.write(toHex(currentMaskWalletChainIdSettings.value))
+                context.write(toHex(chainId.getCurrentValue()))
                 break
             case EthereumMethodType.ETH_ACCOUNTS:
             case EthereumMethodType.MASK_REQUEST_ACCOUNTS:
                 try {
-                    const wallets = await WalletRPC.getWallets(ProviderType.MaskWallet)
                     const accounts = await new Promise<string[]>(async (resolve, reject) => {
                         const onSelectAccount = (accounts: string[]) => resolve(accounts)
                         try {
-                            await openPopupWindow(wallets.length > 0 ? PopupRoutes.SelectWallet : undefined, {
-                                chainId: context.chainId,
-                            })
-                            await WalletRPC.selectAccountPrepare(onSelectAccount)
+                            await openPopupWindow(
+                                wallets.getCurrentValue().length > 0 ? PopupRoutes.SelectWallet : undefined,
+                                {
+                                    chainId: context.chainId,
+                                },
+                            )
+                            await selectAccountPrepare(onSelectAccount)
                         } catch (error) {
                             reject(error)
                         }
@@ -80,19 +75,16 @@ export class MaskWallet implements Middleware<Context> {
                     context.abort(new Error('Invalid JSON payload.'))
                     break
                 }
-
                 try {
-                    const key = await this.getPrivateKey(config.from as string)
-                    const web3 = await this.createWeb3(context.chainId, key)
-                    const signed = await web3.eth.accounts.signTransaction(config, key)
+                    const rawTransaction = await signTransaction(config.from as string, config)
 
-                    if (!signed.rawTransaction) {
+                    if (!rawTransaction) {
                         context.abort(new Error('Failed to sign transaction.'))
                         break
                     }
 
-                    const tx = await web3.eth.sendSignedTransaction(signed.rawTransaction)
-                    context.write(tx.transactionHash)
+                    const tx = await state.Protocol?.sendRawTransaction?.(context.chainId, rawTransaction)
+                    context.write(tx)
                 } catch (error) {
                     context.abort(error, 'Failed to send transaction.')
                 }
@@ -100,9 +92,7 @@ export class MaskWallet implements Middleware<Context> {
             case EthereumMethodType.PERSONAL_SIGN:
                 try {
                     const [data, address] = context.request.params as [string, string]
-                    const key = await this.getPrivateKey(address)
-                    const web3 = await this.createWeb3(context.chainId, key)
-                    context.write(await web3.eth.sign(data, address))
+                    context.write(await signMessage(data, address))
                 } catch (error) {
                     context.abort(error, 'Failed to sign data.')
                 }
@@ -110,13 +100,7 @@ export class MaskWallet implements Middleware<Context> {
             case EthereumMethodType.ETH_SIGN_TYPED_DATA:
                 try {
                     const [address, data] = context.request.params as [string, string]
-                    context.write(
-                        signTypedData({
-                            privateKey: toBuffer('0x' + (await this.getPrivateKey(address))),
-                            data: JSON.parse(data),
-                            version: SignTypedDataVersion.V4,
-                        }),
-                    )
+                    context.write(await signTypedData(address, JSON.parse(data)))
                 } catch (error) {
                     context.abort(error, 'Failed to sign typed data.')
                 }

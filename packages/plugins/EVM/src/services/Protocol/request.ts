@@ -61,6 +61,7 @@ export async function request<T extends unknown>(
                 try {
                     // create request provider
                     const externalProvider = await createExternalProvider(
+                        context.site,
                         context.chainId,
                         isUniversalPayload(context.request) ? ProviderType.MaskWallet : context.providerType,
                     )

@@ -1,4 +1,5 @@
 import type { RequestArguments } from 'web3-core'
+import { ExtensionSite } from '@masknet/shared-base'
 import {
     getPayloadChainId,
     getPayloadConfig,
@@ -8,16 +9,12 @@ import {
     ProviderType,
     EthereumMethodType,
     EthereumTransactionConfig,
+    ChainId,
 } from '@masknet/web3-shared-evm'
-// import {
-//     currentAccountSettings,
-//     currentChainIdSettings,
-//     currentMaskWalletAccountSettings,
-//     currentMaskWalletChainIdSettings,
-//     currentProviderSettings,
-// } from '../../../plugins/Wallet/settings'
 import { getError, hasError } from './error'
 import type { Context, Middleware } from './types'
+import { getWeb3State } from '../../state'
+import { getSharedContext } from '../../context'
 
 class Composer<T> {
     private listOfMiddleware: Middleware<T>[] = []
@@ -59,9 +56,9 @@ class RequestContext implements Context {
     private _writeable = true
     private _error: Error | null = null
     private _result: unknown
-    private _account = currentAccountSettings.value
-    private _chainId = currentChainIdSettings.value
-    private _providerType = currentProviderSettings.value
+    private _account = getWeb3State().Account?.account?.getCurrentValue() ?? ''
+    private _chainId = getWeb3State().Account?.chainId?.getCurrentValue() ?? ChainId.Mainnet
+    private _providerType = getWeb3State().Account?.providerType?.getCurrentValue() ?? ProviderType.MaskWallet
 
     constructor(
         private _requestArguments: RequestArguments,
@@ -74,8 +71,9 @@ class RequestContext implements Context {
 
         // mask wallet settings
         if (this.providerType === ProviderType.MaskWallet) {
-            this._account = currentMaskWalletAccountSettings.value
-            this._chainId = currentMaskWalletChainIdSettings.value
+            const { account, chainId } = getSharedContext()
+            this._account = account.getCurrentValue()
+            this._chainId = chainId.getCurrentValue()
         }
     }
 
@@ -92,7 +90,7 @@ class RequestContext implements Context {
     }
 
     get site() {
-        return this.requestOptions?.site
+        return this.requestOptions?.site ?? ExtensionSite.Popup
     }
 
     get providerType() {

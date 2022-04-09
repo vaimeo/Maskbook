@@ -333,9 +333,9 @@ export declare namespace Web3Plugin {
             Account = {
                 account: string
                 chainId: ChainId
+                currencyType: CurrencyType
                 providerType: ProviderType
                 networkType: NetworkType
-                currencyType: CurrencyType
             },
         > {
             /** Is testnets valid */
@@ -351,7 +351,6 @@ export declare namespace Web3Plugin {
             /** The currency of estimated values and prices. */
             currencyType?: Subscription<CurrencyType>
 
-            getAccount?: (site: EnhanceableSite | ExtensionSite) => Promise<Account>
             updateAccount?: (site: EnhanceableSite | ExtensionSite, options: Partial<Account>) => Promise<void>
             resetAccount?: (site: EnhanceableSite | ExtensionSite) => Promise<void>
         }
@@ -376,11 +375,13 @@ export declare namespace Web3Plugin {
                 pagination?: Pagination,
             ) => Promise<Pageable<NonFungibleAsset>>
         }
-        export interface NameServiceState<ChainId> {
+        export interface NameServiceState<ChainId, DomainBook = Record<string, string>> {
             /** The tracked domains of currently chosen sub-network */
-            domainBook?: Subscription<Record<string, string>>
+            domainBook?: Subscription<DomainBook>
 
+            /** get address of domain name */
             lookup?: (chainId: ChainId, domain: string) => Promise<string | undefined>
+            /** get domain name of address */
             reverse?: (chainId: ChainId, address: string) => Promise<string | undefined>
         }
         export interface TokenPriceState<ChainId> {
@@ -393,10 +394,15 @@ export declare namespace Web3Plugin {
             getTokenPrices?: (chainId: ChainId, currency: CurrencyType, ids: string[]) => CryptoPrices
         }
         export interface TokenListState<ChainId> {
-            /** Get the token lists of supported fungible tokens. */
-            getFungibleTokenLists?: (chainId: ChainId) => Promise<TokenList>
-            /** Get the token lists of supported non-fungible tokens. */
-            getNonFungibleTokenLists?: (chainId: ChainId) => Promise<TokenList>
+            /** The tracked fungible token list of currently chosen sub-network */
+            fungibleTokens?: Subscription<FungibleToken[]>
+            /** The tracked non-fungible token list of currently chosen sub-network */
+            nonFungibleTokens?: Subscription<NonFungibleToken[]>
+
+            /** Get the fungible token list. */
+            getFungibleTokens?: (chainId: ChainId) => Promise<FungibleToken[]>
+            /** Get the non-fungible token list. */
+            getNonFungibleTokens?: (chainId: ChainId) => Promise<NonFungibleToken[]>
         }
         export interface TokenState {
             /** The user added fungible tokens. */
@@ -438,16 +444,22 @@ export declare namespace Web3Plugin {
         }
         export interface ProtocolState<ChainId, RequestArguments, TransactionConfig> {
             request?: <T>(chainId: ChainId, requestArguments: RequestArguments) => Promise<T>
+            /** Get the latest block height of chain */
+            getLatestBlockNumber?: (chainId: ChainId) => Promise<number>
+            /** Get the latest balance of account */
+            getLatestBalance?: (chainId: ChainId, account: string) => Promise<string>
+            /** Get transaction status */
+            getTransactionStatus?: (chainId: ChainId, id: string) => Promise<TransactionStatusType>
             /** Sign a plain message, some chain support multiple sign methods */
             signMessage?: (address: string, message: string, signType?: string) => Promise<string>
             /** Sign a transaction, and the result could send as a raw transaction */
             signTransaction?: (address: string, transaction: TransactionConfig) => Promise<string>
-            /** Get transaction status */
-            getTransactionStatus?: (chainId: ChainId, id: string) => Promise<TransactionStatusType>
             /** Send transaction and get tx id */
             sendTransaction?: (chainId: ChainId, transaction: TransactionConfig) => Promise<string>
-            /** Send transaction and wait until it confirmed */
-            sendAndConfirmTransaction?: (chainId: ChainId, transaction: TransactionConfig) => Promise<string>
+            /** Send raw transaction and get tx id */
+            sendRawTransaction?: (chainid: ChainId, rawTransaction: string) => Promise<string>
+            /** Send (raw) transaction and wait until it confirmed */
+            sendAndConfirmTransaction?: (chainId: ChainId, transaction: string | TransactionConfig) => Promise<string>
         }
         export interface WalletState {
             /** The currently stored wallet by MaskWallet. */
@@ -467,8 +479,6 @@ export declare namespace Web3Plugin {
             /** compare two addresses */
             isSameAddress?: (address?: string, otherAddress?: string) => boolean
 
-            getLatestBlockNumber?: (chainId: ChainId) => Promise<number>
-            getLatestBalance?: (chainId: ChainId, account: string) => Promise<string>
             getChainDetailed?: (chainId: ChainId) => ChainDetailed | undefined
             getAverageBlockDelay?: (chainId: ChainId, scale?: number) => number
 

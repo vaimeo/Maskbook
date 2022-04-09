@@ -16,9 +16,9 @@ export class AccountState<
     Account extends {
         account: string
         chainId: ChainId
+        currencyType: CurrencyType
         providerType: ProviderType
         networkType: NetworkType
-        currencyType: CurrencyType
     },
 > implements Web3Plugin.ObjectCapabilities.AccountState<ChainId, ProviderType, NetworkType, Account>
 {
@@ -49,10 +49,6 @@ export class AccountState<
         this.providerType = this.createSubscriptionFromChainOptions((x) => x.providerType)
         this.networkType = this.createSubscriptionFromChainOptions((x) => x.networkType)
         this.currencyType = this.createSubscriptionFromChainOptions((x) => x.currencyType)
-    }
-
-    async getAccount(site: EnhanceableSite | ExtensionSite) {
-        return this.storage[site].value
     }
 
     async updateAccount(site: EnhanceableSite | ExtensionSite, options: Partial<Account>) {
