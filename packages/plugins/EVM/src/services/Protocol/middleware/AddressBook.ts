@@ -25,6 +25,8 @@ export class AddressBook implements Middleware<Context> {
     }
 
     async fn(context: Context, next: () => Promise<void>) {
+        const { AddressBook } = getWeb3State()
+
         await next()
 
         if (context.method !== EthereumMethodType.ETH_SEND_TRANSACTION) return
@@ -34,8 +36,7 @@ export class AddressBook implements Middleware<Context> {
             const from = this.getFrom(computedPayload)
             const to = this.getTo(computedPayload)
 
-            if (!isSameAddress(from, to) && !isZeroAddress(to) && to)
-                await getWeb3State().AddressBook?.addAddress(context.chainId, to)
+            if (!isSameAddress(from, to) && !isZeroAddress(to) && to) await AddressBook?.addAddress(context.chainId, to)
         } catch {
             // to scan the context for available recipient address, allow to fail silently.
         }

@@ -26,6 +26,7 @@ export class Popup implements Middleware<Context> {
     async fn(context: Context, next: () => Promise<void>) {
         const { hasNativeAPI, shiftUnconfirmedRequest, pushUnconfirmedRequest, openPopupWindow, closePopupWindow } =
             getSharedContext()
+
         if (context.providerType !== ProviderType.MaskWallet || hasNativeAPI || !context.requestOptions?.popupsWindow) {
             await next()
             return

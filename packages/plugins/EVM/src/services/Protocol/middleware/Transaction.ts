@@ -11,6 +11,7 @@ import { getWeb3State } from '../../../state'
 
 export class RecentTransaction implements Middleware<Context> {
     async fn(context: Context, next: () => Promise<void>) {
+        const { Transaction } = getWeb3State()
         let replacedHash
 
         switch (context.method) {
@@ -34,7 +35,7 @@ export class RecentTransaction implements Middleware<Context> {
                 case EthereumMethodType.ETH_SEND_TRANSACTION:
                     if (!context.config || typeof context.result !== 'string') return
                     if (replacedHash)
-                        await getWeb3State().Transaction?.replaceTransaction?.(
+                        await Transaction?.replaceTransaction?.(
                             context.chainId,
                             context.account,
                             replacedHash,
@@ -42,7 +43,7 @@ export class RecentTransaction implements Middleware<Context> {
                             context.config,
                         )
                     else
-                        await getWeb3State().Transaction?.addTransaction?.(
+                        await Transaction?.addTransaction?.(
                             context.chainId,
                             context.account,
                             context.result,
@@ -53,7 +54,7 @@ export class RecentTransaction implements Middleware<Context> {
                     const receipt = context.result as TransactionReceipt | null
                     const status = getReceiptStatus(receipt)
                     if (receipt?.transactionHash && status !== TransactionStatusType.NOT_DEPEND) {
-                        await getWeb3State().Transaction?.updateTransaction?.(
+                        await Transaction?.updateTransaction?.(
                             context.chainId,
                             context.account,
                             receipt.transactionHash,

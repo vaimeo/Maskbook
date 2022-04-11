@@ -7,7 +7,7 @@ import { getSharedContext } from '../../../context'
 
 export class MaskWallet implements Middleware<Context> {
     async fn(context: Context, next: () => Promise<void>) {
-        const state = getWeb3State()
+        const { Protocol } = getWeb3State()
         const {
             hasNativeAPI,
             nativeType,
@@ -83,7 +83,7 @@ export class MaskWallet implements Middleware<Context> {
                         break
                     }
 
-                    const tx = await state.Protocol?.sendRawTransaction?.(context.chainId, rawTransaction)
+                    const tx = await Protocol?.sendRawTransaction?.(context.chainId, rawTransaction)
                     context.write(tx)
                 } catch (error) {
                     context.abort(error, 'Failed to send transaction.')

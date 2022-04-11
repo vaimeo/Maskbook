@@ -47,7 +47,7 @@ export class Account extends AccountState<ChainId, ProviderType, NetworkType, Ac
 
         // make sure account and provider type to be updating both
         if ((options.account && !options.providerType) || (options.account === undefined && options.providerType))
-            throw new Error('Account and provider type must be updating both.')
+            throw new Error('Account and provider type should update together.')
 
         const { account, chainId, providerType, networkType } = options
 

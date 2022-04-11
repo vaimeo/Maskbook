@@ -6,7 +6,6 @@ import { CurrencyType, NetworkPluginID, Web3Plugin } from '../web3-types'
 
 // constant subscriptions
 const ZERO = createConstantSubscription(0)
-const ZERO_STRING = createConstantSubscription('0')
 const USD_CURRENCY = createConstantSubscription(CurrencyType.USD)
 const EMPTY_STRING = createConstantSubscription('')
 const EMPTY_ARRAY = createConstantSubscription([])
@@ -27,21 +26,24 @@ function usePluginsWeb3Context() {
 function usePluginWeb3State(pluginID: string, context: Record<string, Web3Plugin.ObjectCapabilities.Capabilities>) {
     const pluginContext = context[pluginID]
 
-    const { Shared, Utils } = pluginContext ?? {}
-    const allowTestnet = useSubscription(Shared?.allowTestnet ?? FALSE)
-    const chainId = useSubscription(Shared?.chainId ?? ZERO)
-    const account = useSubscription(Shared?.account ?? EMPTY_STRING)
-    const networkType = useSubscription(Shared?.networkType ?? EMPTY_STRING)
-    const providerType = useSubscription(Shared?.providerType ?? EMPTY_STRING)
-    const currencyType = useSubscription(Shared?.currencyType ?? USD_CURRENCY)
-    const tokenPrices = useSubscription(Shared?.tokenPrices ?? NULL)
-    const addressBook = useSubscription(Shared?.addressBook ?? EMPTY_ARRAY)
-    const domainBook = useSubscription(Shared?.domainBook ?? EMPTY_OBJECT)
-    const transactions = useSubscription(Shared?.transactions ?? EMPTY_ARRAY)
-    const walletPrimary = useSubscription(Shared?.walletPrimary ?? NULL)
-    const wallets = useSubscription(Shared?.wallets ?? EMPTY_ARRAY)
-    const fungibleTokens = useSubscription(Shared?.fungibleTokens ?? EMPTY_ARRAY)
-    const nonFungibleTokens = useSubscription(Shared?.nonFungibleTokens ?? EMPTY_ARRAY)
+    const { Account, AddressBook, Token, TokenList, TokenPrice, Transaction, NameService, Wallet, Utils } =
+        pluginContext ?? {}
+    const allowTestnet = useSubscription(Account?.allowTestnet ?? FALSE)
+    const chainId = useSubscription(Account?.chainId ?? ZERO)
+    const account = useSubscription(Account?.account ?? EMPTY_STRING)
+    const networkType = useSubscription(Account?.networkType ?? EMPTY_STRING)
+    const providerType = useSubscription(Account?.providerType ?? EMPTY_STRING)
+    const currencyType = useSubscription(Account?.currencyType ?? USD_CURRENCY)
+    const tokenPrices = useSubscription(TokenPrice?.tokenPrices ?? NULL)
+    const addressBook = useSubscription(AddressBook?.addressBook ?? EMPTY_ARRAY)
+    const domainBook = useSubscription(NameService?.domainBook ?? EMPTY_OBJECT)
+    const transactions = useSubscription(Transaction?.transactions ?? EMPTY_ARRAY)
+    const walletPrimary = useSubscription(Wallet?.walletPrimary ?? NULL)
+    const wallets = useSubscription(Wallet?.wallets ?? EMPTY_ARRAY)
+    const fungibleTokens = useSubscription(Token?.fungibleTokens ?? EMPTY_ARRAY)
+    const nonFungibleTokens = useSubscription(Token?.nonFungibleTokens ?? EMPTY_ARRAY)
+    const fungibleTokenList = useSubscription(TokenList?.fungibleTokens ?? EMPTY_ARRAY)
+    const nonFungibleTokenList = useSubscription(TokenList?.nonFungibleTokens ?? EMPTY_ARRAY)
 
     return {
         allowTestnet,
@@ -58,6 +60,8 @@ function usePluginWeb3State(pluginID: string, context: Record<string, Web3Plugin
         wallets,
         fungibleTokens,
         nonFungibleTokens,
+        fungibleTokenList,
+        nonFungibleTokenList,
     }
 }
 

@@ -1,6 +1,7 @@
 import type { Web3Plugin } from '@masknet/plugin-infra'
 import {
     isValidDomain,
+    isValidAddress,
     isSameAddress,
     ChainId,
     formatBalance,
@@ -23,6 +24,7 @@ import {
 export class UtilState implements Web3Plugin.ObjectCapabilities.Others<ChainId> {
     isChainIdValid = isChainIdValid
     isValidDomain = isValidDomain
+    isValidAddress = isValidAddress
     isSameAddress = isSameAddress
 
     getChainDetailed = getChainDetailed

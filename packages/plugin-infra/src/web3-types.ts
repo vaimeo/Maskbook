@@ -478,8 +478,10 @@ export declare namespace Web3Plugin {
         export interface Others<ChainId> {
             /** detect if a chain id is supported  */
             isChainIdValid?: (chainId: ChainId, allowTestnet: boolean) => boolean
-            /** detech if a domain is valid */
+            /** detect if a domain is valid */
             isValidDomain?: (domain: string) => boolean
+            /** detect if an address is valid */
+            isValidAddress?: (address: string) => boolean
             /** compare two addresses */
             isSameAddress?: (address?: string, otherAddress?: string) => boolean
 
@@ -504,7 +506,13 @@ export declare namespace Web3Plugin {
             resolveFungibleTokenLink?: (chainId: ChainId, address: string) => string
             resolveNonFungibleTokenLink?: (chainId: ChainId, address: string, tokenId: string) => string
         }
-        export interface Capabilities<ChainId, ProviderType, NetworkType, RequestArguments, TransactionConfig> {
+        export interface Capabilities<
+            ChainId = number,
+            ProviderType = string,
+            NetworkType = string,
+            RequestArguments = unknown,
+            TransactionConfig = unknown,
+        > {
             Account?: AccountState<ChainId, ProviderType, NetworkType>
             AddressBook?: AddressBookState<ChainId>
             Asset?: AssetState<ChainId>
