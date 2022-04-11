@@ -11,8 +11,8 @@ import {
     ProviderType,
     resolveProviderDownloadLink,
 } from '@masknet/web3-shared-evm'
-import { WalletMessages } from '../../../Wallet/messages'
 import { useInjectedProviderType } from '../../hooks'
+import { EVM_Messages } from '../../messages'
 
 export function ProviderIconClickBait({
     network,
@@ -23,7 +23,7 @@ export function ProviderIconClickBait({
 }: Web3Plugin.UI.ProviderIconClickBaitProps) {
     // #region connect wallet dialog
     const { setDialog: setConnectWalletDialog } = useRemoteControlledDialog(
-        WalletMessages.events.connectWalletDialogUpdated,
+        EVM_Messages.events.connectWalletDialogUpdated,
         (ev) => {
             if (ev.open) return
             if (ev.result) onSubmit?.(network, provider)

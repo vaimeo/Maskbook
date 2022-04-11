@@ -4,6 +4,7 @@ import type { ProviderType, ChainId } from '@masknet/web3-shared-evm'
 import { NetworkPluginID, useChainId, useProviderType } from '@masknet/plugin-infra'
 import { EVM_Messages, EVM_RPC } from '../../messages'
 import { useBridgedProvider } from '../../hooks'
+import { getSiteType } from '@masknet/shared-base'
 
 export interface ProviderBridgeProps {
     providerType: ProviderType
@@ -53,7 +54,9 @@ export function ProviderBridge({ providerType: expectedProviderType }: ProviderB
     useEffect(() => {
         const onAccountsChanged = async (accounts: string[]) => {
             if (actualProviderType !== expectedProviderType) return
-            await EVM_RPC.notifyEvent(actualProviderType, 'accountsChanged', accounts)
+            const siteType = getSiteType()
+            if (!siteType) return
+            await EVM_RPC.notifyEvent(siteType, actualProviderType, 'accountsChanged', accounts)
         }
         provider?.on('accountsChanged', onAccountsChanged)
         return () => {
@@ -64,7 +67,9 @@ export function ProviderBridge({ providerType: expectedProviderType }: ProviderB
     useEffect(() => {
         const onChainChanged = async (chainId: ChainId) => {
             if (actualProviderType !== expectedProviderType) return
-            await EVM_RPC.notifyEvent(actualProviderType, 'chainChanged', chainId)
+            const siteType = getSiteType()
+            if (!siteType) return
+            await EVM_RPC.notifyEvent(siteType, actualProviderType, 'chainChanged', chainId)
         }
         provider?.on('chainChanged', onChainChanged)
         return () => {
@@ -83,7 +88,9 @@ export function ProviderBridge({ providerType: expectedProviderType }: ProviderB
     useEffect(() => {
         const onDisconnect = async () => {
             if (actualProviderType !== expectedProviderType) return
-            await EVM_RPC.notifyEvent(actualProviderType, 'disconnect')
+            const siteType = getSiteType()
+            if (!siteType) return
+            await EVM_RPC.notifyEvent(siteType, actualProviderType, 'disconnect')
         }
         provider?.on('disconnect', onDisconnect)
         return () => {

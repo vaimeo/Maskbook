@@ -3,7 +3,7 @@ import { unreachable } from '@dimensiondev/kit'
 import type { Web3Plugin } from '@masknet/plugin-infra'
 import { useRemoteControlledDialog } from '@masknet/shared-base-ui'
 import { getChainIdFromNetworkType, isFortmaticSupported, NetworkType, ProviderType } from '@masknet/web3-shared-evm'
-import { WalletMessages } from '../../../Wallet/messages'
+import { EVM_Messages } from '../../messages'
 
 export function NetworkIconClickBait({
     network,
@@ -14,7 +14,7 @@ export function NetworkIconClickBait({
 }: Web3Plugin.UI.NetworkIconClickBaitProps) {
     // #region connect wallet dialog
     const { setDialog: setConnectWalletDialog } = useRemoteControlledDialog(
-        WalletMessages.events.connectWalletDialogUpdated,
+        EVM_Messages.events.connectWalletDialogUpdated,
         (ev) => {
             if (ev.open) return
             if (ev.result) onSubmit?.(network, provider)
