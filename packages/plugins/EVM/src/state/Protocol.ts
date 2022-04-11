@@ -1,10 +1,8 @@
+import { first } from 'lodash-unified'
 import type { RequestArguments, TransactionConfig } from 'web3-core'
 import type { Plugin, Web3Plugin } from '@masknet/plugin-infra'
 import { ChainId, getReceiptStatus, RequestOptions, SendOverrides } from '@masknet/web3-shared-evm'
 import { EVM_RPC } from '../messages'
-
-type SignType = string | Omit<string, 'personal' | 'typedData'>
-
 export class ProtocolState
     implements Web3Plugin.ObjectCapabilities.ProtocolState<ChainId, RequestArguments, TransactionConfig>
 {
@@ -25,8 +23,17 @@ export class ProtocolState
             options,
         )
     }
+    async getAccount() {
+        const accounts = await EVM_RPC.getAccounts()
+        return first(accounts) ?? ''
+    }
+    async getChainId() {
+        const hex = await EVM_RPC.getChainId()
+        return Number.parseInt(hex, 16)
+    }
     getLatestBalance(chainId: ChainId, account: string) {
         return EVM_RPC.getBalance(account, {
+            account,
             chainId,
         })
     }
@@ -35,7 +42,11 @@ export class ProtocolState
             chainId,
         })
     }
-    signMessage(address: string, message: string, signType: SignType = 'personal') {
+    signMessage(
+        address: string,
+        message: string,
+        signType: string | Omit<string, 'personal' | 'typedData'> = 'personal',
+    ) {
         switch (signType) {
             case 'personal':
                 return EVM_RPC.personalSign(message, address, '')
@@ -57,15 +68,21 @@ export class ProtocolState
 
     async sendTransaction(chainId: ChainId, transaction: TransactionConfig) {
         if (!transaction.from) throw new Error('An invalid transaction.')
-        const signed = await this.signTransaction(transaction.from as string, transaction)
-        const txHash = await EVM_RPC.sendRawTransaction(signed, {
+        const rawTransaction = await this.signTransaction(transaction.from as string, transaction)
+        const txHash = await EVM_RPC.sendRawTransaction(rawTransaction, {
             chainId,
         })
 
         return txHash
     }
+    async sendRawTransaction(chainId: ChainId, rawTransaction: string) {
+        const txHash = await EVM_RPC.sendRawTransaction(rawTransaction, {
+            chainId,
+        })
+        return txHash
+    }
     async sendAndConfirmTransactions(chainId: ChainId, transaction: TransactionConfig) {
-        const hash = await this.sendTransaction(chainId, transaction)
+        const txHash = await this.sendTransaction(chainId, transaction)
 
         // TODO: implement it
         // await waitForConfirmation(hash)

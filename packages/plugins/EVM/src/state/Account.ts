@@ -5,6 +5,8 @@ import {
     ChainId,
     getChainIdFromNetworkType,
     getNetworkTypeFromChainId,
+    isSameAddress,
+    isValidAddress,
     NetworkType,
     ProviderType,
 } from '@masknet/web3-shared-evm'
@@ -27,7 +29,7 @@ const DEFAULT_CHAIN_OPTINOS: AccountStorage = {
 }
 
 export class Account extends AccountState<ChainId, ProviderType, NetworkType, AccountStorage> {
-    constructor(override context: Plugin.Shared.SharedContext, protected state: State) {
+    constructor(override context: Plugin.Shared.SharedContext) {
         const defaultValue = [...getEnumAsArray(EnhanceableSite), ...getEnumAsArray(ExtensionSite)].reduce(
             (accumulator, site) => {
                 accumulator[site.value] = DEFAULT_CHAIN_OPTINOS
@@ -47,28 +49,31 @@ export class Account extends AccountState<ChainId, ProviderType, NetworkType, Ac
         if ((options.account && !options.providerType) || (options.account === undefined && options.providerType))
             throw new Error('Account and provider type must be updating both.')
 
-        // // update wallet in the DB
-        // if (
-        //     account &&
-        //     providerType &&
-        //     EthereumAddress.isValid(account) &&
-        //     providerType !== ProviderType.MaskWallet &&
-        //     !(await hasWallet(account))
-        // ) {
-        //     await updateWallet(account, {})
-        // }
+        const { account, chainId, providerType, networkType } = options
+
+        // update wallet in the DB
+        if (
+            account &&
+            providerType &&
+            isValidAddress(account) &&
+            providerType !== ProviderType.MaskWallet &&
+            !this.context.wallets.getCurrentValue().some((x) => isSameAddress(x.address, account))
+        ) {
+            await this.context.updateWallet(account, {})
+        }
 
         await super.updateAccount(site, {
             ...this.storage[site].value,
             ...options,
         })
 
-        // if (providerType === ProviderType.MaskWallet) {
-        //     await updateMaskAccount({
-        //         account,
-        //         chainId,
-        //         networkType
-        //     })
-        // }
+        if (providerType === ProviderType.MaskWallet) {
+            await this.context.updateAccount({
+                account,
+                chainId,
+                networkType,
+                providerType: ProviderType.MaskWallet,
+            })
+        }
     }
 }

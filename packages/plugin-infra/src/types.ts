@@ -88,7 +88,12 @@ export namespace Plugin.Shared {
         /** Prepare to select a Mask Wallet account */
         selectAccountPrepare(callback: (accounts: string[]) => void): Promise<void>
         /** Update Mask Wallet account */
-        updateAccount(): Promise<void>
+        updateAccount(account: {
+            account?: string
+            chainId?: number
+            networkType?: string
+            providerType?: string
+        }): Promise<void>
         /** Reset Mask Wallet account */
         resetAccount(): Promise<void>
 
@@ -99,6 +104,8 @@ export namespace Plugin.Shared {
 
         /** Add a new wallet */
         addWallet(id: string, wallet: Web3Plugin.Wallet): Promise<void>
+        /** Update a wallet */
+        updateWallet(id: string, wallet: Partial<Web3Plugin.Wallet>): Promise<void>
         /** Remove a old wallet */
         removeWallet(id: string): Promise<void>
 

@@ -23,7 +23,7 @@ export type State = Web3Plugin.ObjectCapabilities.Capabilities<
 let state: State = null!
 
 export async function setupWeb3State(context: Plugin.SNSAdaptor.SNSAdaptorContext) {
-    const Account_ = new Account(context, state)
+    const Account_ = new Account(context)
     state = {
         Account: Account_,
         AddressBook: new AddressBook(context, {

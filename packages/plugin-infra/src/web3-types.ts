@@ -444,6 +444,10 @@ export declare namespace Web3Plugin {
         }
         export interface ProtocolState<ChainId, RequestArguments, TransactionConfig> {
             request?: <T>(chainId: ChainId, requestArguments: RequestArguments) => Promise<T>
+            /** Get the current account */
+            getAccont?: () => Promise<string>
+            /** Get the current chain id */
+            getChainId?: () => Promise<ChainId>
             /** Get the latest block height of chain */
             getLatestBlockNumber?: (chainId: ChainId) => Promise<number>
             /** Get the latest balance of account */
