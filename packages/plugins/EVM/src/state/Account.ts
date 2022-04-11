@@ -10,9 +10,8 @@ import {
     NetworkType,
     ProviderType,
 } from '@masknet/web3-shared-evm'
-import type { State } from '.'
 
-export interface AccountStorage {
+interface AccountStorage {
     chainId: ChainId
     account: string
     currencyType: CurrencyType

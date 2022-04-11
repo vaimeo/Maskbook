@@ -1,8 +1,8 @@
-import { Pagination, Web3Plugin, CurrencyType } from '@masknet/plugin-infra'
+import { Pagination, Web3Plugin, CurrencyType, Pageable } from '@masknet/plugin-infra'
 import { ChainId, createClient, getTokenConstants } from '@masknet/web3-shared-flow'
 import { CoinGecko } from '@masknet/web3-providers'
-import { createFungibleAsset, createFungibleToken } from '../helpers'
 import { rightShift } from '@masknet/web3-shared-base'
+import { createFungibleAsset, createFungibleToken } from '../helpers'
 
 async function getTokenBalance(
     chainId: ChainId,
@@ -55,9 +55,15 @@ async function getAssetFUSD(chainId: ChainId, account: string) {
         storageKey: 'fusdBalance',
     })
     return createFungibleAsset(
-        createFungibleToken(chainId, FUSD_ADDRESS, 'Flow USD', 'FUSD', 8),
+        createFungibleToken(
+            chainId,
+            FUSD_ADDRESS,
+            'Flow USD',
+            'FUSD',
+            8,
+            new URL('../assets/FUSD.png', import.meta.url).toString(),
+        ),
         balance,
-        new URL('../assets/FUSD.png', import.meta.url).toString(),
         price,
     )
 }
@@ -73,9 +79,15 @@ async function getAssetFLOW(chainId: ChainId, account: string) {
     })
 
     return createFungibleAsset(
-        createFungibleToken(chainId, FLOW_ADDRESS, 'Flow', 'FLOW', 8),
+        createFungibleToken(
+            chainId,
+            FLOW_ADDRESS,
+            'Flow',
+            'FLOW',
+            8,
+            new URL('../assets/flow.png', import.meta.url).toString(),
+        ),
         balance,
-        new URL('../assets/flow.png', import.meta.url).toString(),
         price,
     )
 }
@@ -91,26 +103,35 @@ async function getAssetTether(chainId: ChainId, account: string) {
     })
 
     return createFungibleAsset(
-        createFungibleToken(chainId, TETHER_ADDRESS, 'Tether USD', 'tUSD', 8),
+        createFungibleToken(
+            chainId,
+            TETHER_ADDRESS,
+            'Tether USD',
+            'tUSD',
+            8,
+            new URL('../assets/tUSD.png', import.meta.url).toString(),
+        ),
         balance,
-        new URL('../assets/tUSD.png', import.meta.url).toString(),
+
         price,
     )
 }
 
 export async function getFungibleAssets(
+    chainId: ChainId,
     address: string,
-    provider: string,
-    network: Web3Plugin.NetworkDescriptor,
     pagination?: Pagination,
-): Promise<Web3Plugin.FungibleAsset<Web3Plugin.FungibleToken>[]> {
+): Promise<Pageable<Web3Plugin.FungibleAsset>> {
     const allSettled = await Promise.allSettled([
-        getAssetFLOW(network.chainId, address),
-        getAssetFUSD(network.chainId, address),
-        getAssetTether(network.chainId, address),
+        getAssetFLOW(chainId, address),
+        getAssetFUSD(chainId, address),
+        getAssetTether(chainId, address),
     ])
 
-    return allSettled
-        .map((x) => (x.status === 'fulfilled' ? x.value : null))
-        .filter(Boolean) as Web3Plugin.FungibleAsset<Web3Plugin.FungibleToken>[]
+    return {
+        data: (await allSettled
+            .map((x) => (x.status === 'fulfilled' ? x.value : null))
+            .filter(Boolean)) as Web3Plugin.FungibleAsset[],
+        hasNextPage: false,
+    }
 }

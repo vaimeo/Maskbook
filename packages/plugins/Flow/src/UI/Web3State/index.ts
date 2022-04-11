@@ -51,9 +51,6 @@ export function createWeb3State(signal: AbortSignal): Web3Plugin.ObjectCapabilit
                 return user?.addr ? ProviderType.Blocto : undefined
             }),
         },
-        Asset: {
-            getFungibleAssets,
-        },
         Utils: {
             formatAddress,
             formatBalance: toFixed,

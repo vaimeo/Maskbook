@@ -8,6 +8,7 @@ export function createFungibleToken(
     name: string,
     symbol: string,
     decimals: number,
+    logoURI?: string,
 ): Web3Plugin.FungibleToken {
     return {
         id: address,
@@ -18,13 +19,13 @@ export function createFungibleToken(
         name,
         symbol,
         decimals,
+        logoURI,
     }
 }
 
 export function createFungibleAsset(
     token: Web3Plugin.FungibleToken,
     balance: string,
-    logoURI?: string,
     price?: { [key in CurrencyType]?: string },
 ): Web3Plugin.FungibleAsset {
     return {
