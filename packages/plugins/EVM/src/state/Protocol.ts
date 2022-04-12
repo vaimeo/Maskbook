@@ -1,28 +1,14 @@
 import { first } from 'lodash-unified'
 import type { RequestArguments, TransactionConfig } from 'web3-core'
 import type { Plugin, Web3Plugin } from '@masknet/plugin-infra'
-import { ChainId, getReceiptStatus, RequestOptions, SendOverrides } from '@masknet/web3-shared-evm'
+import { ChainId, getReceiptStatus } from '@masknet/web3-shared-evm'
 import { EVM_RPC } from '../messages'
+
 export class ProtocolState
     implements Web3Plugin.ObjectCapabilities.ProtocolState<ChainId, RequestArguments, TransactionConfig>
 {
     constructor(private context: Plugin.Shared.SharedContext) {}
 
-    request<T>(
-        chainId: ChainId,
-        requestArguments: RequestArguments,
-        overrides?: SendOverrides,
-        options?: RequestOptions,
-    ) {
-        return EVM_RPC.request<T>(
-            requestArguments,
-            {
-                ...overrides,
-                chainId,
-            },
-            options,
-        )
-    }
     async getAccount() {
         const accounts = await EVM_RPC.getAccounts()
         return first(accounts) ?? ''

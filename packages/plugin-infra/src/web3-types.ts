@@ -443,7 +443,6 @@ export declare namespace Web3Plugin {
             clearTransactions?: (chainId: ChainId, address: string) => Promise<void>
         }
         export interface ProtocolState<ChainId, RequestArguments, TransactionConfig> {
-            request?: <T>(chainId: ChainId, requestArguments: RequestArguments) => Promise<T>
             /** Get the current account */
             getAccont?: () => Promise<string>
             /** Get the current chain id */

@@ -1,7 +1,8 @@
 import type { Subscription } from 'use-subscription'
 import { getEnumAsArray } from '@dimensiondev/kit'
-import { Plugin, TokenListState, TokenType, Web3Plugin } from '@masknet/plugin-infra'
+import { Plugin, TokenListState, Web3Plugin } from '@masknet/plugin-infra'
 import { ChainId, getTokenConstants } from '@masknet/web3-shared-flow'
+import { createFungibleToken } from '../helpers'
 
 export class TokenList extends TokenListState<ChainId> {
     constructor(
@@ -28,39 +29,30 @@ export class TokenList extends TokenListState<ChainId> {
     private composeFungibleTokenList(chainId: ChainId): Web3Plugin.FungibleToken[] {
         const { FLOW_ADDRESS = '', FUSD_ADDRESS = '', TETHER_ADDRESS = '' } = getTokenConstants(chainId)
         return [
-            {
-                id: FLOW_ADDRESS,
-                type: TokenType.Fungible,
-                subType: TokenType.Fungible,
+            createFungibleToken(
                 chainId,
-                name: 'Flow',
-                symbol: 'FLOW',
-                address: FLOW_ADDRESS,
-                decimals: 8,
-                logoURI: new URL('../assets/flow.png', import.meta.url).toString(),
-            },
-            {
-                id: FUSD_ADDRESS,
-                type: TokenType.Fungible,
-                subType: TokenType.Fungible,
+                FLOW_ADDRESS,
+                'Flow',
+                'FLOW',
+                8,
+                new URL('../assets/flow.png', import.meta.url).toString(),
+            ),
+            createFungibleToken(
                 chainId,
-                name: 'Flow USD',
-                symbol: 'FUSD',
-                address: FUSD_ADDRESS,
-                decimals: 8,
-                logoURI: new URL('../assets/FUSD.png', import.meta.url).toString(),
-            },
-            {
-                id: TETHER_ADDRESS,
-                type: TokenType.Fungible,
-                subType: TokenType.Fungible,
+                FUSD_ADDRESS,
+                'Flow USD',
+                'FUSD',
+                8,
+                new URL('../assets/FUSD.png', import.meta.url).toString(),
+            ),
+            createFungibleToken(
                 chainId,
-                name: 'Tether USD',
-                symbol: 'tUSD',
-                address: TETHER_ADDRESS,
-                decimals: 8,
-                logoURI: new URL('../assets/tUSD.png', import.meta.url).toString(),
-            },
+                TETHER_ADDRESS,
+                'Tether USD',
+                'tUSD',
+                8,
+                new URL('../assets/tUSD.png', import.meta.url).toString(),
+            ),
         ]
     }
 
