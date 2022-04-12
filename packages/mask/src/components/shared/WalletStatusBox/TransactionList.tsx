@@ -1,5 +1,5 @@
 import { LinkOutIcon } from '@masknet/icons'
-import { useWeb3State } from '@masknet/plugin-infra'
+import { useWeb3State } from '@masknet/plugin-infra/web3'
 import { WalletMessages } from '@masknet/plugin-wallet'
 import { makeStyles } from '@masknet/theme'
 import {
@@ -72,7 +72,7 @@ const statusTextMap: Record<TransactionStatusType, string> = {
     [TransactionStatusType.CANCELLED]: 'Cancelled',
 }
 
-const getContractFunctionName = async (data: string) => {
+const getContractFunctionName = async (data: string | undefined) => {
     if (!data) return null
     const sig = data.slice(0, 10)
     const name = await Services.Ethereum.getContractFunctionName(sig)
@@ -97,7 +97,7 @@ const Transaction: FC<TransactionProps> = ({ chainId, transaction: tx, onClear =
         return transaction.to
     }, [web3, tx])
     const address = (contractAddress || '').toLowerCase()
-    const txData = tx.payload?.params?.[0].data as string
+    const txData = tx.payload?.params?.[0].data as string | undefined
     const { value: functionName } = useAsync(async () => {
         const name = await getContractFunctionName(txData)
         if (name === TransactionType.CREATE_RED_PACKET) return 'Create Lucky Drop'
