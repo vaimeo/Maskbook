@@ -2,7 +2,6 @@
     "messages": {
         "H8rw2f": "(the name is set by the web site)",
         "nMkx7r": [["0", "plural", { "one": ["#", " Hour"], "other": ["#", " Hours"] }]],
-        "Hz5HKj": [["0", "plural", { "one": ["#", " Pending"], "other": ["#", " Pendings"] }]],
         "KMgp2+": [["0"], " available"],
         "y6VCOb": [["0"], " Mins"],
         "MpnSqP": [["0"], " Pending"],
@@ -18,7 +17,6 @@
                 }
             ]
         ],
-        "uY5CXj": [["promote_file_service"], " \\n", ["encrypted"]],
         "dlcyk4": [
             ["promote_red_packet"],
             " \\n\\n🧧🧧🧧 Try sending Lucky Drop to your friends with Mask.io. \\n\\n",

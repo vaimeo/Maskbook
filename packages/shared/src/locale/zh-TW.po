@@ -1,6 +1,7 @@
 msgid ""
 msgstr ""
-"Project-Id-Version: 1970-01-01 00:00+0000gs-To:\n"
+"Project-Id-Version: \n"
+"Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: \n"
 "PO-Revision-Date: \n"
 "Last-Translator: \n"
@@ -9,16 +10,11 @@ msgstr ""
 "Content-Type: \n"
 "Content-Transfer-Encoding: \n"
 "Plural-Forms: \n"
-"Report-Msgid-Bugs-To: \n"
 
 #: src/UI/components/CompositionDialog/PluginEntryRender.tsx
 #: src/UI/components/CompositionDialog/PluginEntryRender.tsx
 msgid "(beta)"
 msgstr ""
-
-#: src/UI/components/WalletStatusBox/usePendingTransactions.tsx
-#~ msgid "{0, plural, one {# Pending} other {# Pendings}}"
-#~ msgstr ""
 
 #: src/UI/translate.ts
 msgid "{0} {1} approval successfully."
@@ -440,10 +436,6 @@ msgstr ""
 #: src/UI/components/AccountIcons/index.tsx
 msgid "Data source is retrieved from {platform, select, twitter {Twitter profile} facebook {Facebook profile} next_id {NEXT.ID}}."
 msgstr ""
-
-#: src/UI/modals/WalletRiskWarningModal/WalletRiskWarning.tsx
-#~ msgid "Dear User,<0/><1/>When using any wallet-related plugins in Mask Network, please confirm the following usage risks:<2/><3/>Mask Network provides non-commercial free services. The plug-ins are provided by community members and other excellent third-party DApp teams. Due to the natrue of the decentralized network and other uncertain risk factors, users are requested to properly protect their sensitive information such as wallet mnemonic words and private keys. Please be cautious when interact with any blockchain contract. The risks caused by any third-party DApps (plug-ins) are borne by the third-party DApps themselves."
-#~ msgstr ""
 
 #: src/UI/modals/WalletRiskWarningModal/WalletRiskWarning.tsx
 msgid "Dear User,<0/><1/>When using any wallet-related plugins in Mask Network, please confirm the following usage risks:<2/><3/>Mask Network provides non-commercial free services. The plug-ins are provided by community members and other excellent third-party DApp teams. Due to the nature of the decentralized network and other uncertain risk factors, users are requested to properly protect their sensitive information such as wallet mnemonic words and private keys. Please be cautious when interact with any blockchain contract. The risks caused by any third-party DApps (plug-ins) are borne by the third-party DApps themselves."
