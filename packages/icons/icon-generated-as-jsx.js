@@ -445,7 +445,12 @@ export const NFTScan = /*#__PURE__*/ __createIcon('NFTScan', [
 ])
 export const Okx = /*#__PURE__*/ __createIcon('okx', [
     {
-        u: () => new URL('./brands/okx.svg', import.meta.url).href,
+        c: ['dark'],
+        u: () => new URL('./brands/okx.dark.svg', import.meta.url).href,
+    },
+    {
+        c: ['light'],
+        u: () => new URL('./brands/okx.light.svg', import.meta.url).href,
     },
 ])
 export const OneInch = /*#__PURE__*/ __createIcon('OneInch', [
@@ -4085,11 +4090,6 @@ export const FileService = /*#__PURE__*/ __createIcon('FileService', [
 export const FindTruman = /*#__PURE__*/ __createIcon('FindTruman', [
     {
         u: () => new URL('./plugins/FindTruman.png', import.meta.url).href,
-    },
-])
-export const FriendTech = /*#__PURE__*/ __createIcon('FriendTech', [
-    {
-        u: () => new URL('./plugins/FriendTech.svg', import.meta.url).href,
     },
 ])
 export const Gitcoin = /*#__PURE__*/ __createIcon('Gitcoin', [

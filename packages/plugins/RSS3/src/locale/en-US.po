@@ -173,7 +173,11 @@ msgid "Successful"
 msgstr ""
 
 #: src/SiteAdaptor/FeedsPage.tsx
-msgid "There's no feed associated with this address."
+#~ msgid "There's no feed associated with this address."
+#~ msgstr ""
+
+#: src/SiteAdaptor/FeedsPage.tsx
+msgid "There's no feed associated with this address.<0>{0}</0>"
 msgstr ""
 
 #: src/SiteAdaptor/modals/DetailsModal/TxDetails.tsx

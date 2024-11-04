@@ -80,7 +80,8 @@ export function next_id_mini_dark_url() { return new URL("./brands/NextIDMini.da
 export function next_id_mini_light_url() { return new URL("./brands/NextIDMini.light.svg", import.meta.url).href }
 export function nft_go_url() { return new URL("./brands/NFTGo.svg", import.meta.url).href }
 export function nft_scan_url() { return new URL("./brands/NFTScan.svg", import.meta.url).href }
-export function okx_url() { return new URL("./brands/okx.svg", import.meta.url).href }
+export function okx_dark_url() { return new URL("./brands/okx.dark.svg", import.meta.url).href }
+export function okx_light_url() { return new URL("./brands/okx.light.svg", import.meta.url).href }
 export function one_inch_url() { return new URL("./brands/OneInch.png", import.meta.url).href }
 export function open_sea_url() { return new URL("./brands/OpenSea.svg", import.meta.url).href }
 export function open_sea_colored_url() { return new URL("./brands/OpenSeaColored.svg", import.meta.url).href }
@@ -377,7 +378,6 @@ export function ens_url() { return new URL("./plugins/ENS.png", import.meta.url)
 export function ens_cover_url() { return new URL("./plugins/ENSCover.svg", import.meta.url).href }
 export function file_service_url() { return new URL("./plugins/FileService.svg", import.meta.url).href }
 export function find_truman_url() { return new URL("./plugins/FindTruman.png", import.meta.url).href }
-export function friend_tech_url() { return new URL("./plugins/FriendTech.svg", import.meta.url).href }
 export function gitcoin_dark_url() { return new URL("./plugins/Gitcoin.dark.svg", import.meta.url).href }
 export function gitcoin_light_url() { return new URL("./plugins/Gitcoin.light.svg", import.meta.url).href }
 export function good_ghosting_dark_url() { return new URL("./plugins/GoodGhosting.dark.svg", import.meta.url).href }

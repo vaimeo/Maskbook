@@ -416,9 +416,6 @@ importers:
       '@masknet/plugin-file-service':
         specifier: workspace:^
         version: link:../plugins/FileService
-      '@masknet/plugin-friend-tech':
-        specifier: workspace:^
-        version: link:../plugins/FriendTech
       '@masknet/plugin-gitcoin':
         specifier: workspace:^
         version: link:../plugins/Gitcoin
@@ -1286,57 +1283,6 @@ importers:
         specifier: ^1.0.2
         version: 1.0.2
 
-  packages/plugins/FriendTech:
-    dependencies:
-      '@masknet/icons':
-        specifier: workspace:^
-        version: link:../../icons
-      '@masknet/plugin-infra':
-        specifier: workspace:^
-        version: link:../../plugin-infra
-      '@masknet/shared':
-        specifier: workspace:^
-        version: link:../../shared
-      '@masknet/shared-base':
-        specifier: workspace:^
-        version: link:../../shared-base
-      '@masknet/shared-base-ui':
-        specifier: workspace:^
-        version: link:../../shared-base-ui
-      '@masknet/theme':
-        specifier: workspace:^
-        version: link:../../theme
-      '@masknet/web3-hooks-base':
-        specifier: workspace:^
-        version: link:../../web3-hooks/base
-      '@masknet/web3-providers':
-        specifier: workspace:^
-        version: link:../../web3-providers
-      '@masknet/web3-shared-base':
-        specifier: workspace:^
-        version: link:../../web3-shared/base
-      '@masknet/web3-shared-evm':
-        specifier: workspace:^
-        version: link:../../web3-shared/evm
-      '@servie/events':
-        specifier: ^3.0.0
-        version: 3.0.0
-      bignumber.js:
-        specifier: 9.1.2
-        version: 9.1.2
-      date-fns:
-        specifier: ^4.1.0
-        version: 4.1.0
-      react-router-dom:
-        specifier: ^6.24.0
-        version: 6.24.0(react-dom@0.0.0-experimental-58af67a8f8-20240628(react@0.0.0-experimental-58af67a8f8-20240628))(react@0.0.0-experimental-58af67a8f8-20240628)
-      react-use:
-        specifier: ^17.5.0
-        version: 17.5.0(patch_hash=tokvlmgj4xqkhjmndck4f7nw3q)(react-dom@0.0.0-experimental-58af67a8f8-20240628(react@0.0.0-experimental-58af67a8f8-20240628))(react@0.0.0-experimental-58af67a8f8-20240628)
-      urlcat:
-        specifier: ^3.1.0
-        version: 3.1.0(patch_hash=scyjp2cqyqu6oq4kmzjh3isyxa)
-
   packages/plugins/Gitcoin:
     dependencies:
       '@masknet/icons':
@@ -2029,6 +1975,9 @@ importers:
       '@ethersproject/providers':
         specifier: ^5.7.2
         version: 5.7.2(bufferutil@4.0.7)(utf-8-validate@5.0.10)
+      '@hookform/resolvers':
+        specifier: ^3.6.0
+        version: 3.6.0(react-hook-form@7.53.0(react@0.0.0-experimental-58af67a8f8-20240628))
       '@masknet/icons':
         specifier: workspace:^
         version: link:../../icons
@@ -2086,6 +2035,9 @@ importers:
       immer:
         specifier: ^10.1.1
         version: 10.1.1
+      react-hook-form:
+        specifier: ^7.53.0
+        version: 7.53.0(react@0.0.0-experimental-58af67a8f8-20240628)
       react-router-dom:
         specifier: ^6.24.0
         version: 6.24.0(react-dom@0.0.0-experimental-58af67a8f8-20240628(react@0.0.0-experimental-58af67a8f8-20240628))(react@0.0.0-experimental-58af67a8f8-20240628)
@@ -2098,6 +2050,12 @@ importers:
       use-subscription:
         specifier: ^1.8.0
         version: 1.8.0(react@0.0.0-experimental-58af67a8f8-20240628)
+      web3-core:
+        specifier: 1.10.4
+        version: 1.10.4(encoding@0.1.13)
+      zod:
+        specifier: ^3.23.8
+        version: 3.23.8
     devDependencies:
       '@types/use-subscription':
         specifier: ^1.0.2
@@ -8493,9 +8451,6 @@ packages:
   date-fns@3.6.0:
     resolution: {integrity: sha512-fRHTG8g/Gif+kSh50gaGEdToemgfj74aRX3swtiouboip5JDLAyDE9F11nHMIcvOaXeOC6D7SpNhi7uFyB7Uww==}
 
-  date-fns@4.1.0:
-    resolution: {integrity: sha512-Ukq0owbQXxa/U3EGtsdVBkR1w7KOQ5gIBqdH2hkvknzZPYvBxb/aa6E8L7tmjFtkwZBu3UXBbjIgPo/Ez4xaNg==}
-
   debounce@1.2.1:
     resolution: {integrity: sha512-XRRe6Glud4rd/ZGQfiV1ruXSfbvfJedlV9Y6zOlP+2K04vBYiJEte6stfFkCP03aMnY5tsipamumUjL14fofug==}
 
@@ -12849,6 +12804,12 @@ packages:
   react-hook-form@7.52.0:
     resolution: {integrity: sha512-mJX506Xc6mirzLsmXUJyqlAI3Kj9Ph2RhplYhUVffeOQSnubK2uVqBFOBJmvKikvbFV91pxVXmDiR+QMF19x6A==}
     engines: {node: '>=12.22.0'}
+    peerDependencies:
+      react: 0.0.0-experimental-58af67a8f8-20240628
+
+  react-hook-form@7.53.0:
+    resolution: {integrity: sha512-M1n3HhqCww6S2hxLxciEXy2oISPnAzxY7gvwVPrtlczTM/1dDadXgUxDpHMrMTblDOcm/AXtXxHwZ3jpg1mqKQ==}
+    engines: {node: '>=18.0.0'}
     peerDependencies:
       react: 0.0.0-experimental-58af67a8f8-20240628
 
@@ -17576,6 +17537,10 @@ snapshots:
   '@hookform/resolvers@3.6.0(react-hook-form@7.52.0(react@0.0.0-experimental-58af67a8f8-20240628))':
     dependencies:
       react-hook-form: 7.52.0(react@0.0.0-experimental-58af67a8f8-20240628)
+
+  '@hookform/resolvers@3.6.0(react-hook-form@7.53.0(react@0.0.0-experimental-58af67a8f8-20240628))':
+    dependencies:
+      react-hook-form: 7.53.0(react@0.0.0-experimental-58af67a8f8-20240628)
 
   '@humanfs/core@0.19.0': {}
 
@@ -22569,8 +22534,6 @@ snapshots:
       '@babel/runtime': 7.24.7
 
   date-fns@3.6.0: {}
-
-  date-fns@4.1.0: {}
 
   debounce@1.2.1: {}
 
@@ -28046,6 +28009,10 @@ snapshots:
     dependencies:
       react: 0.0.0-experimental-58af67a8f8-20240628
 
+  react-hook-form@7.53.0(react@0.0.0-experimental-58af67a8f8-20240628):
+    dependencies:
+      react: 0.0.0-experimental-58af67a8f8-20240628
+
   react-idle-timer@5.7.2(react-dom@0.0.0-experimental-58af67a8f8-20240628(react@0.0.0-experimental-58af67a8f8-20240628))(react@0.0.0-experimental-58af67a8f8-20240628):
     dependencies:
       react: 0.0.0-experimental-58af67a8f8-20240628
@@ -31051,6 +31018,3 @@ snapshots:
   zod@3.23.8: {}
 
   zwitch@2.0.2: {}
-
-time:
-  '@types/web@0.0.171': '2024-10-13T04:08:50.020Z'

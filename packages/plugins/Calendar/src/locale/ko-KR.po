@@ -25,10 +25,6 @@ msgstr "캘린더"
 msgid "Date"
 msgstr "날짜"
 
-#: src/SiteAdaptor/CalendarContent.tsx
-msgid "Events"
-msgstr "이벤트"
-
 #: src/SiteAdaptor/components/CountDownTimer.tsx
 msgid "Expired"
 msgstr "만료됨"

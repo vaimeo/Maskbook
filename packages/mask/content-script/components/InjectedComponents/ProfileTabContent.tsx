@@ -2,7 +2,7 @@ import { useCallback, useEffect, useMemo, useRef, useState } from 'react'
 import { useUpdateEffect } from 'react-use'
 import { compact, first } from 'lodash-es'
 import { TabContext } from '@mui/lab'
-import { Link, Button, Stack, Tab, ThemeProvider, Typography } from '@mui/material'
+import { Button, Stack, Tab, ThemeProvider, Typography } from '@mui/material'
 import { Icons } from '@masknet/icons'
 import { useQuery } from '@tanstack/react-query'
 import { Telemetry } from '@masknet/web3-telemetry'
@@ -76,14 +76,6 @@ const useStyles = makeStyles()((theme) => ({
         fontSize: 18,
         fontWeight: 700,
     },
-    settingLink: {
-        cursor: 'pointer',
-        marginTop: 4,
-        zIndex: 0,
-        '&:hover': {
-            textDecoration: 'none',
-        },
-    },
     content: {
         position: 'relative',
     },
@@ -107,8 +99,14 @@ const useStyles = makeStyles()((theme) => ({
     gearIcon: {
         color: theme.palette.maskColor.dark,
     },
-    linkOutIcon: {
-        color: theme.palette.maskColor.secondaryDark,
+    currentAddress: {
+        fontSize: '18px',
+        fontWeight: 700,
+        maxWidth: 200,
+        textOverflow: 'ellipsis',
+        overflow: 'hidden',
+        whiteSpace: 'nowrap',
+        color: theme.palette.maskColor.dark,
     },
     mainLinkIcon: {
         margin: '0px 2px',
@@ -448,9 +446,7 @@ function Content(props: ProfileTabContentProps) {
                                     }}
                                     linkIconClassName={classes.mainLinkIcon}
                                     TypographyProps={{
-                                        fontSize: '18px',
-                                        fontWeight: 700,
-                                        color: (theme) => theme.palette.maskColor.dark,
+                                        className: classes.currentAddress,
                                     }}
                                     socialAccount={selectedSocialAccount}
                                 />
@@ -508,14 +504,7 @@ function Content(props: ProfileTabContentProps) {
                                         sx={{ cursor: 'pointer' }}
                                     />
                                 </ConnectPersonaBoundary>
-                            :   <Link
-                                    className={classes.settingLink}
-                                    href="https://mask.io"
-                                    target="_blank"
-                                    rel="noopener noreferrer">
-                                    <Icons.LinkOut className={classes.linkOutIcon} size={20} />
-                                </Link>
-                            }
+                            :   null}
                         </div>
                     </div>
                     <div className={classes.tabs}>

@@ -20,10 +20,6 @@ msgstr ""
 msgid "Date"
 msgstr ""
 
-#: src/SiteAdaptor/CalendarContent.tsx
-msgid "Events"
-msgstr ""
-
 #: src/SiteAdaptor/components/CountDownTimer.tsx
 msgid "Expired"
 msgstr ""
