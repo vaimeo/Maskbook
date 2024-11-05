@@ -13,7 +13,7 @@ import { useMarkdownStyles } from '../hooks/index.js'
 const useStyles = makeStyles<void, 'image' | 'markdown' | 'failedImage' | 'body' | 'playButton' | 'verbose'>()(
     (theme, _, refs) => ({
         markdown: {},
-        inspectable: {
+        canInspect: {
             cursor: 'pointer',
             padding: theme.spacing(1.5),
             '&:hover': {
@@ -201,7 +201,7 @@ export const SocialFeed = memo<SocialFeedProps>(function SocialFeed({ post, verb
     return (
         <article
             {...rest}
-            className={cx(className, verbose ? classes.verbose : classes.inspectable)}
+            className={cx(className, verbose ? classes.verbose : classes.canInspect)}
             onClick={() => {
                 if (verbose) return
                 SocialFeedDetailsModal.open({

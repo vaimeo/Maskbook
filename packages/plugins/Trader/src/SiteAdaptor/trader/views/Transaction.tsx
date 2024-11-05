@@ -237,7 +237,7 @@ const useStyles = makeStyles<void, 'leftSideToken' | 'rightSideToken'>()((theme,
 export const Transaction = memo(function Transaction() {
     const { reset, setFromToken, mode, setToToken } = useTrade()
     const { classes, cx, theme } = useStyles()
-    const { basepath, showSnackbar } = useRuntime()
+    const { basePath, showSnackbar } = useRuntime()
     const navigate = useNavigate()
     const [params, setParams] = useSearchParams()
     const hash = params.get('hash')
@@ -636,7 +636,7 @@ export const Transaction = memo(function Transaction() {
                             if (txSucceed) reset()
                             setFromToken(okxTokenToFungibleToken(tx.fromToken))
                             setToToken(okxTokenToFungibleToken(tx.toToken))
-                            navigate(urlcat(basepath, RoutePaths.Trade, { mode: tx.kind }))
+                            navigate(urlcat(basePath, RoutePaths.Trade, { mode: tx.kind }))
                         }}>
                         <Icons.Cached color={theme.palette.maskColor.bottom} />
                         {txSucceed ?

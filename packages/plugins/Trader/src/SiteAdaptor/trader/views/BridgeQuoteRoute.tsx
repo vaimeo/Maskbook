@@ -107,7 +107,7 @@ const useStyles = makeStyles<void, 'active' | 'label' | 'fastestTag' | 'maxTag'>
 
 export const BridgeQuoteRoute = memo(function BridgeQuoteRoute() {
     const { classes, theme, cx } = useStyles()
-    const { basepath } = useRuntime()
+    const { basePath } = useRuntime()
     const { bridgeQuote, fromToken, toToken, mode } = useTrade()
     const [bridgeId = bridgeQuote?.routerList[0].router.bridgeId, setBridgeId] = useState<number>()
     const chainId = fromToken?.chainId as ChainId
@@ -195,7 +195,7 @@ export const BridgeQuoteRoute = memo(function BridgeQuoteRoute() {
                                 component={Link}
                                 className={classes.tag}
                                 to={{
-                                    pathname: basepath + RoutePaths.TradingRoute,
+                                    pathname: basePath + RoutePaths.TradingRoute,
                                     search: `?router-bridge-id=${currBridgeId}&mode=${mode}`,
                                 }}>
                                 Route info <Icons.ArrowRight size={16} />

@@ -14,13 +14,13 @@ export function useGetTransferReceived() {
             const receipt = await web3.getTransactionReceipt(hash, { chainId })
             const receiverTopic = `0x000000000000000000000000${account.slice(2)}`.toLowerCase()
 
-            const datas = receipt?.logs
+            const data = receipt?.logs
                 .filter((x) => {
                     return x.topics.length === 3 && x.topics[0] === TOPIC && x.topics[2].toLowerCase() === receiverTopic
                 })
                 .map((log) => log.data)
 
-            return datas?.length ? BigNumber.sum(...datas).toFixed() : undefined
+            return data?.length ? BigNumber.sum(...data).toFixed() : undefined
         },
         [web3],
     )

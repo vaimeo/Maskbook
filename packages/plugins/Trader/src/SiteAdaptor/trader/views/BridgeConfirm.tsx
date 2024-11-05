@@ -173,7 +173,7 @@ const useStyles = makeStyles()((theme) => ({
 
 export const BridgeConfirm = memo(function BridgeConfirm() {
     const { classes, cx, theme } = useStyles()
-    const { basepath, showToolTip, showSnackbar } = useRuntime()
+    const { basePath, showToolTip, showSnackbar } = useRuntime()
     const navigate = useNavigate()
     const {
         mode,
@@ -365,7 +365,7 @@ export const BridgeConfirm = memo(function BridgeConfirm() {
                 bridgeName: router?.bridgeName,
             })
             if (leaveRef.current) return
-            const url = urlcat(basepath, RoutePaths.Transaction, {
+            const url = urlcat(basePath, RoutePaths.Transaction, {
                 hash,
                 chainId: fromChainId,
                 mode,
@@ -379,7 +379,7 @@ export const BridgeConfirm = memo(function BridgeConfirm() {
             })
         }
     }, [
-        basepath,
+        basePath,
         fromToken,
         toToken,
         fromTokenAmount,
@@ -489,7 +489,7 @@ than estimated, and any unused funds will remain in the original address.`
                         </Typography>
                         <Link
                             className={cx(classes.rowValue, classes.link)}
-                            to={{ pathname: basepath + RoutePaths.NetworkFee, search: `?mode=${mode}` }}>
+                            to={{ pathname: basePath + RoutePaths.NetworkFee, search: `?mode=${mode}` }}>
                             <Box display="flex" flexDirection="column">
                                 <Typography className={classes.text}>
                                     {`${formatWeiToEther(gasFee).toFixed(4)} ${fromNetwork?.nativeCurrency.symbol ?? 'ETH'}${gasCost ? ` ≈ $${gasCost}` : ''}`}

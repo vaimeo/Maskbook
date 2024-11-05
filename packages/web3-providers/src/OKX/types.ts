@@ -512,7 +512,7 @@ export type GetBridgeResponse = OKXResponse<
         /**
          * The randomKeyAccount parameter is not required for every transaction.
          * It is only generated and returned during certain special transactions,
-         * such as when using the CCTP bridge for cross-chain token transfers.
+         * such as when using the bridge for cross-chain token transfers.
          */
         randomKeyAccount?: string[]
     }>
@@ -533,7 +533,6 @@ export interface BridgeStatus {
     crossChainInfo: {
         memo?: string
     } | null
-    destinationChainGasfee: string
     /**
      * WAITING (Order processing)
      * FROM_SUCCESS (Source swap success)
@@ -551,7 +550,6 @@ export interface BridgeStatus {
     fromTokenAddress: string
     fromTxHash: string
     refundTokenAddress: string
-    sourceChainGasfee: string
     /**
      * PENDING (Order pending)
      * SUCCESS (Order success)

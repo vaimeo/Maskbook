@@ -139,7 +139,7 @@ function useCompareList(quote: OKXSwapQuote | undefined, chainId: ChainId) {
 
 export const QuoteRoute = memo(function QuoteRoute() {
     const { classes, theme } = useStyles()
-    const { basepath, showToolTip } = useRuntime()
+    const { basePath, showToolTip } = useRuntime()
     const { quote, chainId } = useTrade()
 
     const compareList = useCompareList(quote, chainId)
@@ -227,7 +227,7 @@ export const QuoteRoute = memo(function QuoteRoute() {
                                 <Typography
                                     component={Link}
                                     className={classes.tag}
-                                    to={basepath + RoutePaths.TradingRoute}>
+                                    to={basePath + RoutePaths.TradingRoute}>
                                     Route info <Icons.ArrowRight size={16} />
                                 </Typography>
                             :   null}

@@ -190,7 +190,7 @@ export function TradeView() {
         chainId: toChainId,
     })
 
-    const { basepath, pickToken } = useRuntime()
+    const { basePath, pickToken } = useRuntime()
 
     const toTokenAmount = isSwap ? quote?.toTokenAmount : bridgeQuote?.toTokenAmount
     const { fromTokenValue, toTokenValue, priceDiff } = useMemo(() => {
@@ -405,7 +405,7 @@ export function TradeView() {
                     color={isOverSlippage ? 'error' : undefined}
                     disabled={!isTradable}
                     onClick={() => {
-                        const url = urlcat(basepath, isSwap ? RoutePaths.Confirm : RoutePaths.BridgeConfirm, {
+                        const url = urlcat(basePath, isSwap ? RoutePaths.Confirm : RoutePaths.BridgeConfirm, {
                             mode,
                         })
                         navigate(url)

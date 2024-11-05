@@ -13,7 +13,7 @@ import { useFeedOwner } from '../contexts/FeedOwnerContext.js'
 
 const useStyles = makeStyles()((theme) => ({
     verbose: {},
-    inspectable: {
+    canInspect: {
         cursor: 'pointer',
         padding: theme.spacing(1.5),
         '&:hover': {
@@ -42,7 +42,7 @@ export const FinanceFeed = memo<FinanceFeedProps>(function FinanceFeed({ transac
     return (
         <article
             {...rest}
-            className={cx(className, verbose ? classes.verbose : classes.inspectable)}
+            className={cx(className, verbose ? classes.verbose : classes.canInspect)}
             onClick={() => {
                 if (verbose) return
                 FinanceFeedDetailsModal.open({

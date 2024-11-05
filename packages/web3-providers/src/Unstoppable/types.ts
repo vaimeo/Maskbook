@@ -9,6 +9,7 @@ type Meta = {
     resolver: string
     registry: string
     reverse: boolean
+    // cspell:disable-next-line
     type: 'Uns' | 'Zilliqa' | 'Ens'
     customMeta: {
         expiresAt: number

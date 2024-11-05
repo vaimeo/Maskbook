@@ -171,7 +171,7 @@ const useStyles = makeStyles()((theme) => ({
 export const Confirm = memo(function Confirm() {
     const { classes, cx, theme } = useStyles()
     const navigate = useNavigate()
-    const { basepath, showToolTip, showSnackbar } = useRuntime()
+    const { basePath, showToolTip, showSnackbar } = useRuntime()
     const {
         mode,
         inputAmount,
@@ -355,7 +355,7 @@ export const Confirm = memo(function Confirm() {
                 gasPrice: gasConfig.gasPrice || '0',
             })
             if (leaveRef.current) return
-            const url = urlcat(basepath, RoutePaths.Transaction, { hash, chainId, mode })
+            const url = urlcat(basePath, RoutePaths.Transaction, { hash, chainId, mode })
             navigate(url, { replace: true })
         } catch (err) {
             showSnackbar(t`Swap`, {
@@ -364,7 +364,7 @@ export const Confirm = memo(function Confirm() {
             })
         }
     }, [
-        basepath,
+        basePath,
         fromToken,
         toToken,
         transaction,
@@ -469,7 +469,7 @@ export const Confirm = memo(function Confirm() {
                         </Typography>
                         <Link
                             className={cx(classes.rowValue, classes.link)}
-                            to={{ pathname: basepath + RoutePaths.NetworkFee, search: `?mode=${mode}` }}>
+                            to={{ pathname: basePath + RoutePaths.NetworkFee, search: `?mode=${mode}` }}>
                             <Box display="flex" flexDirection="column">
                                 <Typography className={classes.text}>
                                     {`${formatWeiToEther(gasFee).toFixed(4)} ${nativeToken?.symbol ?? 'ETH'}${gasCost ? ` ≈ $${gasCost}` : ''}`}
@@ -494,7 +494,7 @@ export const Confirm = memo(function Confirm() {
                         <Typography
                             className={cx(classes.rowValue, classes.link)}
                             onClick={() => {
-                                navigate(urlcat(basepath, RoutePaths.SelectLiquidity, { mode }))
+                                navigate(urlcat(basePath, RoutePaths.SelectLiquidity, { mode }))
                             }}>
                             {dexIdsCount}/{liquidityList.length}
                             <Icons.ArrowRight size={20} />

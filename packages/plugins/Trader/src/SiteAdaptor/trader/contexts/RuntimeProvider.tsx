@@ -8,7 +8,7 @@ export interface ShowTooltipOptions {
 }
 
 export interface RuntimeOptions {
-    basepath: string
+    basePath: string
     pickToken(
         currentToken: Web3Helper.FungibleTokenAll | null | undefined,
         side: 'from' | 'to',

@@ -37,5 +37,5 @@ export function useImplementRuntime(): RuntimeOptions {
 
     const { showSnackbar } = useCustomSnackbar()
 
-    return useMemo(() => ({ pickToken, basepath: '', showToolTip: noop, showSnackbar }), [pickToken, showSnackbar])
+    return useMemo(() => ({ pickToken, basePath: '', showToolTip: noop, showSnackbar }), [pickToken, showSnackbar])
 }

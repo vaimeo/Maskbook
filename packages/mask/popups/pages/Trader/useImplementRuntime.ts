@@ -69,7 +69,7 @@ export function useImplementRuntime() {
     const { showSnackbar } = usePopupCustomSnackbar()
 
     return useMemo(
-        () => ({ pickToken, basepath: '/trader', showToolTip, showSnackbar }),
+        () => ({ pickToken, basePath: '/trader', showToolTip, showSnackbar }),
         [pickToken, showToolTip, showSnackbar],
     )
 }

@@ -129,7 +129,7 @@ const useStyles = makeStyles()((theme) => ({
 
 export function HistoryView() {
     const { classes, theme } = useStyles()
-    const { basepath } = useRuntime()
+    const { basePath } = useRuntime()
     const address = useAccount(NetworkPluginID.PLUGIN_EVM)
     const { data: history = EMPTY_LIST, isLoading } = useTradeHistory(address)
     const networks = useNetworks(NetworkPluginID.PLUGIN_EVM)
@@ -161,7 +161,7 @@ export function HistoryView() {
                 const chainId = tx.kind === 'swap' || !tx.kind ? tx.chainId : tx.fromChainId
                 const network = networks.find((x) => +x.chainId === chainId)
                 const toNetwork = tx.kind === 'bridge' ? networks.find((x) => x.chainId === tx.toChainId) : null
-                const url = urlcat(basepath, RoutePaths.Transaction, { hash: tx.hash, chainId, mode: tx.kind })
+                const url = urlcat(basePath, RoutePaths.Transaction, { hash: tx.hash, chainId, mode: tx.kind })
                 return (
                     <div className={classes.group} key={tx.hash}>
                         <div className={classes.groupHeader}>

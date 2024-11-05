@@ -10,7 +10,7 @@ import { t } from '@lingui/macro'
 
 export function Header() {
     const { mode } = useTrade()
-    const basepath = '/trader'
+    const basePath = '/trader'
     const titleMap: Record<RoutePaths, string | null> = {
         [RoutePaths.Trade]: t`Exchange`,
         [RoutePaths.History]: t`History`,
@@ -39,7 +39,7 @@ export function Header() {
                         <Icons.History
                             size={24}
                             onClick={() => {
-                                navigate(basepath + RoutePaths.History)
+                                navigate(basePath + RoutePaths.History)
                             }}
                         />
                     :   null

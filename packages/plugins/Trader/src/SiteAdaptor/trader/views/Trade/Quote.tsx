@@ -70,7 +70,7 @@ interface QuoteProps extends BoxProps {
 
 export function Quote({ quote, ...props }: QuoteProps) {
     const { classes, theme, cx } = useStyles()
-    const { basepath, showToolTip } = useRuntime()
+    const { basePath, showToolTip } = useRuntime()
     const { chainId, disabledDexIds, expand, setExpand, isAutoSlippage, slippage, mode, bridgeQuote } = useTrade()
     const isSwap = mode === 'swap'
     const [forwardCompare, setForwardCompare] = useState(true)
@@ -156,7 +156,7 @@ export function Quote({ quote, ...props }: QuoteProps) {
                         <Typography
                             component={Link}
                             className={cx(classes.rowValue, classes.link)}
-                            to={{ pathname: basepath + RoutePaths.Slippage, search: `?mode=${mode}` }}>
+                            to={{ pathname: basePath + RoutePaths.Slippage, search: `?mode=${mode}` }}>
                             <TextOverflowTooltip
                                 as={ShadowRootTooltip}
                                 placement="top"
@@ -179,7 +179,7 @@ export function Quote({ quote, ...props }: QuoteProps) {
                             <Typography
                                 component={Link}
                                 className={cx(classes.rowValue, classes.link)}
-                                to={{ pathname: basepath + RoutePaths.SelectLiquidity, search: '?mode=swap' }}>
+                                to={{ pathname: basePath + RoutePaths.SelectLiquidity, search: '?mode=swap' }}>
                                 {dexIdsCount}/{liquidityList.length}
                                 <Icons.ArrowRight size={20} />
                             </Typography>
@@ -194,8 +194,8 @@ export function Quote({ quote, ...props }: QuoteProps) {
                             className={cx(classes.rowValue, classes.link)}
                             to={
                                 isSwap ?
-                                    { pathname: basepath + RoutePaths.QuoteRoute, search: '?mode=swap' }
-                                :   { pathname: basepath + RoutePaths.BridgeQuoteRoute, search: '?mode=bridge' }
+                                    { pathname: basePath + RoutePaths.QuoteRoute, search: '?mode=swap' }
+                                :   { pathname: basePath + RoutePaths.BridgeQuoteRoute, search: '?mode=bridge' }
                             }>
                             {!isSwap && bestRouter ?
                                 <span className={classes.bestRoute}>
