@@ -1,4 +1,5 @@
 import { msg, Trans } from '@lingui/macro'
+import { useLingui } from '@lingui/react'
 import { Icons } from '@masknet/icons'
 import { PluginWalletStatusBar } from '@masknet/shared'
 import { NetworkPluginID, Sniffings } from '@masknet/shared-base'
@@ -29,7 +30,6 @@ import { formatInput, formatTokenBalance } from '../../helpers.js'
 import { useBridgable } from '../../hooks/useBridgable.js'
 import { useSwappable } from '../../hooks/useSwappable.js'
 import { Quote } from './Quote.js'
-import { useLingui } from '@lingui/react'
 
 const useStyles = makeStyles()((theme) => ({
     view: {
@@ -183,7 +183,9 @@ export function TradeView() {
     const fromChainId = fromToken?.chainId as ChainId
     const toChainId = toToken?.chainId as ChainId
     const fromNetwork = networks.find((x) => x.chainId === fromChainId)
+    const fromNetworkName = fromNetwork?.fullName || fromNetwork?.name
     const toNetwork = networks.find((x) => x.chainId === toChainId)
+    const toNetworkName = toNetwork?.fullName || toNetwork?.name
     const { data: fromTokenBalance, isLoading: isLoadingFromTokenBalance } = useFungibleTokenBalance(
         NetworkPluginID.PLUGIN_EVM,
         fromToken?.address,
@@ -264,8 +266,8 @@ export function TradeView() {
                                         {fromToken?.symbol ?? '--'}
                                     </Typography>
                                     <Typography component="span" className={classes.chain}>
-                                        {fromNetwork?.fullName ?
-                                            <Trans>on {fromNetwork.fullName}</Trans>
+                                        {fromNetworkName ?
+                                            <Trans>on {fromNetworkName}</Trans>
                                         :   '--'}
                                     </Typography>
                                 </Box>
@@ -359,8 +361,8 @@ export function TradeView() {
                                         {toToken?.symbol ?? '--'}
                                     </Typography>
                                     <Typography component="span" className={classes.chain}>
-                                        {toNetwork?.fullName ?
-                                            <Trans>on {toNetwork.fullName}</Trans>
+                                        {toNetworkName ?
+                                            <Trans>on {toNetworkName}</Trans>
                                         :   '--'}
                                     </Typography>
                                 </Box>
