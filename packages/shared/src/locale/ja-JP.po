@@ -203,6 +203,7 @@ msgid "By confirming means that you agree to bear the possible risks above."
 msgstr ""
 
 #: src/UI/contexts/components/ApproveMaskDialog.tsx
+#: src/UI/modals/ConfirmDialog/index.tsx
 #: src/UI/modals/WalletRiskWarningModal/WalletRiskWarning.tsx
 msgid "Cancel"
 msgstr "キャンセル"
@@ -293,6 +294,7 @@ msgstr "コミュニティー"
 
 #: src/UI/contexts/components/ApproveMaskDialog.tsx
 #: src/UI/contexts/components/ApproveMaskDialog.tsx
+#: src/UI/modals/ConfirmDialog/index.tsx
 #: src/UI/modals/ConfirmModal/Dialog.tsx
 #: src/UI/modals/ConfirmModal/Dialog.tsx
 #: src/UI/modals/GasSettingModal/GasSetting1559.tsx

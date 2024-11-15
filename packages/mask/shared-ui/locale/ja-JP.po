@@ -1455,6 +1455,7 @@ msgstr "Maskウォレットで取引と資産を安全に保管してくださ�
 msgid "Kept safely"
 msgstr "安全に保管されている"
 
+#: dashboard/pages/CreateMaskWallet/Recovery/index.tsx
 #: popups/pages/Wallet/ExportPrivateKey/index.tsx
 #: popups/pages/Wallet/ExportPrivateKey/index.tsx
 msgid "Keystore"
@@ -1636,6 +1637,7 @@ msgstr "ローカルに統合"
 msgid "Message"
 msgstr "メッセージ"
 
+#: dashboard/pages/CreateMaskWallet/Recovery/index.tsx
 #: popups/pages/Wallet/ExportPrivateKey/index.tsx
 msgid "Mnemonic"
 msgstr "ニーモニック"
@@ -2095,6 +2097,7 @@ msgstr "プライバシー・ポリシー（個人情報に関する方針）"
 msgid "Private"
 msgstr "プライベート"
 
+#: dashboard/pages/CreateMaskWallet/Recovery/index.tsx
 #: dashboard/pages/SetupPersona/Recovery/index.tsx
 #: popups/pages/Personas/ExportPrivateKey/index.tsx
 #: popups/pages/Wallet/ExportPrivateKey/index.tsx
