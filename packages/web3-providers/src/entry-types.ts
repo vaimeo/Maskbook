@@ -36,7 +36,6 @@ export * from './types/Lens.js'
 export type * from './types/Storage.js'
 export type * from './types/Snapshot.js'
 export type * from './types/Store.js'
-export type * from './types/Luma.js'
 
 // Provider Implementations
 export * from './DeBank/types.js'
@@ -47,6 +46,7 @@ export type * from './Web3/Router/types/index.js'
 export * from './RedPacket/types.js'
 export * from './AvatarStore/types.js'
 export type * from './OKX/types.js'
+export type * from './Calendar/types.js'
 
 export type { BaseConnectionOptions } from './Web3/Base/apis/ConnectionOptions.js'
 export type { BaseHubOptions } from './Web3/Base/apis/HubOptions.js'

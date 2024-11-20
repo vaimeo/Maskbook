@@ -106,7 +106,7 @@ const useStyles = makeStyles()((theme) => ({
 
 interface NewsListProps {
     date: Date
-    onDatesUpdate?(/** locale date string list */ dates: string[]): void
+    onDatesUpdate(/** locale date string list */ dates: string[]): void
 }
 
 export function NewsList({ date, onDatesUpdate }: NewsListProps) {
@@ -123,6 +123,7 @@ export function NewsList({ date, onDatesUpdate }: NewsListProps) {
         }
         return newsList
     }, [list, date])
+
     useEffect(() => {
         onDatesUpdate?.(Object.keys(list))
     }, [list, onDatesUpdate])
@@ -145,29 +146,31 @@ export function NewsList({ date, onDatesUpdate }: NewsListProps) {
                                 <Typography className={classes.dateDiv}>
                                     {format(new Date(key), 'MMM dd,yyy')}
                                 </Typography>
-                                {list[key].map((v) => (
+                                {list[key].map((event) => (
                                     <Link
-                                        key={v.event_url}
-                                        href={v.event_url}
+                                        key={event.event_url}
+                                        href={event.event_url}
                                         className={classes.eventCard}
                                         rel="noopener noreferrer"
                                         target="_blank">
                                         <div className={classes.eventHeader}>
                                             <div className={classes.projectWrap}>
                                                 <Image
-                                                    src={v.project.logo}
+                                                    src={event.project?.logo || event.poster_url}
                                                     classes={{ container: classes.logo }}
                                                     size={24}
-                                                    alt={v.project.name}
+                                                    alt={event.project?.name || event.event_title}
                                                 />
                                                 <Typography className={classes.projectName}>
-                                                    {v.project.name}
+                                                    {event.project?.name || event.event_title}
                                                 </Typography>
                                             </div>
-                                            <Typography className={classes.eventType}>{v.event_type}</Typography>
+                                            <Typography className={classes.eventType}>{event.event_type}</Typography>
                                         </div>
-                                        <Typography className={classes.eventTitle}>{v.event_title}</Typography>
-                                        <Typography className={classes.eventContent}>{v.event_description}</Typography>
+                                        <Typography className={classes.eventTitle}>{event.event_title}</Typography>
+                                        <Typography className={classes.eventContent}>
+                                            {event.event_description}
+                                        </Typography>
                                     </Link>
                                 ))}
                             </div>
