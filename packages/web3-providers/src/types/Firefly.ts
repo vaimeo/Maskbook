@@ -167,6 +167,11 @@ export namespace FireflyRedPacketAPI {
     export interface ProfileFollowStrategyPayload {
         platform: PlatformType
         profileId: string
+        /**
+         * Depends on the platform which created the redpacket
+         * for example, Firefly APP doesn't provide it, but Firefly Web does
+         */
+        handle?: string
     }
 
     export interface PostReactionStrategyPayload {
@@ -313,9 +318,12 @@ export namespace FireflyRedPacketAPI {
         publicKey: HexString
     }>
 
-    export type ClaimResponse = FireflyResponse<{
-        signedMessage: HexString
-    }>
+    export type ClaimResponse = FireflyResponse<
+        | {
+              signedMessage: HexString
+          }
+        | undefined
+    >
 
     export type HistoryResponse = FireflyResponse<{
         cursor: number
@@ -378,7 +386,7 @@ export namespace FireflyRedPacketAPI {
     export type ClaimStrategyStatus =
         | {
               type: 'profileFollow'
-              payload: Array<{ platform: PlatformType; profileId: string; handle: string }>
+              payload: ProfileFollowStrategyPayload[]
               result: boolean
           }
         | {
@@ -421,6 +429,58 @@ export namespace FireflyRedPacketAPI {
 }
 
 export namespace FireflyTwitterAPI {
+    export interface LegacyUserInfo {
+        following: boolean
+        can_dm: boolean
+        can_media_tag: boolean
+        /**  "Sat May 02 08:47:28 +0000 2009" */
+        created_at: string
+        default_profile: boolean
+        default_profile_image: boolean
+        /** bio */
+        description: string
+        entities: {
+            description?: {
+                urls: Array<{
+                    display_url: string
+                    expanded_url: string
+                    url: string
+                    indices: [number, number]
+                }>
+            }
+            url?: {
+                urls: Array<{
+                    display_url: string
+                    expanded_url: string
+                    url: string
+                    indices: [number, number]
+                }>
+            }
+        }
+        fast_followers_count: number
+        favourites_count: number
+        followers_count: number
+        friends_count: number
+        has_custom_timelines: boolean
+        is_translator: boolean
+        listed_count: number
+        location: string
+        media_count: number
+        /** nick name */
+        name: string
+        normal_followers_count: number
+        pinned_tweet_ids_str: string[]
+        possibly_sensitive: boolean
+        profile_banner_url: string
+        profile_image_url_https: string
+        profile_interstitial_type: string
+        screen_name: string
+        statuses_count: number
+        translator_type: string
+        verified: boolean
+        want_retweets: boolean
+        withheld_in_countries: unknown[]
+    }
     export interface TwitterUserInfo {
         __typename: 'User'
         id: string
@@ -429,58 +489,7 @@ export namespace FireflyTwitterAPI {
         has_graduated_access: boolean
         is_blue_verified: boolean
         profile_image_shape: string
-        legacy: {
-            following: boolean
-            can_dm: boolean
-            can_media_tag: boolean
-            /**  "Sat May 02 08:47:28 +0000 2009" */
-            created_at: string
-            default_profile: boolean
-            default_profile_image: boolean
-            /** bio */
-            description: string
-            entities: {
-                description?: {
-                    urls: Array<{
-                        display_url: string
-                        expanded_url: string
-                        url: string
-                        indices: [number, number]
-                    }>
-                }
-                url?: {
-                    urls: Array<{
-                        display_url: string
-                        expanded_url: string
-                        url: string
-                        indices: [number, number]
-                    }>
-                }
-            }
-            fast_followers_count: number
-            favourites_count: number
-            followers_count: number
-            friends_count: number
-            has_custom_timelines: boolean
-            is_translator: boolean
-            listed_count: number
-            location: string
-            media_count: number
-            /** nick name */
-            name: string
-            normal_followers_count: number
-            pinned_tweet_ids_str: string[]
-            possibly_sensitive: boolean
-            profile_banner_url: string
-            profile_image_url_https: string
-            profile_interstitial_type: string
-            screen_name: string
-            statuses_count: number
-            translator_type: string
-            verified: boolean
-            want_retweets: boolean
-            withheld_in_countries: unknown[]
-        }
+        legacy: LegacyUserInfo
         professional?: {
             rest_id: string
             professional_type: string
@@ -513,4 +522,6 @@ export namespace FireflyTwitterAPI {
     }
 
     export type TwitterUserInfoResponse = FireflyResponse<{ data: { user: { result: TwitterUserInfo } } }>
+
+    export type TwitterUserV2Response = FireflyResponse<{ result: { legacy: LegacyUserInfo } }>
 }
