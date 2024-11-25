@@ -139,7 +139,7 @@ export function EventList({ date, onDatesUpdate }: EventListProps) {
                 <div className={classes.paddingWrap}>
                     <div className={cx(classes.empty, classes.eventTitle)}>
                         <EmptyStatus>
-                            <Trans>No events</Trans>
+                            <Trans>No content for the last two weeks.</Trans>
                         </EmptyStatus>
                     </div>
                 </div>

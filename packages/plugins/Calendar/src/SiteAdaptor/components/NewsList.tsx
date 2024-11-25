@@ -1,10 +1,12 @@
 import { Trans } from '@lingui/macro'
-import { EmptyStatus, Image, LoadingStatus } from '@masknet/shared'
-import { EMPTY_OBJECT } from '@masknet/shared-base'
-import { makeStyles } from '@masknet/theme'
+import { ElementAnchor, EmptyStatus, Image, LoadingStatus, ReloadStatus } from '@masknet/shared'
+import { EMPTY_LIST } from '@masknet/shared-base'
+import { LoadingBase, makeStyles } from '@masknet/theme'
+import type { ParsedEvent } from '@masknet/web3-providers/types'
 import { Link, Typography } from '@mui/material'
 import { format } from 'date-fns'
-import { useCallback, useEffect, useMemo } from 'react'
+import { uniq } from 'lodash-es'
+import { useEffect, useMemo } from 'react'
 import { useNewsList } from '../../hooks/useEventList.js'
 
 const useStyles = makeStyles()((theme) => ({
@@ -102,6 +104,9 @@ const useStyles = makeStyles()((theme) => ({
         color: theme.palette.maskColor.main,
         padding: '10px 0',
     },
+    loading: {
+        color: theme.palette.maskColor.main,
+    },
 }))
 
 interface NewsListProps {
@@ -109,76 +114,122 @@ interface NewsListProps {
     onDatesUpdate(/** locale date string list */ dates: string[]): void
 }
 
+interface Group {
+    date: number
+    /** 2024/10/10 */
+    label: string
+    events: ParsedEvent[]
+}
 export function NewsList({ date, onDatesUpdate }: NewsListProps) {
-    const { data: list = EMPTY_OBJECT, isLoading } = useNewsList(date)
-    const dateString = date.toLocaleDateString()
-    const empty = !Object.keys(list).length
     const { classes, cx } = useStyles()
-    const futureNewsList = useMemo(() => {
-        const newsList: string[] = []
-        for (const key in list) {
-            if (new Date(key) >= date) {
-                newsList.push(key)
+    const { isLoading, isFetching, data: newsList, error, hasNextPage, fetchNextPage } = useNewsList(date)
+
+    const groups = useMemo(() => {
+        if (!newsList?.length) return EMPTY_LIST
+        const groups: Group[] = []
+        newsList.forEach((event) => {
+            const eventDate = new Date(event.event_date)
+            if (eventDate < date) return
+            const label = eventDate.toLocaleDateString()
+            const group: Group = groups.find((g) => g.label === label) || {
+                date: event.event_date,
+                label,
+                events: [],
             }
-        }
-        return newsList
-    }, [list, date])
+            if (!group.events.length) groups.push(group)
+            group.events.push(event)
+        })
+        return groups
+    }, [newsList, date])
 
     useEffect(() => {
-        onDatesUpdate(Object.keys(list))
-    }, [list, onDatesUpdate])
+        if (!newsList) return onDatesUpdate(EMPTY_LIST)
+        onDatesUpdate(uniq(newsList.map((x) => new Date(x.event_date).toLocaleDateString())))
+    }, [onDatesUpdate, newsList])
 
-    const listRef = useCallback((el: HTMLDivElement | null) => {
-        el?.scrollTo({ top: 0 })
-    }, [])
-
-    return (
-        <div className={classes.container} ref={listRef} key={dateString}>
-            <div className={classes.paddingWrap}>
-                {isLoading && empty ?
+    if (isLoading) {
+        return (
+            <div className={classes.container}>
+                <div className={classes.paddingWrap}>
                     <div className={cx(classes.empty, classes.eventTitle)}>
                         <LoadingStatus />
                     </div>
-                : !empty && futureNewsList.length ?
-                    futureNewsList.map((key) => {
-                        return (
-                            <div key={key}>
-                                <Typography className={classes.dateDiv}>
-                                    {format(new Date(key), 'MMM dd,yyy')}
-                                </Typography>
-                                {list[key].map((event) => (
-                                    <Link
-                                        key={event.event_url}
-                                        href={event.event_url}
-                                        className={classes.eventCard}
-                                        rel="noopener noreferrer"
-                                        target="_blank">
-                                        <div className={classes.eventHeader}>
-                                            <div className={classes.projectWrap}>
-                                                <Image
-                                                    src={event.project?.logo || event.poster_url}
-                                                    classes={{ container: classes.logo }}
-                                                    size={24}
-                                                    alt={event.project?.name || event.event_title}
-                                                />
-                                                <Typography className={classes.projectName}>
-                                                    {event.project?.name || event.event_title}
-                                                </Typography>
-                                            </div>
-                                            <Typography className={classes.eventType}>{event.event_type}</Typography>
+                </div>
+            </div>
+        )
+    }
+
+    if (error) {
+        return (
+            <div className={classes.container}>
+                <div className={classes.paddingWrap}>
+                    <div className={cx(classes.empty, classes.eventTitle)}>
+                        <ReloadStatus message={error.message}></ReloadStatus>
+                    </div>
+                </div>
+            </div>
+        )
+    }
+    if (!groups.length) {
+        return (
+            <div className={classes.container}>
+                <div className={classes.paddingWrap}>
+                    <div className={cx(classes.empty, classes.eventTitle)}>
+                        <EmptyStatus>
+                            <Trans>No content for the last two weeks.</Trans>
+                        </EmptyStatus>
+                    </div>
+                </div>
+            </div>
+        )
+    }
+
+    return (
+        <div className={classes.container}>
+            <div className={classes.paddingWrap}>
+                {groups.map((group) => {
+                    return (
+                        <div key={group.label}>
+                            <Typography className={classes.dateDiv}>
+                                {format(new Date(group.date), 'MMM dd,yyy')}
+                            </Typography>
+                            {group.events.map((event) => (
+                                <Link
+                                    key={event.event_url}
+                                    href={event.event_url}
+                                    className={classes.eventCard}
+                                    rel="noopener noreferrer"
+                                    target="_blank">
+                                    <div className={classes.eventHeader}>
+                                        <div className={classes.projectWrap}>
+                                            <Image
+                                                src={event.project?.logo || event.poster_url}
+                                                classes={{ container: classes.logo }}
+                                                size={24}
+                                                alt={event.project?.name || event.event_title}
+                                            />
+                                            <Typography className={classes.projectName}>
+                                                {event.project?.name || event.event_title}
+                                            </Typography>
                                         </div>
-                                        <Typography className={classes.eventTitle}>{event.event_title}</Typography>
-                                        <Typography className={classes.eventContent}>
-                                            {event.event_description}
-                                        </Typography>
-                                    </Link>
-                                ))}
-                            </div>
-                        )
-                    })
-                :   <EmptyStatus className={classes.empty}>
-                        <Trans>No content for the last two weeks.</Trans>
-                    </EmptyStatus>
+                                        <Typography className={classes.eventType}>{event.event_type}</Typography>
+                                    </div>
+                                    <Typography className={classes.eventTitle}>{event.event_title}</Typography>
+                                    <Typography className={classes.eventContent}>{event.event_description}</Typography>
+                                </Link>
+                            ))}
+                        </div>
+                    )
+                })}
+                {hasNextPage ?
+                    <ElementAnchor height={30} callback={() => fetchNextPage()}>
+                        {isFetching ?
+                            <LoadingBase className={classes.loading} />
+                        :   null}
+                    </ElementAnchor>
+                :   <Typography color={(theme) => theme.palette.maskColor.second} textAlign="center" py={2}>
+                        <Trans>No more data available.</Trans>
+                    </Typography>
                 }
             </div>
         </div>
