@@ -40,15 +40,17 @@ msgstr ""
 #~ msgid "NFTs"
 #~ msgstr ""
 
+#: src/SiteAdaptor/components/EventList.tsx
 #: src/SiteAdaptor/components/NewsList.tsx
 msgid "No content for the last two weeks."
 msgstr ""
 
 #: src/SiteAdaptor/components/EventList.tsx
-msgid "No events"
-msgstr ""
+#~ msgid "No events"
+#~ msgstr ""
 
 #: src/SiteAdaptor/components/EventList.tsx
+#: src/SiteAdaptor/components/NewsList.tsx
 msgid "No more data available."
 msgstr ""
 

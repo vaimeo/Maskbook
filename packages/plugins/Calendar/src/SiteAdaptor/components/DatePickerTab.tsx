@@ -1,10 +1,9 @@
 import { Icons } from '@masknet/icons'
-import { EMPTY_LIST } from '@masknet/shared-base'
 import { makeStyles } from '@masknet/theme'
 import { ClickAwayListener, IconButton, Typography } from '@mui/material'
 import { eachDayOfInterval, endOfWeek, startOfWeek } from 'date-fns'
 import { useMemo } from 'react'
-import { DatePicker } from './DatePicker.js'
+import { DatePicker, type DatePickerProps } from './DatePicker.js'
 
 const useStyles = makeStyles()((theme) => ({
     container: {
@@ -40,20 +39,16 @@ const useStyles = makeStyles()((theme) => ({
     },
 }))
 
-interface DatePickerTabProps {
-    open: boolean
-    onToggle: (x: boolean) => void
-    /** locale date string list */
-    allowedDates: string[]
-    date: Date
-    onChange: (date: Date) => void
-}
+interface DatePickerTabProps extends DatePickerProps {}
 
-export function DatePickerTab({ date, onChange, allowedDates = EMPTY_LIST, open, onToggle }: DatePickerTabProps) {
+export function DatePickerTab(props: DatePickerTabProps) {
+    const { open, date, allowedDates, onChange, onToggle } = props
     const { classes } = useStyles()
+
     const days = useMemo(() => {
         return eachDayOfInterval({ start: startOfWeek(date), end: endOfWeek(date) })
     }, [date])
+
     return (
         <div className={classes.container}>
             {days.map((v) => {
@@ -81,13 +76,7 @@ export function DatePickerTab({ date, onChange, allowedDates = EMPTY_LIST, open,
                         }}>
                         <Icons.LinearCalendar size={24} />
                     </IconButton>
-                    <DatePicker
-                        open={open}
-                        onToggle={onToggle}
-                        date={date}
-                        onChange={onChange}
-                        allowedDates={allowedDates}
-                    />
+                    <DatePicker {...props} />
                 </div>
             </ClickAwayListener>
         </div>

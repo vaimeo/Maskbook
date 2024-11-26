@@ -60,17 +60,18 @@ function fixEvent(event: Event): ParsedEvent {
 }
 
 export class Calendar {
-    static async getNewsList(startDate: number, endDate?: number) {
-        const list = await fetchCachedJSON<EventResponse>(
+    static async getNewsList(startDate: number, endDate?: number, indicator?: PageIndicator) {
+        const res = await fetchCachedJSON<EventResponse>(
             urlcat(BASE_URL, {
                 provider_type: 'coincarp',
                 start_date: Math.floor(startDate / 1000),
                 end_date: endDate ? Math.floor(endDate / 1000) : 0,
-                cursor: 0,
+                cursor: indicator?.id,
             }),
         )
-        if (!list.data) return
-        return list.data.events.map(fixEventDate)
+        if (!res.data) return createPageable([], indicator, createNextIndicator(indicator))
+        const events = res.data.events.map(fixEventDate)
+        return createPageable(events, indicator, createNextIndicator(indicator, res.data.page.next))
     }
     static async getEventList(start_date: number, end_date: number, indicator?: PageIndicator) {
         const res = await fetchCachedJSON<EventResponse>(

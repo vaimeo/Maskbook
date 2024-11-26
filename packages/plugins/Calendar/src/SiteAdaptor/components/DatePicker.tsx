@@ -76,28 +76,23 @@ const useStyles = makeStyles()((theme) => {
     }
 })
 
-interface DatePickerProps {
+export interface DatePickerProps {
     open: boolean
     onToggle: (x: boolean) => void
     date: Date
-    onChange: (date: Date) => void
+    /** locale date string list */
     allowedDates: string[]
+    onChange: (date: Date) => void
+    onMonthChange: (date: Date) => void
 }
 
-export function DatePicker({ date, onChange, open, onToggle, allowedDates }: DatePickerProps) {
+export function DatePicker({ date, onChange, open, onToggle, allowedDates, onMonthChange }: DatePickerProps) {
     const { classes } = useStyles()
     const [currentDate, setCurrentDate] = useState(date)
     const monthStart = startOfMonth(currentDate)
     const startingDayOfWeek = monthStart.getDay()
     const daysInMonth = endOfMonth(currentDate).getDate()
     const daysInPrevMonth = endOfMonth(addMonths(currentDate, -1)).getDate()
-
-    const isPrevMonthDisabled = useMemo(() => {
-        return !isAfter(currentDate, endOfMonth(new Date()))
-    }, [currentDate])
-    const isNextMonthDisabled = useMemo(() => {
-        return isAfter(addMonths(currentDate, 1), addMonths(endOfMonth(new Date()), 2))
-    }, [currentDate])
 
     if (!open) return null
 
@@ -107,7 +102,9 @@ export function DatePicker({ date, onChange, open, onToggle, allowedDates }: Dat
     }
 
     const changeMonth = (amount: number) => {
-        setCurrentDate(addMonths(currentDate, amount))
+        const date = addMonths(currentDate, amount)
+        setCurrentDate(date)
+        onMonthChange(date)
     }
 
     const daysOfWeek = ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat']
@@ -180,10 +177,10 @@ export function DatePicker({ date, onChange, open, onToggle, allowedDates }: Dat
             <div className={classes.header}>
                 <Typography className={classes.headerText}>{format(currentDate, 'MMMM yyyy')}</Typography>
                 <Box className={classes.headerIcon}>
-                    <IconButton size="small" onClick={() => changeMonth(-1)} disabled={isPrevMonthDisabled}>
+                    <IconButton size="small" onClick={() => changeMonth(-1)}>
                         <Icons.LeftArrow size={24} />
                     </IconButton>
-                    <IconButton size="small" onClick={() => changeMonth(1)} disabled={isNextMonthDisabled}>
+                    <IconButton size="small" onClick={() => changeMonth(1)}>
                         <Icons.RightArrow size={24} />
                     </IconButton>
                 </Box>
