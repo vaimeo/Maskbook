@@ -25,6 +25,7 @@ export function useHiddenAddressConfig(
     signWithPersona: WalletAPI.SignWithPersona,
 ) {
     return useQuery({
+        // eslint-disable-next-line @tanstack/query/exhaustive-deps
         queryKey: ['next-id', 'hidden-address', pluginID, personaPubkey],
         enabled: Boolean(personaPubkey && pluginID),
         queryFn: async () => {
@@ -111,5 +112,5 @@ export function hiddenAddressesAdapter(list: string[], accounts: string[]): Reco
 export function getHiddenAddressesOf(config?: AddressData, socialId?: string) {
     if (!config) return EMPTY_LIST
     if (Array.isArray(config)) return config
-    return socialId ? config[socialId] ?? EMPTY_LIST : EMPTY_LIST
+    return socialId ? (config[socialId] ?? EMPTY_LIST) : EMPTY_LIST
 }

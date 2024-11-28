@@ -37,8 +37,11 @@ const deferPackages = [
 
 const avoidMistakeRules = {
     // Libraries
+    '@tanstack/query/exhaustive-deps': 'error', // avoid unstable results from the hook being deps
     '@tanstack/query/stable-query-client': 'error',
+    '@tanstack/query/infinite-query-property-order': 'warn', // help TypeScript to infer type correctly
     '@tanstack/query/no-rest-destructuring': 'error',
+    '@tanstack/query/no-unstable-deps': 'error', // avoid unstable results from the hook being deps
     '@lingui/no-single-tag-to-translate': 'error',
     // '@lingui/no-single-variables-to-translate': 'error', // we're mixing two i18n frameworks, a lot of false positive reports
     // https://github.com/lingui/eslint-plugin/issues/46
@@ -100,6 +103,7 @@ const avoidMistakeRules = {
     // '@typescript-eslint/no-invalid-void-type': 'warn', // Disallow void type outside of generic or return types
     '@typescript-eslint/no-misused-new': 'error', // wrong 'new ()' or 'constructor()' signatures
     '@typescript-eslint/no-unsafe-function-type': 'error',
+    // '@typescript-eslint/no-unsafe-type-assertion': 'error', // bans `expr as T`
     '@typescript-eslint/no-wrapper-object-types': 'error',
     /// Unicode support
     'no-misleading-character-class': 'error', // RegEx
@@ -478,6 +482,11 @@ const moduleSystemRules = {
                     message: 'Background cannot import Ui specific code.',
                 },
                 {
+                    target: './packages/mask/shared/**',
+                    from: './packages/mask/shared-ui/',
+                    message: 'packages/mask/shared cannot import services. Move it to packages/mask/shared-ui instead.',
+                },
+                {
                     target: './packages/mask/!(background)/**',
                     from: './packages/mask/background/',
                     message: 'Use Services.* instead.',
@@ -618,6 +627,23 @@ export default tseslint.config(
         files: ['packages/**/tests/**/*.ts'],
         rules: {
             'unicorn/consistent-function-scoping': 'off',
+        },
+    },
+    {
+        files: ['packages/mask/shared/**/*.ts', 'packages/mask/shared/**/*.tsx'],
+        rules: {
+            '@typescript-eslint/no-restricted-imports': [
+                'error',
+                {
+                    paths: [
+                        {
+                            name: '#services',
+                            message:
+                                'packages/mask/shared cannot import services. Move it to packages/mask/shared-ui instead.',
+                        },
+                    ],
+                },
+            ],
         },
     },
     {

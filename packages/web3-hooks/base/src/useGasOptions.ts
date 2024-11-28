@@ -15,11 +15,12 @@ export function useGasOptions<T extends NetworkPluginID = NetworkPluginID>(
     const Utils = useWeb3Utils(pluginID)
 
     return useQuery({
+        // eslint-disable-next-line @tanstack/query/exhaustive-deps
         queryKey: ['get-gas-options', pluginID, chainId, JSON.stringify(options)],
         queryFn: async () => {
             if (!Utils.isValidChainId(chainId)) return null
             return Hub.getGasOptions!(chainId, options)
         },
-        refetchInterval: live ? Utils.getAverageBlockDelay?.(chainId) ?? 10 : false,
+        refetchInterval: live ? (Utils.getAverageBlockDelay?.(chainId) ?? 10) : false,
     })
 }
