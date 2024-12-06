@@ -83,7 +83,7 @@ export const Component = memo(function ResetWallet() {
         // We don't reset existed wallets until recovery
         await browser.tabs.create({
             active: true,
-            url: browser.runtime.getURL(`/dashboard.html#/${DashboardRoutes.CreateMaskWalletForm}?reset=true`),
+            url: browser.runtime.getURL(`/dashboard.html#${DashboardRoutes.CreateMaskWalletForm}?reset=true`),
         })
 
         await Services.Helper.removePopupWindow()
