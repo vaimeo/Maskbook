@@ -763,8 +763,8 @@ importers:
         specifier: ^5.1.0
         version: 5.1.0(bufferutil@4.0.8)(utf-8-validate@5.0.10)(webpack-cli@5.1.4)(webpack@5.88.2)
       webpack-target-webextension:
-        specifier: ^2.0.0
-        version: 2.0.0(webpack@5.88.2)
+        specifier: ^2.0.1
+        version: 2.0.1(webpack@5.88.2)
 
   packages/mask-sdk:
     devDependencies:
@@ -14854,8 +14854,8 @@ packages:
     resolution: {integrity: sha512-/DyMEOrDgLKKIG0fmvtz+4dUX/3Ghozwgm6iPp8KRhvn+eQf9+Q7GWxVNMk3+uCPWfdXYC4ExGBckIXdFEfH1w==}
     engines: {node: '>=10.13.0'}
 
-  webpack-target-webextension@2.0.0:
-    resolution: {integrity: sha512-wbBJOWcaLYCcAMIEDy/lN9miB5Fnb2sG6pL8QoYvgjmnsZMOvsZGPOG3GjMOn1qXgS3OxxR8sHC4owHdFZA2BA==}
+  webpack-target-webextension@2.0.1:
+    resolution: {integrity: sha512-YVwMmBDUSlvj9F26pSspJofYD6kNJY7UycWdUbBzjcIaXDhF4MKQUG4YrUYD6tfJO1QrU3bVzOueGV12Go7p3A==}
     engines: {node: '>=18.20.5'}
     peerDependencies:
       webpack: Jack-Works/webpack#528c91e564d5756e21c9c462b607d913452af770
@@ -30747,7 +30747,7 @@ snapshots:
 
   webpack-sources@3.2.3: {}
 
-  webpack-target-webextension@2.0.0(webpack@5.88.2):
+  webpack-target-webextension@2.0.1(webpack@5.88.2):
     dependencies:
       webpack: https://codeload.github.com/Jack-Works/webpack/tar.gz/f7244d8e23e799b84a536efb2fdccec5370ac37e(@swc/core@1.9.3(@swc/helpers@0.5.15))(webpack-cli@5.1.4)
 
