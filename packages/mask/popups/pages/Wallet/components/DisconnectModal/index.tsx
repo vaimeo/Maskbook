@@ -1,10 +1,11 @@
 import Services from '#services'
+import { Trans } from '@lingui/macro'
+import { Icons } from '@masknet/icons'
 import { makeStyles, usePopupCustomSnackbar } from '@masknet/theme'
 import { useWallet } from '@masknet/web3-hooks-base'
 import { Box, Typography } from '@mui/material'
 import { useMutation, useQueryClient } from '@tanstack/react-query'
-import { memo, useCallback } from 'react'
-import { Trans } from '@lingui/macro'
+import { memo } from 'react'
 
 const useStyles = makeStyles()((theme) => ({
     container: {
@@ -85,40 +86,52 @@ const useStyles = makeStyles()((theme) => ({
 
 interface DisconnectModalProps {
     origin: string
-    setOpen: (open: boolean) => void
+    onClose: () => void
 }
 
-const DisconnectModal = memo(function DisconnectModal({ origin, setOpen }: DisconnectModalProps) {
+const DisconnectModal = memo(function DisconnectModal({ origin, onClose }: DisconnectModalProps) {
     const queryClient = useQueryClient()
     const { classes, cx } = useStyles()
     const { showSnackbar } = usePopupCustomSnackbar()
-    const wallet = useWallet()
+    const address = useWallet()?.address
     const { mutate: onDisconnect } = useMutation({
-        mutationFn: useCallback(async (): Promise<void> => {
-            if (!wallet) return
-            await Services.Wallet.disconnectWalletFromOrigin(wallet.address, origin, 'any')
-        }, []),
+        mutationFn: async (): Promise<void> => {
+            if (!address) return
+            await Services.Wallet.disconnectWalletFromOrigin(address, origin, 'any')
+        },
         onMutate: async () => {
-            await queryClient.invalidateQueries({ queryKey: ['wallet-granted-origins', wallet?.address] })
-            showSnackbar(<Trans>Disconnected successfully.</Trans>, { variant: 'success' })
-            setOpen(false)
+            await queryClient.invalidateQueries({ queryKey: ['wallet-granted-origins', address] })
+            showSnackbar(
+                <Box display="flex" alignItems="center">
+                    <Icons.FillSuccess style={{ marginRight: 6 }} />
+                    <Trans>Disconnected successfully.</Trans>
+                </Box>,
+                { variant: 'success' },
+            )
+            onClose()
         },
         onSettled: () => {
-            queryClient.invalidateQueries({ queryKey: ['wallet-granted-origins', wallet?.address] })
+            queryClient.invalidateQueries({ queryKey: ['wallet-granted-origins', address] })
         },
     })
     const { mutate: onDisconnectAll } = useMutation({
-        mutationFn: useCallback(async (): Promise<void> => {
-            if (!wallet) return
-            await Services.Wallet.disconnectAllOriginsConnectedFromWallet(wallet!.address, 'any')
-        }, [wallet?.address]),
+        mutationFn: async () => {
+            if (!address) return
+            await Services.Wallet.disconnectAllOriginsConnectedFromWallet(address!, 'any')
+        },
         onMutate: async () => {
-            await queryClient.invalidateQueries({ queryKey: ['wallet-granted-origins', wallet?.address] })
-            showSnackbar(<Trans>Disconnected successfully.</Trans>, { variant: 'success' })
-            setOpen(false)
+            await queryClient.invalidateQueries({ queryKey: ['wallet-granted-origins', address!] })
+            showSnackbar(
+                <Box display="flex" alignItems="center">
+                    <Icons.FillSuccess style={{ marginRight: 6 }} />
+                    <Trans>Disconnected successfully.</Trans>
+                </Box>,
+                { variant: 'success' },
+            )
+            onClose()
         },
         onSettled: () => {
-            queryClient.invalidateQueries({ queryKey: ['wallet-granted-origins', wallet?.address] })
+            queryClient.invalidateQueries({ queryKey: ['wallet-granted-origins', address] })
         },
     })
     return (
@@ -136,21 +149,18 @@ const DisconnectModal = memo(function DisconnectModal({ origin, setOpen }: Disco
                     <button
                         type="button"
                         className={cx(classes.button, classes.confirmButton)}
-                        disabled={!wallet}
+                        disabled={!address}
                         onClick={() => onDisconnect()}>
                         <Trans>Confirm</Trans>
                     </button>
-                    <button
-                        type="button"
-                        className={cx(classes.button, classes.cancelButton)}
-                        onClick={() => setOpen(false)}>
+                    <button type="button" className={cx(classes.button, classes.cancelButton)} onClick={onClose}>
                         <Trans>Cancel</Trans>
                     </button>
                 </Box>
                 <button
                     type="button"
                     className={classes.disconnectAll}
-                    disabled={!wallet}
+                    disabled={!address}
                     onClick={() => onDisconnectAll()}>
                     <Trans>Disconnect all accounts</Trans>
                 </button>
