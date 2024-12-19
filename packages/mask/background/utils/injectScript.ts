@@ -3,7 +3,6 @@ import { memoize } from 'lodash-es'
 
 export const injectedScriptURL = '/js/injected-script.js'
 export const maskSDK_URL = '/js/mask-sdk.js'
-const contentScriptURL = '/contentScript.html'
 
 export async function evaluateContentScript(tabId: number | undefined, frameId?: number) {
     if (browser.scripting) {
@@ -15,13 +14,13 @@ export async function evaluateContentScript(tabId: number | undefined, frameId?:
         if (!tabId) return
         const script = {
             target: { tabId, frameIds: frameId ? [frameId] : undefined },
-            files: await fetchInjectContentScriptList(),
+            files: contentScriptList,
             world: 'ISOLATED' as any,
         }
         if (Sniffings.is_firefox) delete script.world
         await browser.scripting.executeScript(script)
     } else {
-        for (const script of await fetchInjectContentScriptList()) {
+        for (const script of contentScriptList) {
             await browser.tabs.executeScript(tabId, {
                 file: script,
                 frameId,
@@ -30,32 +29,19 @@ export async function evaluateContentScript(tabId: number | undefined, frameId?:
         }
     }
 }
-async function fetchInjectContentScriptList_raw() {
-    const contentScripts: string[] = []
-    const html = await fetch(contentScriptURL).then((x) => x.text())
-    // We're not going to use DOMParser because it is not available in MV3.
-    Array.from(html.matchAll(/<script src="([\w./-]+)"><\/script>/g)).forEach((script) =>
-        contentScripts.push(new URL(script[1], browser.runtime.getURL('')).pathname),
-    )
-
-    const bodyIndex = html.indexOf('<body>')
-    if (bodyIndex === -1) throw new Error('Compiler error. Cannot parse contentScript.html')
-    const bodyEndIndex = html.indexOf('</body>', bodyIndex)
-    if (bodyEndIndex === -1) throw new Error('Compiler error. Cannot parse contentScript.html')
-    const body = html.slice(bodyIndex + '<body>'.length, bodyEndIndex).trim()
-    body.replaceAll('<script defer src="', '')
-        .replaceAll('></script>', '')
-        .split('"')
-        .forEach((script) => {
-            if (!script) return
-            contentScripts.push(new URL(script, browser.runtime.getURL('')).pathname)
-        })
-    return contentScripts
-}
-export const fetchInjectContentScriptList =
-    process.env.NODE_ENV === 'development' ?
-        fetchInjectContentScriptList_raw
-    :   memoize(fetchInjectContentScriptList_raw)
+export const contentScriptList = [
+    '/js/patches.js',
+    '/js/polyfill/ecmascript.js',
+    '/js/polyfill/dom.js',
+    '/js/polyfill/browser-polyfill.js',
+    '/js/sentry.js',
+    '/js/sentry-patch.js',
+    '/js/polyfill/lockdown.js',
+    '/js/trusted-types.js',
+    '/js/lockdown.js',
+    '/js/module-loader.js',
+    '/cs.js',
+]
 
 async function injectUserScriptMV2_raw(url: string) {
     try {

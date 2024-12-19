@@ -1,7 +1,7 @@
 import { noop } from 'lodash-es'
 import { hmr } from '../../../utils-pure/index.js'
 import type { Scripting } from 'webextension-polyfill'
-import { injectedScriptURL, fetchInjectContentScriptList, maskSDK_URL } from '../../utils/injectScript.js'
+import { injectedScriptURL, maskSDK_URL, contentScriptList } from '../../utils/injectScript.js'
 import { Sniffings } from '@masknet/shared-base'
 import { definedSiteAdaptors } from '../../../shared/site-adaptors/definitions.js'
 
@@ -56,7 +56,7 @@ async function prepareContentScript(matches: string[]): Promise<Scripting.Regist
     const content: Scripting.RegisteredContentScript = {
         id: 'content',
         allFrames: true,
-        js: await fetchInjectContentScriptList(),
+        js: contentScriptList,
         persistAcrossSessions: false,
         // @ts-expect-error Chrome API
         world: 'ISOLATED',

@@ -98,7 +98,11 @@ export async function createConfiguration(
                     // Note: when devtools is enabled, we will install react-refresh/runtime manually to keep the correct react global hook installation order.
                     // https://github.com/pmmmwh/react-refresh-webpack-plugin/issues/680
                     alias[require.resolve('@pmmmwh/react-refresh-webpack-plugin/client/ReactRefreshEntry.js')] =
-                        require.resolve('./package-overrides/null.mjs')
+                        //
+                        alias[
+                            join(require.resolve('@rspack/plugin-react-refresh/package.json'), '../') +
+                                'client/reactRefreshEntry.js'
+                        ] = require.resolve('./package-overrides/null.mjs')
                 }
                 return alias
             })(),
@@ -200,7 +204,13 @@ export async function createConfiguration(
                     diagnosticsVerbosity: 1,
                 })
             :   undefined,
-            new WebExtensionPlugin({ background: { pageEntry: 'background', serviceWorkerEntry: 'backgroundWorker' } }),
+            new WebExtensionPlugin({
+                background: { pageEntry: 'background', serviceWorkerEntry: 'backgroundWorker' },
+                experimental_output: {
+                    backgroundWorker: 'sw.js',
+                    contentScript: 'cs.js',
+                },
+            }),
             // this slow down performance for rspack
             !rspack &&
                 flags.sourceMapHideFrameworks !== false &&
@@ -353,11 +363,8 @@ export async function createConfiguration(
                 },
             },
             splitChunks:
-                // TODO: chunk splitting should be disabled by WebExtensionPlugin
-                // why do we need to disable it manually?
-                rspack ? false
-                : productionLike ? undefined
-                : {
+                productionLike ? undefined : (
+                    {
                         maxInitialRequests: Infinity,
                         chunks: 'all',
                         cacheGroups: {
@@ -376,7 +383,8 @@ export async function createConfiguration(
                                 },
                             },
                         },
-                    },
+                    }
+                ),
         },
         output: {
             path: flags.outputPath,
@@ -432,7 +440,6 @@ export async function createConfiguration(
     baseConfig.plugins.push(
         await addHTMLEntry(['dashboard'], 'dashboard.html', TemplateType.NoLoading, flags.profiling),
         await addHTMLEntry(['popups'], 'popups.html', TemplateType.Loading, flags.profiling),
-        await addHTMLEntry(['contentScript'], 'contentScript.html', TemplateType.NoLoading, flags.profiling),
         await addHTMLEntry(['background'], 'background.html', TemplateType.Background, flags.profiling),
     )
     if (flags.devtools) {
