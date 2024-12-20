@@ -441,8 +441,10 @@ export function CreateERC20RedPacket() {
                                     <button
                                         type="button"
                                         className={classes.deleteButton}
-                                        onClick={() => {
+                                        onClick={(event) => {
+                                            event.stopPropagation()
                                             setCustomThemes((origins) => origins.filter((x) => x !== theme))
+                                            if (theme === selectedTheme) setTheme(undefined)
                                         }}>
                                         <Icons.Delete size={16} />
                                     </button>
