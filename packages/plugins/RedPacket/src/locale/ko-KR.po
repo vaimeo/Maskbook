@@ -3,7 +3,7 @@ msgstr ""
 "Project-Id-Version: mask-network\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: \n"
-"PO-Revision-Date: 2024-11-26 10:57\n"
+"PO-Revision-Date: 2024-12-20 06:15\n"
 "Last-Translator: \n"
 "Language: ko_KR\n"
 "Language-Team: Korean\n"
@@ -690,19 +690,19 @@ msgstr ""
 
 #: src/SiteAdaptor/RedPacket/index.tsx
 #~ msgid "The Lucky Drop has been refunded."
-#~ msgstr "행운 드랍은 이미 리펀됩니다."
+#~ msgstr ""
 
 #: src/SiteAdaptor/RedPacket/index.tsx
 #~ msgid "The Lucky Drop is broken."
-#~ msgstr "훼손된 행운 드랍"
+#~ msgstr ""
 
 #: src/SiteAdaptor/RedPacket/index.tsx
 #~ msgid "The Lucky Drop is empty."
-#~ msgstr "비어 있는 행운 드랍"
+#~ msgstr ""
 
 #: src/SiteAdaptor/RedPacket/index.tsx
 #~ msgid "The Lucky Drop is expired."
-#~ msgstr "만료된 행운 드랍"
+#~ msgstr ""
 
 #: src/SiteAdaptor/SelectNftTokenDialog.tsx
 #: src/SiteAdaptor/SelectNftTokenDialog.tsx
@@ -828,7 +828,7 @@ msgstr ""
 
 #: src/SiteAdaptor/RedPacket/index.tsx
 #~ msgid "You could refund {0} {1}."
-#~ msgstr "{0} {1} 리펀 가능합니다."
+#~ msgstr ""
 
 #: src/SiteAdaptor/RedPacket/index.tsx
 #~ msgid "You got {0} {1}"

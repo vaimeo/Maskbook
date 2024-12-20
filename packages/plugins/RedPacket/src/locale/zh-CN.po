@@ -3,7 +3,7 @@ msgstr ""
 "Project-Id-Version: mask-network\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: \n"
-"PO-Revision-Date: 2024-11-26 10:57\n"
+"PO-Revision-Date: 2024-12-20 06:15\n"
 "Last-Translator: \n"
 "Language: zh_CN\n"
 "Language-Team: Chinese Simplified\n"
@@ -690,19 +690,19 @@ msgstr ""
 
 #: src/SiteAdaptor/RedPacket/index.tsx
 #~ msgid "The Lucky Drop has been refunded."
-#~ msgstr "此红包已退款。"
+#~ msgstr ""
 
 #: src/SiteAdaptor/RedPacket/index.tsx
 #~ msgid "The Lucky Drop is broken."
-#~ msgstr "此红包已被损坏。"
+#~ msgstr ""
 
 #: src/SiteAdaptor/RedPacket/index.tsx
 #~ msgid "The Lucky Drop is empty."
-#~ msgstr "此红包是空的。"
+#~ msgstr ""
 
 #: src/SiteAdaptor/RedPacket/index.tsx
 #~ msgid "The Lucky Drop is expired."
-#~ msgstr "此红包已过期。"
+#~ msgstr ""
 
 #: src/SiteAdaptor/SelectNftTokenDialog.tsx
 #: src/SiteAdaptor/SelectNftTokenDialog.tsx
@@ -828,7 +828,7 @@ msgstr ""
 
 #: src/SiteAdaptor/RedPacket/index.tsx
 #~ msgid "You could refund {0} {1}."
-#~ msgstr "您可以退款 {0} {1}。"
+#~ msgstr ""
 
 #: src/SiteAdaptor/RedPacket/index.tsx
 #~ msgid "You got {0} {1}"

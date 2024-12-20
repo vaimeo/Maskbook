@@ -3,7 +3,7 @@ msgstr ""
 "Project-Id-Version: mask-network\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: \n"
-"PO-Revision-Date: 2024-11-26 10:57\n"
+"PO-Revision-Date: 2024-12-20 06:15\n"
 "Last-Translator: \n"
 "Language: ja_JP\n"
 "Language-Team: Japanese\n"
@@ -690,19 +690,19 @@ msgstr ""
 
 #: src/SiteAdaptor/RedPacket/index.tsx
 #~ msgid "The Lucky Drop has been refunded."
-#~ msgstr "ラッキードロップは返金されました。"
+#~ msgstr ""
 
 #: src/SiteAdaptor/RedPacket/index.tsx
 #~ msgid "The Lucky Drop is broken."
-#~ msgstr "ラッキードロップが壊れています。"
+#~ msgstr ""
 
 #: src/SiteAdaptor/RedPacket/index.tsx
 #~ msgid "The Lucky Drop is empty."
-#~ msgstr "ラッキードロップは空です。"
+#~ msgstr ""
 
 #: src/SiteAdaptor/RedPacket/index.tsx
 #~ msgid "The Lucky Drop is expired."
-#~ msgstr "ラッキードロップの有効期限が切れています。"
+#~ msgstr ""
 
 #: src/SiteAdaptor/SelectNftTokenDialog.tsx
 #: src/SiteAdaptor/SelectNftTokenDialog.tsx
@@ -828,7 +828,7 @@ msgstr ""
 
 #: src/SiteAdaptor/RedPacket/index.tsx
 #~ msgid "You could refund {0} {1}."
-#~ msgstr "{0} {1} を返金することができます。"
+#~ msgstr ""
 
 #: src/SiteAdaptor/RedPacket/index.tsx
 #~ msgid "You got {0} {1}"
