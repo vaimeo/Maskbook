@@ -1,3 +1,4 @@
+import { parseURL } from '@masknet/shared-base'
 import { regexMatch } from '../../../utils/regexMatch.js'
 
 // more about twitter photo url formatting:
@@ -20,4 +21,11 @@ export function normalizeImageURL(url: string) {
 
 export function parseId(t: string) {
     return regexMatch(t, /status\/(\d+)/, 1)!
+}
+
+export function removeUrlParam(url: string, param: string) {
+    const parsed = parseURL(url)
+    if (!parsed) return url
+    parsed.searchParams.delete(param)
+    return parsed.href
 }
