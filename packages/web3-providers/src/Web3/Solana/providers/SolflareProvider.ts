@@ -1,6 +1,5 @@
-import type { Transaction } from '@solana/web3.js'
 import { injectedSolflareProvider } from '@masknet/injected-script'
-import { PhantomMethodType, ProviderType } from '@masknet/web3-shared-solana'
+import { PhantomMethodType, ProviderType, type Transaction } from '@masknet/web3-shared-solana'
 import { SolanaInjectedWalletProvider } from './BaseInjected.js'
 
 export class SolanaSolflareProvider extends SolanaInjectedWalletProvider {

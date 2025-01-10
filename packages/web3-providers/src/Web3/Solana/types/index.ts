@@ -47,26 +47,6 @@ export type GetBalanceResponse = RpcResponse<{ value: number }>
 
 export type GetProgramAccountsResponse = RpcResponse<ProgramAccount[]>
 
-interface SplToken {
-    symbol: string
-    name: string
-    mint: string
-    decimals: 3
-    icon: string
-}
-
-export interface RaydiumTokenList {
-    name: string
-    timestamp: string
-    version: {
-        major: number
-        minor: number
-        patch: number
-    }
-    official: SplToken[]
-    unOfficial: SplToken[]
-}
-
 export interface MaskToken {
     address: string
     name: string
@@ -74,4 +54,32 @@ export interface MaskToken {
     logoURI: string
     originLogoURI: string
     decimals: number
+}
+
+interface RaydiumToken {
+    address: string
+    chainId: number
+    decimals: number
+    logoURI: string
+    name: string
+    programId: string
+    symbol: string
+}
+
+export interface JupToken {
+    address: string
+    created_at: string
+    daily_volume: number
+    decimals: number
+    logoURI: string
+    name: string
+    symbol: string
+}
+
+export interface RaydiumTokenList {
+    data: {
+        mintList: RaydiumToken[]
+    }
+    id: string
+    success: boolean
 }

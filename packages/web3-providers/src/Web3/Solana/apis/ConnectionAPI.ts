@@ -3,7 +3,6 @@ import {
     ChainId,
     SchemaType,
     type Signature,
-    type Transaction,
     type TransactionDetailed,
     type TransactionReceipt,
     type Block,
@@ -14,6 +13,7 @@ import {
     type TransactionSignature,
     type ProviderType,
     type Operation,
+    type Transaction,
 } from '@masknet/web3-shared-solana'
 import {
     TransactionStatusType,
@@ -365,11 +365,17 @@ export class SolanaConnectionAPI
 
     async sendTransaction(transaction: Transaction, initial?: SolanaConnectionOptions) {
         const signedTransaction = await this.signTransaction(transaction)
-        return SolanaWeb3.sendAndConfirmRawTransaction(this.Web3.getConnection(initial), signedTransaction.serialize())
+        return SolanaWeb3.sendAndConfirmRawTransaction(
+            this.Web3.getConnection(initial),
+            signedTransaction.message.serialize() as Buffer,
+        )
     }
 
     sendSignedTransaction(signature: TransactionSignature, initial?: SolanaConnectionOptions): Promise<string> {
-        return SolanaWeb3.sendAndConfirmRawTransaction(this.Web3.getConnection(initial), signature.serialize())
+        return SolanaWeb3.sendAndConfirmRawTransaction(
+            this.Web3.getConnection(initial),
+            signature.message.serialize() as Buffer,
+        )
     }
 
     replaceTransaction(hash: string, config: Transaction, options?: SolanaConnectionOptions): Promise<void> {
