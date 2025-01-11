@@ -1,5 +1,4 @@
-import { msg, t, Trans } from '@lingui/macro'
-import { useLingui } from '@lingui/react'
+import { Trans, useLingui } from '@lingui/react/macro'
 import { Icons } from '@masknet/icons'
 import {
     ChainBoundary,
@@ -179,7 +178,7 @@ const useStyles = makeStyles()((theme) => ({
 }))
 
 export function CreateERC20RedPacket() {
-    const { _ } = useLingui()
+    const { t } = useLingui()
     const { account } = useChainContext<NetworkPluginID.PLUGIN_EVM>()
     const { chainId, setChainId } = useChainContext<NetworkPluginID.PLUGIN_EVM>()
     const isFirefly = getEnhanceableSiteType() === EnhanceableSite.Firefly
@@ -358,7 +357,7 @@ export function CreateERC20RedPacket() {
                             {message.length}/{messageMaxLength}
                         </Typography>
                     }
-                    placeholder={_(msg`Best Wishes!`)}
+                    placeholder={t`Best Wishes!`}
                     inputProps={{
                         maxLength: messageMaxLength,
                     }}
@@ -387,7 +386,7 @@ export function CreateERC20RedPacket() {
                     </Box>
                     <FungibleTokenInput
                         className={classes.input}
-                        label={isRandom ? _(msg`Total amount`) : _(msg`Amount Each`)}
+                        label={isRandom ? t`Total amount` : t`Amount Each`}
                         token={token}
                         placeholder="0"
                         onSelectToken={onSelectTokenChipClick}
@@ -498,7 +497,7 @@ export function CreateERC20RedPacket() {
                             expectedChainId={chainId}
                             forceShowingWrongNetworkButton>
                             <WalletConnectedBoundary
-                                noGasText={_(msg`Insufficient Balance for Gas Fee`)}
+                                noGasText={t`Insufficient Balance for Gas Fee`}
                                 expectedChainId={chainId}
                                 hideRiskWarningConfirmed={isFirefly}>
                                 <ActionButton

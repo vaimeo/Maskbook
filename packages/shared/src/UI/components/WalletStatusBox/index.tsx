@@ -19,8 +19,7 @@ import { formatBalance } from '@masknet/web3-shared-base'
 import { delay } from '@masknet/kit'
 import { Icons } from '@masknet/icons'
 import { usePendingTransactions } from './usePendingTransactions.js'
-import { Trans, msg } from '@lingui/macro'
-import { useLingui } from '@lingui/react'
+import { Trans, useLingui } from '@lingui/react/macro'
 
 const useStyles = makeStyles<{
     contentBackground?: string
@@ -107,7 +106,7 @@ export interface WalletStatusBox {
 }
 
 export function WalletStatusBox(props: WalletStatusBox) {
-    const { _ } = useLingui()
+    const { t } = useLingui()
     const providerDescriptor = useProviderDescriptor<'all'>()
     const theme = useTheme()
     const { classes, cx } = useStyles({
@@ -184,7 +183,7 @@ export function WalletStatusBox(props: WalletStatusBox) {
                                 className={classes.link}
                                 href={Utils.explorerResolver.addressLink(chainId, account) ?? ''}
                                 target="_blank"
-                                title={_(msg`View on Explorer`)}
+                                title={t`View on Explorer`}
                                 rel="noopener noreferrer">
                                 <Icons.LinkOut className={cx(classes.icon, classes.linkIcon)} />
                             </Link>

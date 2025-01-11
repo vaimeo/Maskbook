@@ -1,5 +1,4 @@
-import { Plural, Trans, msg } from '@lingui/macro'
-import { useLingui } from '@lingui/react'
+import { Plural, Trans, useLingui } from '@lingui/react/macro'
 import { Icons } from '@masknet/icons'
 import { AssetPreviewer } from '@masknet/shared'
 import { EMPTY_LIST, type NetworkPluginID } from '@masknet/shared-base'
@@ -235,7 +234,7 @@ const useStyles = makeStyles<StyleProps>()((theme, props) => ({
 }))
 
 export function SelectNft() {
-    const { _ } = useLingui()
+    const { t } = useLingui()
     const navigate = useNavigate()
     // TODO Keep the original names before figuring out the logic and refactoring the code
     const {
@@ -445,7 +444,7 @@ export function SelectNft() {
                 <InputBase
                     startAdornment={<Icons.Search className={classes.iconButton} />}
                     value={tokenDetailedOwnerList.length === 0 ? searchTokenListInput : tokenIdListInput}
-                    placeholder={_(msg`Token ID separated by comma, e.g. 1224, 7873, 8948`)}
+                    placeholder={t`Token ID separated by comma, e.g. 1224, 7873, 8948`}
                     className={classes.textField}
                     onChange={(e) => {
                         if (tokenDetailedOwnerList.length === 0) {

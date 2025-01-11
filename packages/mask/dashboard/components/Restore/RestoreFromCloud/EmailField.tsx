@@ -10,11 +10,10 @@ import { Locale, Scenario } from '../../../utils/type.js'
 import { PrimaryButton } from '../../PrimaryButton/index.js'
 import { useLanguage } from '../../../../shared-ui/index.js'
 import { RestoreContext } from './RestoreProvider.js'
-import { Trans, msg } from '@lingui/macro'
-import { useLingui } from '@lingui/react'
+import { Trans, useLingui } from '@lingui/react/macro'
 
 export const EmailField = memo(function EmailField() {
-    const { _ } = useLingui()
+    const { t } = useLingui()
     const language = useLanguage()
     const [invalidEmail, setInvalidEmail] = useState(false)
     const { showSnackbar } = useCustomSnackbar()
@@ -99,7 +98,7 @@ export const EmailField = memo(function EmailField() {
                     })
                 }}
                 error={hasError}
-                placeholder={_(msg`Email`)}
+                placeholder={t`Email`}
                 helperText={errorMessage}
                 type="email"
                 size="small"
@@ -115,7 +114,7 @@ export const EmailField = memo(function EmailField() {
                         :   ''
                     }
                     onSend={handleSendCodeFn}
-                    placeholder={_(msg`Email verification code`)}
+                    placeholder={t`Email verification code`}
                     disabled={emailNotReady}
                     inputProps={{
                         maxLength: 6,

@@ -25,8 +25,7 @@ import { useUnconfirmedRequest } from '../hooks/useUnConfirmedRequest.js'
 import { StyledInput } from '../../../components/StyledInput/index.js'
 import Services from '#services'
 import { FormattedCurrency } from '@masknet/shared'
-import { Trans, msg } from '@lingui/macro'
-import { useLingui } from '@lingui/react'
+import { Trans, useLingui } from '@lingui/react/macro'
 
 const useStyles = makeStyles()((theme) => ({
     options: {
@@ -92,7 +91,7 @@ const minGasPriceOfChain: ChainIdOptionalRecord<BigNumber.Value> = {
 }
 
 export const Prior1559GasSetting = memo(() => {
-    const { _ } = useLingui()
+    const { t } = useLingui()
     const { classes } = useStyles()
     const { chainId } = useChainContext<NetworkPluginID.PLUGIN_EVM>()
     const { data: gasOptions_ } = useGasOptions(NetworkPluginID.PLUGIN_EVM, { chainId })
@@ -166,12 +165,12 @@ export const Prior1559GasSetting = memo(() => {
         return zod.object({
             gasLimit: zod
                 .string()
-                .min(1, _(msg`Enter a gas limit`))
+                .min(1, t`Enter a gas limit`)
                 .refine(
                     (gasLimit) => new BigNumber(gasLimit).gte(minGasLimit ?? 0),
-                    _(msg`Gas limit must be at least ${String(minGasLimit)}`),
+                    t`Gas limit must be at least ${String(minGasLimit)}`,
                 ),
-            gasPrice: zod.string().min(1, _(msg`Enter a gas price`)),
+            gasPrice: zod.string().min(1, t`Enter a gas price`),
         })
     }, [minGasLimit])
 

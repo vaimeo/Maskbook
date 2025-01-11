@@ -17,8 +17,7 @@ import { useTitle } from '../../../hooks/index.js'
 import { useWalletGroup } from '../../../hooks/useWalletGroup.js'
 import { WalletRenameModal } from '../../../modals/modal-controls.js'
 import { DeriveStateContext } from './context.js'
-import { Trans, msg } from '@lingui/macro'
-import { useLingui } from '@lingui/react'
+import { Trans, useLingui } from '@lingui/react/macro'
 
 const useStyles = makeStyles()((theme) => ({
     content: {
@@ -80,7 +79,7 @@ async function pollResult(address: string) {
 }
 
 export const Component = memo(function DeriveWallet() {
-    const { _ } = useLingui()
+    const { t } = useLingui()
     const { classes } = useStyles()
     const mnemonicId = useLocation().state?.mnemonicId as string
 
@@ -117,7 +116,7 @@ export const Component = memo(function DeriveWallet() {
         setIsDeriving(false)
     }, [mnemonicId, queryClient])
 
-    useTitle(_(msg`Add Wallet`))
+    useTitle(t`Add Wallet`)
 
     const loading = creating || isDeriving
 

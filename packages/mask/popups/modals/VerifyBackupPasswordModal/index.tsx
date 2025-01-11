@@ -7,11 +7,10 @@ import { PasswordField } from '../../components/PasswordField/index.js'
 import { useNavigate } from 'react-router-dom'
 import { PopupRoutes } from '@masknet/shared-base'
 import { MATCH_PASSWORD_RE } from '../../constants.js'
-import { msg, Trans } from '@lingui/macro'
-import { useLingui } from '@lingui/react'
+import { Trans, useLingui } from '@lingui/react/macro'
 
 export const VerifyBackupPasswordModal = memo<ActionModalBaseProps>(function VerifyBackupPasswordModal() {
-    const { _ } = useLingui()
+    const { t } = useLingui()
     const navigate = useNavigate()
     const [password, setPassword] = useState('')
     const [passwordMatched, setPasswordMatched] = useState(true)
@@ -36,7 +35,7 @@ export const VerifyBackupPasswordModal = memo<ActionModalBaseProps>(function Ver
             }>
             <Box display="flex" flexDirection="column" m={0.5}>
                 <PasswordField
-                    placeholder={_(msg`Password`)}
+                    placeholder={t`Password`}
                     onFocus={() => setPasswordMatched(true)}
                     onChange={(e) => {
                         setPassword(e.target.value)

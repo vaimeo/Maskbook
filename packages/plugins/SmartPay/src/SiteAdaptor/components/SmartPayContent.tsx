@@ -49,8 +49,7 @@ import { PluginSmartPayMessages } from '../../message.js'
 import { useERC20TokenAllowance } from '@masknet/web3-hooks-evm'
 import { AddSmartPayPopover } from './AddSmartPayPopover.js'
 import { AccountsManagerPopover } from './AccountsManagePopover.js'
-import { Trans } from '@lingui/macro'
-import { useLingui } from '@lingui/react'
+import { Trans } from '@lingui/react/macro'
 
 const useStyles = makeStyles()((theme) => ({
     dialogContent: {
@@ -179,7 +178,6 @@ const useStyles = makeStyles()((theme) => ({
 }))
 
 export const SmartPayContent = memo(() => {
-    const { _ } = useLingui()
     const { classes } = useStyles()
 
     const [approveDialogOpen, setApproveDialogOpen] = useState(false)

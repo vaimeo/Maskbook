@@ -10,8 +10,7 @@ import Services from '#services'
 import { useNavigate } from 'react-router-dom'
 import { useWallet } from '@masknet/web3-hooks-base'
 import { noop } from 'lodash-es'
-import { Trans, msg } from '@lingui/macro'
-import { useLingui } from '@lingui/react'
+import { Trans, useLingui } from '@lingui/react/macro'
 
 interface ShowPrivateKeyDrawerProps extends BottomDrawerProps {
     error: ReactNode
@@ -21,7 +20,7 @@ interface ShowPrivateKeyDrawerProps extends BottomDrawerProps {
 }
 
 function ShowPrivateKeyDrawer({ password, error, setPassword, setError, ...rest }: ShowPrivateKeyDrawerProps) {
-    const { _ } = useLingui()
+    const { t } = useLingui()
     const theme = useTheme()
     const wallet = useWallet()
     const navigate = useNavigate()
@@ -52,7 +51,7 @@ function ShowPrivateKeyDrawer({ password, error, setPassword, setError, ...rest 
                     sx={{ mt: 2 }}
                     fullWidth
                     autoFocus
-                    placeholder={_(msg`Payment Password`)}
+                    placeholder={t`Payment Password`}
                     error={!!error}
                     value={password}
                     onChange={(e) => {

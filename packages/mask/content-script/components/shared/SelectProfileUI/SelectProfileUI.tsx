@@ -10,8 +10,7 @@ import { startTransition, useCallback, useDeferredValue, useMemo, useState } fro
 import { ProfileInList } from '../SelectRecipients/ProfileInList.js'
 import { useContacts } from '../SelectRecipients/useContacts.js'
 import { activatedSiteAdaptorUI } from '../../../site-adaptor-infra/ui.js'
-import { Trans, msg } from '@lingui/macro'
-import { useLingui } from '@lingui/react'
+import { Trans, useLingui } from '@lingui/react/macro'
 
 interface SelectProfileUIProps extends withClasses<'root'> {
     items: Profile[]
@@ -70,7 +69,7 @@ const useStyles = makeStyles()((theme) => ({
 }))
 
 export function SelectProfileUI(props: SelectProfileUIProps) {
-    const { _ } = useLingui()
+    const { t } = useLingui()
     const { classes, cx } = useStyles(undefined, { props })
     const { frozenSelected, onSetSelected, disabled, items, selected } = props
     const [search, setSearch] = useState('')
@@ -155,7 +154,7 @@ export function SelectProfileUI(props: SelectProfileUIProps) {
                             <Icons.Search />
                         </InputAdornment>
                     }
-                    placeholder={_(msg`eg: X accounts, persona public keys, wallet addresses or ENS`)}
+                    placeholder={t`eg: X accounts, persona public keys, wallet addresses or ENS`}
                     disabled={disabled}
                 />
             </Box>

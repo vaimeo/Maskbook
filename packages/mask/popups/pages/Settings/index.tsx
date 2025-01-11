@@ -7,12 +7,11 @@ import { openWindow } from '@masknet/shared-base-ui'
 import { makeStyles } from '@masknet/theme'
 import { Box, List, ListItem, ListItemText, Typography, useTheme } from '@mui/material'
 import { memo, useCallback, useMemo } from 'react'
-import { Plural, Trans, msg } from '@lingui/macro'
+import { Plural, Trans, useLingui } from '@lingui/react/macro'
 import { UserContext, useAppearance, useLanguage } from '../../../shared-ui/index.js'
 import { NormalHeader, useModalNavigate } from '../../components/index.js'
 import { useSupportedSites } from '../../hooks/useSupportedSites.js'
 import { useTitle } from '../../hooks/useTitle.js'
-import { useLingui } from '@lingui/react'
 
 const useStyles = makeStyles()((theme) => ({
     container: {
@@ -101,7 +100,7 @@ const FAQ_LINK =
 const HOME_LINK = 'Mask.io'
 
 export const Component = memo(function SettingsPage() {
-    const { _ } = useLingui()
+    const { t } = useLingui()
     const theme = useTheme()
     const { classes } = useStyles()
     const modalNavigate = useModalNavigate()
@@ -166,7 +165,7 @@ export const Component = memo(function SettingsPage() {
         await Services.Helper.removePopupWindow()
     }, [])
 
-    useTitle(_(msg`Settings`))
+    useTitle(t`Settings`)
 
     const websiteCount = data?.filter((x) => x.allowInject && x.hasPermission).length
     return (

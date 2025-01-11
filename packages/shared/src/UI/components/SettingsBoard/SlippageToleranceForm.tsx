@@ -9,8 +9,7 @@ import type { z as zod } from 'zod'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { RadioChip } from './RadioChip.js'
 import { useSlippageToleranceSchema } from './hooks/index.js'
-import { msg, Trans } from '@lingui/macro'
-import { useLingui } from '@lingui/react'
+import { Trans, useLingui } from '@lingui/react/macro'
 
 const useStyles = makeStyles()((theme) => {
     return {
@@ -37,7 +36,7 @@ interface SlippageToleranceFormProps {
 }
 
 export function SlippageToleranceForm(props: SlippageToleranceFormProps) {
-    const { _ } = useLingui()
+    const { t } = useLingui()
     const { slippageTolerance, slippageTolerances, onChange } = props
     const { classes } = useStyles()
 
@@ -88,7 +87,7 @@ export function SlippageToleranceForm(props: SlippageToleranceFormProps) {
                         render={({ field }) => (
                             <MaskTextField
                                 {...field}
-                                placeholder={_(msg`Custom`)}
+                                placeholder={t`Custom`}
                                 InputProps={{
                                     type: 'number',
                                     inputProps: {

@@ -10,8 +10,7 @@ import { isGreaterThan, isZero, leftShift, rightShift } from '@masknet/web3-shar
 import { GasSettingMenu } from '../GasSettingMenu/index.js'
 import type { TransactionDetail } from '../../pages/Wallet/type.js'
 import type { GasConfig } from '@masknet/web3-shared-evm'
-import { Trans, msg } from '@lingui/macro'
-import { useLingui } from '@lingui/react'
+import { Trans, useLingui } from '@lingui/react/macro'
 
 const useStyles = makeStyles()((theme) => ({
     title: {
@@ -114,7 +113,7 @@ export const UnlockERC20Token = memo<UnlockERC20TokenProps>(function UnlockERC20
     onPaymentTokenChange,
     paymentToken,
 }) {
-    const { _ } = useLingui()
+    const { t } = useLingui()
     const { classes } = useStyles()
     const theme = useTheme()
     const [value, setValue] = useState('')
@@ -213,7 +212,7 @@ export const UnlockERC20Token = memo<UnlockERC20TokenProps>(function UnlockERC20
             <Box className={classes.amountInfo}>
                 <TextField
                     fullWidth
-                    placeholder={_(msg`Enter Max spend limit`)}
+                    placeholder={t`Enter Max spend limit`}
                     value={value}
                     onChange={(e) => {
                         setValue(e.target.value)

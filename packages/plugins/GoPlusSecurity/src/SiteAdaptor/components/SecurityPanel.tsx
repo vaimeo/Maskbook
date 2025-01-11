@@ -13,8 +13,7 @@ import { DefineMapping, SecurityMessageLevel } from '../constants.js'
 import { TokenPanel } from './TokenPanel.js'
 import { RiskCard, RiskCardUI } from './RiskCard.js'
 import { resolveGoLabLink } from '../../utils/helper.js'
-import { Trans, msg } from '@lingui/macro'
-import { useLingui } from '@lingui/react'
+import { Trans, useLingui } from '@lingui/react/macro'
 
 interface TokenCardProps {
     tokenSecurity: SecurityAPI.TokenSecurityType
@@ -60,7 +59,7 @@ const LIST_HEIGHT = {
 }
 
 export const SecurityPanel = memo<TokenCardProps>(({ tokenSecurity, tokenInfo, tokenPrice, tokenMarketCap }) => {
-    const { _ } = useLingui()
+    const { t } = useLingui()
     const { classes } = useStyles()
     const theme = useTheme()
 
@@ -206,7 +205,7 @@ export const SecurityPanel = memo<TokenCardProps>(({ tokenSecurity, tokenInfo, t
                     {(!makeMessageList.length || securityMessageLevel === SecurityMessageLevel.Safe) && (
                         <RiskCardUI
                             icon={DefineMapping[SecurityMessageLevel.Safe].icon(14)}
-                            title={_(msg`This token has no risky or attention factors.`)}
+                            title={t`This token has no risky or attention factors.`}
                             titleColor={DefineMapping[SecurityMessageLevel.Safe].titleColor}
                         />
                     )}

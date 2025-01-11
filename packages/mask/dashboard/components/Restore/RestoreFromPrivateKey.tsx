@@ -8,8 +8,7 @@ import { useNavigate } from 'react-router-dom'
 import { z } from 'zod'
 import { PrimaryButton } from '../PrimaryButton/index.js'
 import { usePersonaRecovery } from '../../contexts/index.js'
-import { Trans, msg } from '@lingui/macro'
-import { useLingui } from '@lingui/react'
+import { Trans, useLingui } from '@lingui/react/macro'
 
 const useStyles = makeStyles()((theme) => ({
     input: {
@@ -33,7 +32,7 @@ export const RestoreFromPrivateKey = memo(function RestoreFromPrivateKey({
     handleRestoreFromPrivateKey,
     multiline,
 }: RestoreFromPrivateKeyProps) {
-    const { _ } = useLingui()
+    const { t } = useLingui()
     const { classes } = useStyles()
     const navigate = useNavigate()
     const { fillSubmitOutlet } = usePersonaRecovery()
@@ -89,7 +88,7 @@ export const RestoreFromPrivateKey = memo(function RestoreFromPrivateKey({
                         type="password"
                         helperText={errors.privateKey?.message}
                         error={!!errors.privateKey}
-                        placeholder={_(msg`Input your Private Key`)}
+                        placeholder={t`Input your Private Key`}
                     />
                 )}
                 name="privateKey"

@@ -10,8 +10,7 @@ import { ContactsContext, useNonFungibleTokenParams, useTitle, useTokenParams } 
 import { TransferTabType } from '../type.js'
 import { FungibleTokenSection } from './FungibleTokenSection.js'
 import { NonFungibleTokenSection } from './NonFungibleTokenSection.js'
-import { msg, Trans } from '@lingui/macro'
-import { useLingui } from '@lingui/react'
+import { Trans, useLingui } from '@lingui/react/macro'
 
 const useStyles = makeStyles()((theme) => ({
     page: {
@@ -46,10 +45,10 @@ const useStyles = makeStyles()((theme) => ({
 }))
 
 const Transfer = memo(function Transfer() {
-    const { _ } = useLingui()
+    const { t } = useLingui()
     const { classes } = useStyles()
 
-    useTitle(_(msg`Send`))
+    useTitle(t`Send`)
     const [params, setParams] = useSearchParams()
     const undecided = params.get('undecided') === 'true'
 

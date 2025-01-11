@@ -1,5 +1,5 @@
-import { msg, Select, Trans } from '@lingui/macro'
-import { useLingui } from '@lingui/react'
+import { msg } from '@lingui/core/macro'
+import { Select, Trans, useLingui } from '@lingui/react/macro'
 import { Icons } from '@masknet/icons'
 import { LoadingStatus, PluginWalletStatusBar, ProgressiveText, TokenIcon, useUnmountedRef } from '@masknet/shared'
 import { EMPTY_LIST, NetworkPluginID, Sniffings } from '@masknet/shared-base'
@@ -168,7 +168,7 @@ const useStyles = makeStyles()((theme) => ({
 }))
 
 export const Confirm = memo(function Confirm() {
-    const { _ } = useLingui()
+    const { t } = useLingui()
     const { classes, cx, theme } = useStyles()
     const navigate = useNavigate()
     const { basePath, showToolTip, showSnackbar } = useRuntime()
@@ -287,7 +287,7 @@ export const Confirm = memo(function Confirm() {
             })
 
             if (!hash) {
-                showSnackbar(_(msg`Swap`), {
+                showSnackbar(t`Swap`, {
                     message: <Trans>Transaction rejected</Trans>,
                     variant: 'error',
                 })
@@ -298,7 +298,7 @@ export const Confirm = memo(function Confirm() {
                 await waitForTransaction({ chainId, hash })
                 const received = await getReceived({ hash, account, chainId })
                 if (received && !unmountedRef.current) {
-                    showSnackbar(_(msg`Swap`), {
+                    showSnackbar(t`Swap`, {
                         message: (
                             <MuiLink
                                 className={classes.toastLink}
@@ -318,7 +318,7 @@ export const Confirm = memo(function Confirm() {
                     })
                 }
             } catch (error) {
-                showSnackbar(_(msg`Swap`), {
+                showSnackbar(t`Swap`, {
                     message: <Trans>Wait too long for the confirmation.</Trans>,
                     variant: 'error',
                 })
@@ -360,7 +360,7 @@ export const Confirm = memo(function Confirm() {
             const url = urlcat(basePath, RoutePaths.Transaction, { hash, chainId, mode })
             navigate(url, { replace: true })
         } catch (err) {
-            showSnackbar(_(msg`Swap`), {
+            showSnackbar(t`Swap`, {
                 message: (err as Error).message,
                 variant: 'error',
             })
@@ -390,7 +390,7 @@ export const Confirm = memo(function Confirm() {
     const loading = isSending || isCheckingApprove || isApproving || submitting
     const disabled = !isSwappable || loading || dexIdsCount === 0
 
-    const networkTooltip = _(
+    const networkTooltip = t(
         msg`This fee is used to pay miners and isn't collected by us. The actual cost may be less than estimated, and the unused fee won't be deducted from your account.`,
     )
     return (
@@ -464,7 +464,7 @@ export const Confirm = memo(function Confirm() {
                                     size={16}
                                     onClick={() => {
                                         showToolTip({
-                                            title: _(msg`Network fee`),
+                                            title: t`Network fee`,
                                             message: networkTooltip,
                                         })
                                     }}
@@ -530,7 +530,7 @@ export const Confirm = memo(function Confirm() {
                         <Typography className={classes.data}>{transaction?.data}</Typography>
                     :   null}
                     {showStale ?
-                        <Warning description={_(msg`Quote expired. Update to receive a new quote.`)} />
+                        <Warning description={t`Quote expired. Update to receive a new quote.`} />
                     :   null}
                 </div>
             </div>

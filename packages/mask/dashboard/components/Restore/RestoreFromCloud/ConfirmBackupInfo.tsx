@@ -11,11 +11,10 @@ import { AccountStatusBar } from '../AccountStatusBar.js'
 import { BackupInfoCard } from '../BackupInfoCard.js'
 import { RestoreContext } from './RestoreProvider.js'
 import { RestoreStep } from './restoreReducer.js'
-import { Trans, msg } from '@lingui/macro'
-import { useLingui } from '@lingui/react'
+import { Trans, useLingui } from '@lingui/react/macro'
 
 export const ConfirmBackupInfo = memo(function ConfirmBackupInfo() {
-    const { _ } = useLingui()
+    const { t } = useLingui()
     const [password, setPassword] = useState('')
     const [errorMessage, setErrorMessage] = useState<ReactNode | undefined>(undefined)
     const { state, dispatch } = RestoreContext.useContainer()
@@ -81,7 +80,7 @@ export const ConfirmBackupInfo = memo(function ConfirmBackupInfo() {
             <Box mt={4}>
                 <PasswordField
                     fullWidth
-                    placeholder={_(msg`Backup password`)}
+                    placeholder={t`Backup password`}
                     onChange={(e) => {
                         setErrorMessage('')
                         setPassword(e.currentTarget.value)

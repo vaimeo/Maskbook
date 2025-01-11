@@ -1,6 +1,5 @@
 import Services from '#services'
-import { msg, Trans } from '@lingui/macro'
-import { useLingui } from '@lingui/react'
+import { Trans, useLingui } from '@lingui/react/macro'
 import { decryptBackup } from '@masknet/backup-format'
 import { Icons } from '@masknet/icons'
 import { formatFileSize, InjectedDialog } from '@masknet/shared'
@@ -71,7 +70,7 @@ export const MergeBackupDialog = memo<MergeBackupDialogProps>(function MergeBack
     code,
     abstract,
 }) {
-    const { _ } = useLingui()
+    const { t } = useLingui()
     const { classes, theme } = useStyles()
     const [process, setProcess] = useState(0)
     const [backupPassword, setBackupPassword] = useState('')
@@ -234,7 +233,7 @@ export const MergeBackupDialog = memo<MergeBackupDialogProps>(function MergeBack
                 <PasswordField
                     fullWidth
                     value={backupPassword}
-                    placeholder={_(msg`Backup Password`)}
+                    placeholder={t`Backup Password`}
                     onChange={(e) => {
                         setBackupPassword(e.target.value)
                         setBackupPasswordError('')
