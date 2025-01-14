@@ -22,6 +22,15 @@ msgstr ""
 #~ msgid "{0} {1, plural, one {share} other {shares}} / {total} ${symbol}"
 #~ msgstr ""
 
+#: src/SiteAdaptor/components/ConditionSettings.tsx
+#~ msgid "{0} holder"
+#~ msgstr ""
+
+#. placeholder {0}: conditions.join('/')
+#: src/SiteAdaptor/components/ConditionSettings.tsx
+msgid "{0} Holder"
+msgstr ""
+
 #. placeholder {0}: shareTextOption.account
 #: src/SiteAdaptor/RedPacket/index.tsx
 msgid "{claimed} Follow @{0} (mask.io) to claim lucky drops."
@@ -75,6 +84,11 @@ msgstr ""
 msgid "Add a Custom Cover"
 msgstr ""
 
+#: src/SiteAdaptor/components/ConditionSettings.tsx
+#: src/SiteAdaptor/components/ConditionSettings.tsx
+msgid "Adjust Selection"
+msgstr ""
+
 #: src/SiteAdaptor/views/CreateNftRedPacket.tsx
 msgid "ALL"
 msgstr ""
@@ -102,6 +116,10 @@ msgstr ""
 
 #: src/SiteAdaptor/views/NftRedPacketConfirm.tsx
 msgid "Attached Message"
+msgstr ""
+
+#: src/SiteAdaptor/views/Erc20RedPacketConfirm.tsx
+msgid "Available to Everyone"
 msgstr ""
 
 #: src/SiteAdaptor/components/PreviewRedPacket.tsx
@@ -142,6 +160,11 @@ msgstr ""
 #: src/SiteAdaptor/RedPacketNft.tsx
 #: src/SiteAdaptor/RedPacket/OperationFooter.tsx
 msgid "Claim"
+msgstr ""
+
+#: src/SiteAdaptor/views/Erc20RedPacketConfirm.tsx
+#: src/SiteAdaptor/views/CreateERC20RedPacket.tsx
+msgid "Claim Conditions"
 msgstr ""
 
 #: src/SiteAdaptor/components/RouterDialog.tsx
@@ -275,6 +298,10 @@ msgstr ""
 #~ msgid "Creator:"
 #~ msgstr ""
 
+#: src/SiteAdaptor/components/ConditionSettings.tsx
+msgid "Crypto Holder"
+msgstr ""
+
 #: src/SiteAdaptor/FireflyRedpacketConfirmDialog.tsx
 #~ msgid "Customize Lucky Drop sender. Select either Lens or Forecaster usernames, or use the currently connected wallet."
 #~ msgstr ""
@@ -318,6 +345,11 @@ msgstr ""
 
 #: src/SiteAdaptor/views/CreateERC20RedPacket.tsx
 msgid "Equal Amount"
+msgstr ""
+
+#: src/SiteAdaptor/components/ConditionSettings.tsx
+#: src/SiteAdaptor/components/ConditionSettings.tsx
+msgid "Everyone"
 msgstr ""
 
 #: src/SiteAdaptor/RedPacketNft.tsx
@@ -390,6 +422,15 @@ msgstr ""
 msgid "History"
 msgstr ""
 
+#. placeholder {0}: tokenQuantity ? `${tokenQuantity}+` : 'any'
+#: src/SiteAdaptor/views/Erc20RedPacketConfirm.tsx
+msgid "Holding {0}"
+msgstr ""
+
+#: src/SiteAdaptor/views/Erc20RedPacketConfirm.tsx
+msgid "Holding NFT"
+msgstr ""
+
 #. placeholder {0}: shareTextOption.sender
 #. placeholder {1}: shareTextOption.network
 #: src/SiteAdaptor/RedPacket/index.tsx
@@ -431,6 +472,10 @@ msgstr ""
 
 #: src/SiteAdaptor/views/HistoryDetail.tsx
 msgid "It remains unclaimed."
+msgstr ""
+
+#: src/SiteAdaptor/components/ConditionSettings.tsx
+msgid "Leave blank to allow any amount; enter a number to set a minimum holding requirement."
 msgstr ""
 
 #: src/SiteAdaptor/ClaimRequirementsDialog.tsx
@@ -482,6 +527,10 @@ msgstr ""
 msgid "NFT holder"
 msgstr ""
 
+#: src/SiteAdaptor/components/ConditionSettings.tsx
+msgid "NFT Holder"
+msgstr ""
+
 #: src/SiteAdaptor/Requirements/index.tsx
 msgid "NFT Holder of <0/>"
 msgstr ""
@@ -524,6 +573,10 @@ msgstr ""
 #: src/SiteAdaptor/FireflyRedpacketConfirmDialog.tsx
 #~ msgid "Number of Winners"
 #~ msgstr ""
+
+#: src/SiteAdaptor/views/Erc20RedPacketConfirm.tsx
+msgid "or Holding NFT"
+msgstr ""
 
 #: src/SiteAdaptor/FireflyRedPacketDetailsItem.tsx
 #~ msgid "Post on"
@@ -589,6 +642,10 @@ msgstr ""
 msgid "Search"
 msgstr ""
 
+#: src/SiteAdaptor/components/ConditionSettings.tsx
+msgid "Select a token"
+msgstr ""
+
 #: src/SiteAdaptor/views/CreateNftRedPacket.tsx
 #: src/SiteAdaptor/views/CreateERC20RedPacket.tsx
 msgid "Select a Token"
@@ -601,6 +658,10 @@ msgstr ""
 
 #: src/SiteAdaptor/ClaimRequirementsDialog.tsx
 msgid "Select NFT collection to gate access"
+msgstr ""
+
+#: src/SiteAdaptor/components/ConditionSettings.tsx
+msgid "Select NFTs"
 msgstr ""
 
 #: src/SiteAdaptor/views/CreateNftRedPacket.tsx
@@ -636,6 +697,11 @@ msgstr ""
 
 #: src/SiteAdaptor/views/Erc20RedPacketConfirm.tsx
 msgid "Split Mode"
+msgstr ""
+
+#: src/SiteAdaptor/components/ConditionSettings.tsx
+#: src/SiteAdaptor/components/ConditionSettings.tsx
+msgid "Supported contracts"
 msgstr ""
 
 #: src/SiteAdaptor/views/CustomCover.tsx
@@ -700,6 +766,10 @@ msgstr ""
 msgid "Token ID separated by comma, e.g. 1224, 7873, 8948"
 msgstr ""
 
+#: src/SiteAdaptor/components/ConditionSettings.tsx
+msgid "Token quantity greater than"
+msgstr ""
+
 #: src/SiteAdaptor/components/RouterDialog.tsx
 msgid "Tokens"
 msgstr ""
@@ -761,6 +831,11 @@ msgstr ""
 #: src/SiteAdaptor/SelectNftTokenDialog.tsx
 #: src/SiteAdaptor/views/SelectNft.tsx
 msgid "You can also use <0>Shift</0> to select multiple NFTs."
+msgstr ""
+
+#: src/SiteAdaptor/components/ConditionSettings.tsx
+#: src/SiteAdaptor/components/ConditionSettings.tsx
+msgid "You can claim the lucky drop by holding the required amount of any selected token."
 msgstr ""
 
 #: src/SiteAdaptor/ClaimRequirementsDialog.tsx

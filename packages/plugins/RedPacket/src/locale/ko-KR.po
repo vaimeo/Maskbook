@@ -3,7 +3,7 @@ msgstr ""
 "Project-Id-Version: mask-network\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: \n"
-"PO-Revision-Date: 2025-01-08 06:55\n"
+"PO-Revision-Date: 2024-12-24 04:49\n"
 "Last-Translator: \n"
 "Language: ko_KR\n"
 "Language-Team: Korean\n"
@@ -26,6 +26,15 @@ msgstr ""
 #: src/SiteAdaptor/RedPacket/index.tsx
 #~ msgid "{0} {1, plural, one {share} other {shares}} / {total} ${symbol}"
 #~ msgstr ""
+
+#: src/SiteAdaptor/components/ConditionSettings.tsx
+#~ msgid "{0} holder"
+#~ msgstr ""
+
+#. placeholder {0}: conditions.join('/')
+#: src/SiteAdaptor/components/ConditionSettings.tsx
+msgid "{0} Holder"
+msgstr ""
 
 #. placeholder {0}: shareTextOption.account
 #: src/SiteAdaptor/RedPacket/index.tsx
@@ -80,6 +89,11 @@ msgstr ""
 msgid "Add a Custom Cover"
 msgstr ""
 
+#: src/SiteAdaptor/components/ConditionSettings.tsx
+#: src/SiteAdaptor/components/ConditionSettings.tsx
+msgid "Adjust Selection"
+msgstr ""
+
 #: src/SiteAdaptor/views/CreateNftRedPacket.tsx
 msgid "ALL"
 msgstr ""
@@ -108,6 +122,10 @@ msgstr "최대 255명까지 받을 수 있습니다"
 #: src/SiteAdaptor/views/NftRedPacketConfirm.tsx
 msgid "Attached Message"
 msgstr "첨부 메시지"
+
+#: src/SiteAdaptor/views/Erc20RedPacketConfirm.tsx
+msgid "Available to Everyone"
+msgstr ""
 
 #: src/SiteAdaptor/components/PreviewRedPacket.tsx
 #: src/SiteAdaptor/views/CreateERC20RedPacket.tsx
@@ -148,6 +166,11 @@ msgstr ""
 #: src/SiteAdaptor/RedPacket/OperationFooter.tsx
 msgid "Claim"
 msgstr "수령"
+
+#: src/SiteAdaptor/views/Erc20RedPacketConfirm.tsx
+#: src/SiteAdaptor/views/CreateERC20RedPacket.tsx
+msgid "Claim Conditions"
+msgstr ""
 
 #: src/SiteAdaptor/components/RouterDialog.tsx
 msgid "Claim Details"
@@ -280,6 +303,10 @@ msgstr "생성 시간:"
 #~ msgid "Creator:"
 #~ msgstr ""
 
+#: src/SiteAdaptor/components/ConditionSettings.tsx
+msgid "Crypto Holder"
+msgstr ""
+
 #: src/SiteAdaptor/FireflyRedpacketConfirmDialog.tsx
 #~ msgid "Customize Lucky Drop sender. Select either Lens or Forecaster usernames, or use the currently connected wallet."
 #~ msgstr ""
@@ -324,6 +351,11 @@ msgstr "총금액 입력"
 #: src/SiteAdaptor/views/CreateERC20RedPacket.tsx
 msgid "Equal Amount"
 msgstr "동일한 금액"
+
+#: src/SiteAdaptor/components/ConditionSettings.tsx
+#: src/SiteAdaptor/components/ConditionSettings.tsx
+msgid "Everyone"
+msgstr ""
 
 #: src/SiteAdaptor/RedPacketNft.tsx
 #: src/SiteAdaptor/components/RedPacketEnvelope.tsx
@@ -395,6 +427,15 @@ msgstr ""
 msgid "History"
 msgstr "역사 기록"
 
+#. placeholder {0}: tokenQuantity ? `${tokenQuantity}+` : 'any'
+#: src/SiteAdaptor/views/Erc20RedPacketConfirm.tsx
+msgid "Holding {0}"
+msgstr ""
+
+#: src/SiteAdaptor/views/Erc20RedPacketConfirm.tsx
+msgid "Holding NFT"
+msgstr ""
+
 #. placeholder {0}: shareTextOption.sender
 #. placeholder {1}: shareTextOption.network
 #: src/SiteAdaptor/RedPacket/index.tsx
@@ -436,6 +477,10 @@ msgstr "잘못된 네트워크"
 
 #: src/SiteAdaptor/views/HistoryDetail.tsx
 msgid "It remains unclaimed."
+msgstr ""
+
+#: src/SiteAdaptor/components/ConditionSettings.tsx
+msgid "Leave blank to allow any amount; enter a number to set a minimum holding requirement."
 msgstr ""
 
 #: src/SiteAdaptor/ClaimRequirementsDialog.tsx
@@ -487,6 +532,10 @@ msgstr ""
 msgid "NFT holder"
 msgstr ""
 
+#: src/SiteAdaptor/components/ConditionSettings.tsx
+msgid "NFT Holder"
+msgstr ""
+
 #: src/SiteAdaptor/Requirements/index.tsx
 msgid "NFT Holder of <0/>"
 msgstr ""
@@ -529,6 +578,10 @@ msgstr ""
 #: src/SiteAdaptor/FireflyRedpacketConfirmDialog.tsx
 #~ msgid "Number of Winners"
 #~ msgstr ""
+
+#: src/SiteAdaptor/views/Erc20RedPacketConfirm.tsx
+msgid "or Holding NFT"
+msgstr ""
 
 #: src/SiteAdaptor/FireflyRedPacketDetailsItem.tsx
 #~ msgid "Post on"
@@ -594,6 +647,10 @@ msgstr ""
 msgid "Search"
 msgstr "검색"
 
+#: src/SiteAdaptor/components/ConditionSettings.tsx
+msgid "Select a token"
+msgstr ""
+
 #: src/SiteAdaptor/views/CreateNftRedPacket.tsx
 #: src/SiteAdaptor/views/CreateERC20RedPacket.tsx
 msgid "Select a Token"
@@ -606,6 +663,10 @@ msgstr "전체 선택"
 
 #: src/SiteAdaptor/ClaimRequirementsDialog.tsx
 msgid "Select NFT collection to gate access"
+msgstr ""
+
+#: src/SiteAdaptor/components/ConditionSettings.tsx
+msgid "Select NFTs"
 msgstr ""
 
 #: src/SiteAdaptor/views/CreateNftRedPacket.tsx
@@ -642,6 +703,11 @@ msgstr "오류가 발생합니다."
 #: src/SiteAdaptor/views/Erc20RedPacketConfirm.tsx
 msgid "Split Mode"
 msgstr "스플릿 모드"
+
+#: src/SiteAdaptor/components/ConditionSettings.tsx
+#: src/SiteAdaptor/components/ConditionSettings.tsx
+msgid "Supported contracts"
+msgstr ""
 
 #: src/SiteAdaptor/views/CustomCover.tsx
 #~ msgid "Supported formats: JPEG, PNG, GIF<0/> Size limit: {0}"
@@ -705,6 +771,10 @@ msgstr ""
 msgid "Token ID separated by comma, e.g. 1224, 7873, 8948"
 msgstr "토큰 ID는 쉽표로 분리됩니다. 예시: 1224, 7873, 8948"
 
+#: src/SiteAdaptor/components/ConditionSettings.tsx
+msgid "Token quantity greater than"
+msgstr ""
+
 #: src/SiteAdaptor/components/RouterDialog.tsx
 msgid "Tokens"
 msgstr "토큰"
@@ -766,6 +836,11 @@ msgstr ""
 #: src/SiteAdaptor/SelectNftTokenDialog.tsx
 #: src/SiteAdaptor/views/SelectNft.tsx
 msgid "You can also use <0>Shift</0> to select multiple NFTs."
+msgstr ""
+
+#: src/SiteAdaptor/components/ConditionSettings.tsx
+#: src/SiteAdaptor/components/ConditionSettings.tsx
+msgid "You can claim the lucky drop by holding the required amount of any selected token."
 msgstr ""
 
 #: src/SiteAdaptor/ClaimRequirementsDialog.tsx

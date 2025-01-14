@@ -328,6 +328,8 @@ msgid "Community"
 msgstr ""
 
 #: src/UI/modals/WalletRiskWarningModal/WalletRiskWarning.tsx
+#: src/UI/modals/SelectNonFungibleContractModal/SelectNonFungibleContractDialog.tsx
+#: src/UI/modals/SelectFungibleTokenModal/SelectFungibleTokenDialog.tsx
 #: src/UI/modals/GasSettingModal/Prior1559GasSetting.tsx
 #: src/UI/modals/GasSettingModal/GasSetting1559.tsx
 #: src/UI/modals/ConfirmModal/Dialog.tsx
@@ -856,8 +858,8 @@ msgid "Manage Token List"
 msgstr ""
 
 #: src/UI/components/FungibleTokenList/ManageTokenListBar.tsx
-msgid "Manage Token Lists"
-msgstr ""
+#~ msgid "Manage Token Lists"
+#~ msgstr ""
 
 #: src/UI/components/FungibleCoinMarketTable/index.tsx
 #: src/UI/components/FungibleCoinMarketTable/index.tsx

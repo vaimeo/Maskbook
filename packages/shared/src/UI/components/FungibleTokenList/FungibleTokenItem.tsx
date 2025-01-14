@@ -1,25 +1,21 @@
-import { memo, useMemo } from 'react'
-import { Box, Link, ListItem, ListItemIcon, ListItemText, Typography } from '@mui/material'
-import { formatBalance, type FungibleToken } from '@masknet/web3-shared-base'
-import { NetworkPluginID } from '@masknet/shared-base'
-import { TokenIcon } from '../TokenIcon/index.js'
-import { Icons } from '@masknet/icons'
-import { useFungibleTokenBalance, useNetwork, useNetworkContext, useWeb3Utils } from '@masknet/web3-hooks-base'
-import type { Web3Helper } from '@masknet/web3-helpers'
-import { makeStyles, LoadingBase, ActionButton } from '@masknet/theme'
-import { TokenListMode } from './type.js'
-import { SettingSwitch } from '../SettingSwitch/index.js'
-import { useTokenBlocked, useTokenTrusted } from './useTokenBlocked.js'
-import { FormattedBalance } from '../../wallet/index.js'
-import { DotLoading, NetworkIcon } from '../index.js'
-import { useAsyncFn } from 'react-use'
 import { Trans } from '@lingui/react/macro'
+import { Icons } from '@masknet/icons'
+import { NetworkPluginID } from '@masknet/shared-base'
+import { ActionButton, CheckBoxIndicator, LoadingBase, makeStyles } from '@masknet/theme'
+import type { Web3Helper } from '@masknet/web3-helpers'
+import { useFungibleTokenBalance, useNetworkContext, useWeb3Utils } from '@masknet/web3-hooks-base'
+import { formatBalance, type FungibleToken } from '@masknet/web3-shared-base'
+import { Box, Link, ListItem, ListItemIcon, ListItemText, Typography } from '@mui/material'
+import { memo, useMemo } from 'react'
+import { useAsyncFn } from 'react-use'
+import { FormattedBalance } from '../../wallet/index.js'
+import { DotLoading } from '../index.js'
+import { SettingSwitch } from '../SettingSwitch/index.js'
+import { TokenIcon } from '../TokenIcon/index.js'
+import { TokenListMode } from './type.js'
+import { useTokenBlocked, useTokenTrusted } from './useTokenBlocked.js'
 
 const useStyles = makeStyles()((theme) => ({
-    icon: {
-        width: 36,
-        height: 36,
-    },
     list: {
         maxHeight: '100%',
         padding: theme.spacing(1.5),
@@ -79,37 +75,45 @@ const useStyles = makeStyles()((theme) => ({
     link: {
         color: theme.palette.maskColor.second,
     },
-    badgeIcon: {
-        position: 'absolute',
-        right: -6,
-        bottom: -4,
-        border: `1px solid ${theme.palette.common.white}`,
-        borderRadius: '50%',
-    },
     dotLoadingWrapper: {
         display: 'flex',
         flexDirection: 'column-reverse',
         height: 15,
     },
+    disabled: {
+        cursor: 'not-allowed',
+    },
 }))
 
-export const getFungibleTokenItem = <T extends NetworkPluginID>(
-    getSource: (address: string) => 'personal' | 'official' | 'external' | 'official-native',
-    isSelected: (address: string, chainId: Web3Helper.ChainIdAll) => boolean,
-    mode: TokenListMode,
+type GetItemOptions<T extends NetworkPluginID> = {
+    getSource: (address: string) => 'personal' | 'official' | 'external' | 'official-native'
+    isSelected: (address: string, chainId: Web3Helper.ChainIdAll) => boolean
+    mode: TokenListMode
     addOrRemoveTokenToLocal: (
         token: FungibleToken<Web3Helper.Definition[T]['ChainId'], Web3Helper.Definition[T]['SchemaType']>,
-        strategy: 'add' | 'remove',
-    ) => Promise<void>,
+        strategy?: 'add' | 'remove',
+    ) => Promise<void>
     trustOrBlockTokenToLocal: (
         token: FungibleToken<Web3Helper.Definition[T]['ChainId'], Web3Helper.Definition[T]['SchemaType']>,
         strategy: 'trust' | 'block',
-    ) => Promise<void>,
-    isHiddenChainIcon?: boolean,
-    isCustomToken?: boolean,
-) => {
+    ) => Promise<void>
+    isHiddenChainIcon?: boolean
+    isCustomToken?: boolean
+    enabled?: boolean
+}
+
+export const getFungibleTokenItem = <T extends NetworkPluginID>({
+    getSource,
+    isSelected,
+    mode,
+    addOrRemoveTokenToLocal,
+    trustOrBlockTokenToLocal,
+    isHiddenChainIcon,
+    isCustomToken,
+    enabled,
+}: GetItemOptions<T>) => {
     return memo(({ data, index, style }: any) => {
-        const { classes } = useStyles()
+        const { classes, theme } = useStyles()
         const Utils = useWeb3Utils()
 
         const token = data.dataSet[index]
@@ -121,7 +125,6 @@ export const getFungibleTokenItem = <T extends NetworkPluginID>(
         const isTrust = useTokenTrusted(address, token.chainId)
 
         const { pluginID } = useNetworkContext<T>()
-        const network = useNetwork(pluginID, chainId)
 
         const source = useMemo(() => getSource(address), [getSource, address])
         const selected = useMemo(() => isSelected(address, chainId), [isSelected, address, chainId])
@@ -179,6 +182,16 @@ export const getFungibleTokenItem = <T extends NetworkPluginID>(
                     </>
                 )
             }
+            if (mode === TokenListMode.Select) {
+                return (
+                    <CheckBoxIndicator
+                        className={enabled || selected ? undefined : classes.disabled}
+                        color={theme.palette.maskColor.primary}
+                        checked={selected}
+                        uncheckedColor={theme.palette.maskColor.secondaryLine}
+                    />
+                )
+            }
             return (
                 <Typography className={classes.balance}>
                     {balance === undefined ?
@@ -208,28 +221,28 @@ export const getFungibleTokenItem = <T extends NetworkPluginID>(
             <div style={style}>
                 <ListItem
                     title={address}
-                    key={address}
                     button
                     className={`${classes.list} dashboard token-list`}
-                    onClick={mode === TokenListMode.List ? () => onSelect(token) : undefined}
+                    onClick={() => {
+                        if (mode === TokenListMode.List) {
+                            onSelect(token)
+                        } else if (mode === TokenListMode.Select) {
+                            addOrRemoveTokenToLocal(token)
+                        }
+                    }}
                     disabled={!!(selected && mode === TokenListMode.List)}>
                     <ListItemIcon>
                         <Box position="relative">
                             <TokenIcon
-                                className={classes.icon}
+                                pluginID={pluginID}
                                 chainId={chainId}
                                 address={address}
                                 name={name}
                                 logoURL={logoURL}
+                                disableBadge={isHiddenChainIcon}
+                                size={36}
+                                badgeSize={16}
                             />
-                            {isHiddenChainIcon || !network?.iconUrl ? null : (
-                                <NetworkIcon
-                                    pluginID={pluginID}
-                                    chainId={chainId}
-                                    className={classes.badgeIcon}
-                                    size={16}
-                                />
-                            )}
                         </Box>
                     </ListItemIcon>
                     <ListItemText classes={{ primary: classes.text }}>

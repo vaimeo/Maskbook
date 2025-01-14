@@ -1,22 +1,22 @@
-import { memo } from 'react'
-import {
-    Typography,
-    InputBase,
-    Box,
-    Chip,
-    lighten,
-    inputBaseClasses,
-    chipClasses,
-    type InputBaseProps,
-    alpha,
-} from '@mui/material'
+import { Trans } from '@lingui/react/macro'
+import { Icons } from '@masknet/icons'
 import { makeStyles } from '@masknet/theme'
 import type { Web3Helper } from '@masknet/web3-helpers'
+import { useNetworkContext } from '@masknet/web3-hooks-base'
 import { formatBalance } from '@masknet/web3-shared-base'
-import { Icons } from '@masknet/icons'
-import { FormattedBalance, NetworkIcon, TokenIcon } from '../../../index.js'
-import { useNetworkContext, useNetworks } from '@masknet/web3-hooks-base'
-import { Trans } from '@lingui/react/macro'
+import {
+    alpha,
+    Box,
+    Chip,
+    chipClasses,
+    InputBase,
+    inputBaseClasses,
+    lighten,
+    Typography,
+    type InputBaseProps,
+} from '@mui/material'
+import { memo } from 'react'
+import { FormattedBalance, TokenIcon } from '../../../index.js'
 
 const useStyles = makeStyles()((theme) => ({
     root: {
@@ -57,21 +57,11 @@ const useStyles = makeStyles()((theme) => ({
         fontSize: 14,
         lineHeight: '18px',
         fontWeight: 700,
+        paddingLeft: 4,
         color: theme.palette.maskColor.main,
     },
     tokenIcon: {
-        width: 20,
-        height: 20,
-        marginRight: '0px !important',
-    },
-    badgeIcon: {
-        width: 10,
-        height: 10,
-        position: 'absolute',
-        right: -3,
-        bottom: -3,
-        border: `1px solid ${theme.palette.common.white}`,
-        borderRadius: '50%',
+        margin: '0px !important',
     },
     selectToken: {
         backgroundColor: theme.palette.maskColor.primary,
@@ -157,8 +147,6 @@ export const FungibleTokenInputUI = memo<FungibleTokenInputUIProps>(
     }) => {
         const { classes, cx } = useStyles()
         const { pluginID } = useNetworkContext()
-        const networks = useNetworks(pluginID)
-        const network = networks.find((x) => x.chainId === token?.chainId)
         return (
             <InputBase
                 fullWidth
@@ -197,22 +185,16 @@ export const FungibleTokenInputUI = memo<FungibleTokenInputUIProps>(
                                         className={classes.chip}
                                         classes={{ label: classes.chipLabel }}
                                         icon={
-                                            <Box position="relative">
-                                                <TokenIcon
-                                                    className={classes.tokenIcon}
-                                                    address={token.address}
-                                                    name={token.name}
-                                                    chainId={token.chainId}
-                                                    logoURL={token.logoURL}
-                                                />
-                                                <NetworkIcon
-                                                    pluginID={pluginID}
-                                                    className={classes.badgeIcon}
-                                                    chainId={token.chainId}
-                                                    size={16}
-                                                    network={network}
-                                                />
-                                            </Box>
+                                            <TokenIcon
+                                                className={classes.tokenIcon}
+                                                address={token.address}
+                                                name={token.name}
+                                                pluginID={pluginID}
+                                                chainId={token.chainId}
+                                                logoURL={token.logoURL}
+                                                size={20}
+                                                badgeSize={10}
+                                            />
                                         }
                                         deleteIcon={<Icons.ArrowDrop className={classes.arrowIcon} size={24} />}
                                         onDelete={onSelectToken}

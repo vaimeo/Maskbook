@@ -1,6 +1,6 @@
 import { Trans } from '@lingui/react/macro'
 import { Icons } from '@masknet/icons'
-import { NetworkIcon, ProgressiveText, TokenIcon } from '@masknet/shared'
+import { ProgressiveText, TokenIcon } from '@masknet/shared'
 import { NetworkPluginID } from '@masknet/shared-base'
 import { useEverSeen } from '@masknet/shared-base-ui'
 import { makeStyles } from '@masknet/theme'
@@ -9,16 +9,7 @@ import { useFungibleTokenBalance, useWeb3Utils } from '@masknet/web3-hooks-base'
 import { debank } from '@masknet/web3-providers/helpers'
 import { type ReasonableNetwork } from '@masknet/web3-shared-base'
 import type { ChainId } from '@masknet/web3-shared-evm'
-import {
-    Box,
-    Link,
-    ListItem,
-    ListItemIcon,
-    ListItemText,
-    Typography,
-    useForkRef,
-    type ListItemProps,
-} from '@mui/material'
+import { Link, ListItem, ListItemIcon, ListItemText, Typography, useForkRef, type ListItemProps } from '@mui/material'
 import { memo, useMemo, useRef } from 'react'
 import { formatTokenBalance } from '../../../shared/index.js'
 
@@ -37,14 +28,6 @@ const useStyles = makeStyles()((theme) => {
         tokenIcon: {
             width: 36,
             height: 36,
-        },
-        badgeIcon: {
-            position: 'absolute',
-            right: -6,
-            bottom: -4,
-            border: `1px solid ${theme.palette.common.white}`,
-            borderRadius: '50%',
-            fontSize: 10,
         },
         listText: {
             margin: 0,
@@ -141,25 +124,16 @@ export const TokenItem = memo(function TokenItem({
             ref={forkedRef}
             {...rest}>
             <ListItemIcon>
-                {/* TODO utility TokenIcon with badge */}
-                <Box position="relative">
-                    <TokenIcon
-                        className={classes.tokenIcon}
-                        pluginID={NetworkPluginID.PLUGIN_EVM}
-                        chainId={asset.chainId}
-                        address={asset.address}
-                        name={asset.name}
-                        logoURL={asset.logoURL}
-                        size={36}
-                    />
-                    <NetworkIcon
-                        className={classes.badgeIcon}
-                        pluginID={NetworkPluginID.PLUGIN_EVM}
-                        chainId={network?.chainId || asset.chainId}
-                        size={16}
-                        network={network}
-                    />
-                </Box>
+                <TokenIcon
+                    className={classes.tokenIcon}
+                    pluginID={NetworkPluginID.PLUGIN_EVM}
+                    chainId={asset.chainId}
+                    address={asset.address}
+                    name={asset.name}
+                    logoURL={asset.logoURL}
+                    size={36}
+                    badgeSize={16}
+                />
             </ListItemIcon>
             <ListItemText
                 className={classes.listText}

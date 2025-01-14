@@ -1,11 +1,27 @@
 import { NetworkPluginID } from '@masknet/shared-base'
 import type { Web3Helper } from '@masknet/web3-helpers'
-import { useChainContext, useFungibleToken, useWeb3Hub } from '@masknet/web3-hooks-base'
+import { useChainContext, useFungibleToken, useNetworks, useWeb3Hub } from '@masknet/web3-hooks-base'
 import { TokenType } from '@masknet/web3-shared-base'
 import { skipToken, useQuery } from '@tanstack/react-query'
 import { first } from 'lodash-es'
 import { memo } from 'react'
 import { Icon, type IconProps } from '../Icon/index.js'
+
+import { NetworkIcon } from '@masknet/shared'
+import { makeStyles } from '@masknet/theme'
+
+const useStyles = makeStyles()((theme) => ({
+    container: {
+        position: 'relative',
+    },
+    badgeIcon: {
+        position: 'absolute',
+        right: -3,
+        bottom: -3,
+        border: `1px solid ${theme.palette.common.white}`,
+        borderRadius: '50%',
+    },
+}))
 
 export interface TokenIconProps extends IconProps {
     pluginID?: NetworkPluginID
@@ -13,10 +29,13 @@ export interface TokenIconProps extends IconProps {
     address?: string
     symbol?: string
     tokenType?: TokenType
+    badgeSize?: number
     disableDefaultIcon?: boolean
+    disableBadge?: boolean
 }
 
 export const TokenIcon = memo(function TokenIcon(props: TokenIconProps) {
+    const { classes, cx } = useStyles()
     const {
         pluginID = NetworkPluginID.PLUGIN_EVM,
         chainId: propChainId,
@@ -24,11 +43,16 @@ export const TokenIcon = memo(function TokenIcon(props: TokenIconProps) {
         logoURL,
         symbol,
         tokenType = TokenType.Fungible,
-        disableDefaultIcon,
         name,
+        badgeSize = 16,
+        disableDefaultIcon,
+        disableBadge,
+        className,
         ...rest
     } = props
     const { data: token } = useFungibleToken(pluginID, address, undefined, { chainId: propChainId })
+    const networks = useNetworks(pluginID)
+    const network = networks.find((x) => x.chainId === token?.chainId)
 
     const { chainId } = useChainContext({ chainId: props.chainId })
     const Hub = useWeb3Hub(pluginID)
@@ -48,5 +72,20 @@ export const TokenIcon = memo(function TokenIcon(props: TokenIconProps) {
     if (data && disableDefaultIcon) return null
     const text = token?.name || token?.symbol || symbol || name || '?' // `?` prevent to fallback to avatar icon
     const url = logoURL || token?.logoURL || data
-    return <Icon {...rest} logoURL={url} name={text} />
+    const icon = <Icon {...rest} logoURL={url} name={text} />
+
+    return (
+        <div className={cx(classes.container, className)} style={{ height: rest.size, width: rest.size }}>
+            {icon}
+            {disableBadge ? null : (
+                <NetworkIcon
+                    pluginID={pluginID}
+                    className={classes.badgeIcon}
+                    chainId={chainId}
+                    size={badgeSize}
+                    network={network}
+                />
+            )}
+        </div>
+    )
 })

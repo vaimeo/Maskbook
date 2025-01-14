@@ -19,8 +19,13 @@ import {
     type SetStateAction,
 } from 'react'
 import { DURATION, PRESET_THEMES, RED_PACKET_DEFAULT_SHARES } from '../../constants.js'
-import type { RedPacketSettings } from '../hooks/useCreateCallback.js'
 import { NFTSelectOption, type OrderedERC721Token } from '../../types.js'
+import type { RedPacketSettings } from '../hooks/useCreateCallback.js'
+
+export enum ConditionType {
+    Crypto = 'Crypto',
+    NFT = 'NFT',
+}
 
 interface RedPacketContextOptions {
     gasOption: GasConfig | undefined
@@ -33,6 +38,14 @@ interface RedPacketContextOptions {
     message: string
     setMessage: Dispatch<SetStateAction<string>>
     creator: string
+    conditions: ConditionType[]
+    setConditions: Dispatch<SetStateAction<ConditionType[]>>
+    tokenQuantity: string
+    setTokenQuantity: Dispatch<SetStateAction<string>>
+    requiredTokens: Array<FungibleToken<ChainId, SchemaType>>
+    setRequiredTokens: Dispatch<SetStateAction<Array<FungibleToken<ChainId, SchemaType>>>>
+    requiredCollections: Array<NonFungibleCollection<ChainId, SchemaType>>
+    setRequiredCollections: Dispatch<SetStateAction<Array<NonFungibleCollection<ChainId, SchemaType>>>>
     // Token
     token: FungibleToken<ChainId, SchemaType> | undefined
     setToken: Dispatch<SetStateAction<FungibleToken<ChainId, SchemaType> | undefined>>
@@ -40,6 +53,7 @@ interface RedPacketContextOptions {
     rawAmount: string
     setRawAmount: Dispatch<SetStateAction<string>>
     settings: RedPacketSettings
+    // TODO use boolean
     isRandom: 0 | 1
     setIsRandom: Dispatch<SetStateAction<0 | 1>>
     shares: number
@@ -67,6 +81,14 @@ export const RedPacketContext = createContext<RedPacketContextOptions>({
     message: '',
     setMessage: noop,
     creator: '',
+    conditions: EMPTY_LIST,
+    setConditions: noop,
+    requiredTokens: EMPTY_LIST,
+    setRequiredTokens: noop,
+    tokenQuantity: '',
+    setTokenQuantity: noop,
+    requiredCollections: EMPTY_LIST,
+    setRequiredCollections: noop,
     // Token
     token: undefined,
     setToken: noop,
@@ -102,6 +124,12 @@ export const RedPacketProvider = memo(function RedPacketProvider({ children }: P
     const allThemes = useMemo(
         () => (customThemes ? [...PRESET_THEMES, ...customThemes] : PRESET_THEMES),
         [customThemes],
+    )
+    const [conditions, setConditions] = useState<ConditionType[]>([])
+    const [tokenQuantity, setTokenQuantity] = useState('')
+    const [requiredTokens, setRequiredTokens] = useState<Array<FungibleToken<ChainId, SchemaType>>>([])
+    const [requiredCollections, setRequiredCollections] = useState<Array<NonFungibleCollection<ChainId, SchemaType>>>(
+        [],
     )
 
     // Token
@@ -154,6 +182,15 @@ export const RedPacketProvider = memo(function RedPacketProvider({ children }: P
             message,
             setMessage,
             creator,
+            conditions,
+            setConditions,
+            tokenQuantity,
+            setTokenQuantity,
+            requiredTokens,
+            setRequiredTokens,
+            requiredCollections,
+            setRequiredCollections,
+
             // Token
             token,
             setToken,
@@ -178,8 +215,6 @@ export const RedPacketProvider = memo(function RedPacketProvider({ children }: P
             setCollection,
         }
     }, [
-        selectedNfts,
-        myNfts,
         gasOption,
         theme,
         allThemes,
@@ -190,11 +225,17 @@ export const RedPacketProvider = memo(function RedPacketProvider({ children }: P
         nativeToken,
         rawAmount,
         creator,
+        conditions,
+        tokenQuantity,
+        requiredTokens,
+        requiredCollections,
         isRandom,
         shares,
         selectOption,
         collection,
         nftGasOption,
+        myNfts,
+        selectedNfts,
     ])
 
     return <RedPacketContext.Provider value={contextValue}>{children}</RedPacketContext.Provider>
