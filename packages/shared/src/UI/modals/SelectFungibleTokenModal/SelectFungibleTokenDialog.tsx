@@ -22,7 +22,6 @@ const useStyles = makeStyles<StyleProps, 'container' | 'sidebar' | 'tokenList'>(
         [`& .${refs.sidebar}`]: {
             paddingBottom: 72,
             overflow: 'auto',
-            height: '100%',
             boxSizing: 'border-box',
         },
         [`& .${refs.tokenList}`]: {
@@ -146,7 +145,7 @@ export function SelectFungibleTokenDialog({
     const noChanges = useMemo(() => {
         const selectedSet = new Set(selectedTokens.map((x) => [x.chainId, x.address].join(':').toLowerCase()))
         const pendingSet = new Set(pendingSelectedTokens.map((x) => [x.chainId, x.address].join(':').toLowerCase()))
-        return pendingSet.difference(selectedSet).size === 0
+        return pendingSet.size === selectedSet.size && pendingSet.difference(selectedSet).size === 0
     }, [selectedTokens, pendingSelectedTokens])
     return (
         <InjectedDialog

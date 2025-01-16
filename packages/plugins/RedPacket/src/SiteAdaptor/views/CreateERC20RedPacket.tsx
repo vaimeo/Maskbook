@@ -407,22 +407,24 @@ export function CreateERC20RedPacket() {
                         maxAmountShares={isRandom || !shares ? 1 : shares}
                     />
                 </div>
-                <Box className={classes.field}>
-                    <Typography className={classes.label}>
-                        <Trans>Claim Conditions</Trans>
-                    </Typography>
-                    <ConditionSettings className={classes.fieldValue} />
-                </Box>
                 {pluginID === NetworkPluginID.PLUGIN_EVM ?
-                    <SelectGasSettingsToolbar
-                        classes={{ label: classes.label, root: classes.gasSettings }}
-                        nativeToken={nativeToken}
-                        nativeTokenPrice={nativeTokenPrice}
-                        supportMultiCurrency={!!wallet?.owner && chainId === smartPayChainId}
-                        gasConfig={gasOption}
-                        gasLimit={Number.parseInt(params?.gas ?? '0', 10)}
-                        onChange={setGasOption}
-                    />
+                    <>
+                        <Box className={classes.field}>
+                            <Typography className={classes.label}>
+                                <Trans>Claim Conditions</Trans>
+                            </Typography>
+                            <ConditionSettings className={classes.fieldValue} />
+                        </Box>
+                        <SelectGasSettingsToolbar
+                            classes={{ label: classes.label, root: classes.gasSettings }}
+                            nativeToken={nativeToken}
+                            nativeTokenPrice={nativeTokenPrice}
+                            supportMultiCurrency={!!wallet?.owner && chainId === smartPayChainId}
+                            gasConfig={gasOption}
+                            gasLimit={Number.parseInt(params?.gas ?? '0', 10)}
+                            onChange={setGasOption}
+                        />
+                    </>
                 :   null}
                 <Box className={classes.field}>
                     <Typography className={classes.label}>
@@ -471,7 +473,7 @@ export function CreateERC20RedPacket() {
                     </Box>
                 </Box>
                 <div>
-                    {selectedTheme && shares ?
+                    {selectedTheme ?
                         <div className={classes.preview}>
                             <PreviewRedPacket
                                 className={classes.envelope}
