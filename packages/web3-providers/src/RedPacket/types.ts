@@ -1,5 +1,8 @@
+import type { Web3Helper } from '@masknet/web3-helpers'
 import type { FungibleToken } from '@masknet/web3-shared-base'
-import type { SchemaType, ChainId } from '@masknet/web3-shared-evm'
+import type { ChainId, SchemaType } from '@masknet/web3-shared-evm'
+import type { ChainId as SolanaChainId, SchemaType as SolanaSchemaType } from '@masknet/web3-shared-solana'
+import type { Cluster } from '@solana/web3.js'
 import type { BigNumber } from 'bignumber.js'
 
 // #region erc20 red packet
@@ -48,12 +51,17 @@ export interface RedPacketJSONPayload extends RedPacketBasic {
     }
     chainId?: ChainId
     network?: string
-    token?: FungibleToken<ChainId, SchemaType>
+    token?: Web3Helper.FungibleTokenAll
+    themeId?: string
     /**
      * For contract_version === 1, payload has no token but token_type
      */
     token_type?: 0 | number
+    /** retrieve after decrypting the redpacket */
     total_remaining?: string
+
+    // For solana
+    tokenProgram?: string
 }
 
 export interface RedPacketJSONPayloadFromChain extends Omit<RedPacketJSONPayload, 'token'> {
@@ -131,4 +139,21 @@ export type CreateNFTRedpacketParam = {
     _name: string
     _token_addr: string
     _erc721_token_ids: BigNumber[]
+}
+
+export interface SolanaRedPacketJSONPayload extends RedPacketBasic {
+    /** redpacket account id */
+    accountId: string
+    contract_version: number
+    sender: {
+        address: string
+        name: string
+        message: string
+    }
+    chainId?: SolanaChainId
+    /** cluster */
+    network?: Cluster
+    token?: FungibleToken<SolanaChainId, SolanaSchemaType>
+    tokenProgram?: string
+    themeId?: string
 }

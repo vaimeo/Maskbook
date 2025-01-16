@@ -22,7 +22,7 @@ export const CHAIN_DESCRIPTORS: ReadonlyArray<ChainDescriptor<ChainId, SchemaTyp
         color: '#17ac7c',
         fullName: 'Solana',
         shortName: 'Solana',
-        network: 'mainnet',
+        network: 'mainnet-beta',
         nativeCurrency: createFungibleToken(
             ChainId.Mainnet,
             SchemaType.Fungible,
@@ -157,7 +157,7 @@ export const PROVIDER_DESCRIPTORS: ReadonlyArray<ProviderDescriptor<ChainId, Pro
         downloadLink: 'https://solflare.com/download',
         enableRequirements: {
             supportedChainIds: ChainIdList,
-            supportedEnhanceableSites: [],
+            supportedEnhanceableSites: EnhanceableSiteList,
             supportedExtensionSites: [],
         },
     },
@@ -175,5 +175,23 @@ export const PROVIDER_DESCRIPTORS: ReadonlyArray<ProviderDescriptor<ChainId, Pro
             supportedEnhanceableSites: [],
             supportedExtensionSites: [],
         },
+    },
+    {
+        ID: `${PLUGIN_ID}_okx`,
+        providerAdaptorPluginID: PLUGIN_ID,
+        type: ProviderType.OKX,
+        name: 'OKX Solana Wallet',
+        icon: new URL('../assets/okx.svg', import.meta.url).href,
+        enableRequirements: {
+            supportedChainIds: ChainIdList,
+            supportedEnhanceableSites: EnhanceableSiteList,
+            supportedExtensionSites: [],
+        },
+        homeLink: 'https://www.okx.com/web3',
+        shortenLink: 'okx.com',
+        downloadLink: 'https://www.okx.com/web3',
+        iconFilterColor: 'rgba(0, 0, 0, 0.20)',
+        backgroundGradient:
+            'linear-gradient(90deg, rgba(98, 152, 234, 0.2) 1.03%, rgba(98, 152, 234, 0.2) 1.04%, rgba(98, 126, 234, 0.2) 100%), linear-gradient(0deg, #FFFFFF, #FFFFFF)',
     },
 ]

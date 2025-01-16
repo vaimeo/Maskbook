@@ -7,6 +7,8 @@ import { RouterDialog } from './components/RouterDialog.js'
 import { RedPacketRoutes } from './Routes.js'
 import { RedPacketProvider } from './contexts/RedPacketContext.js'
 import { RestorableScrollContext } from '@masknet/shared'
+import { EVMWeb3ContextProvider } from '@masknet/web3-hooks-base'
+import { RedPacketTabs } from '../types.js'
 
 interface RedPacketDialogProps {
     onClose: () => void
@@ -38,6 +40,7 @@ const useStyles = makeStyles()((theme) => ({
 }))
 
 const initialEntries = [RoutePaths.Exit, RoutePaths.CreateErc20RedPacket]
+
 export function RedPacketMainDialog({ onClose }: RedPacketDialogProps) {
     const { classes } = useStyles()
 
@@ -45,21 +48,27 @@ export function RedPacketMainDialog({ onClose }: RedPacketDialogProps) {
 
     return (
         <MemoryRouter initialEntries={initialEntries} initialIndex={initialIndex}>
-            <RedPacketProvider>
-                <RouterDialog
-                    open
-                    onClose={onClose}
-                    classes={{ paper: classes.paper }}
-                    maxWidth="xs"
-                    fullWidth
-                    independent>
-                    <DialogContent className={classes.content}>
-                        <RestorableScrollContext>
-                            <RedPacketRoutes />
-                        </RestorableScrollContext>
-                    </DialogContent>
-                </RouterDialog>
-            </RedPacketProvider>
+            <EVMWeb3ContextProvider>
+                <RedPacketProvider>
+                    <RouterDialog
+                        pageMap={{
+                            [RedPacketTabs.tokens]: RoutePaths.CreateErc20RedPacket,
+                            [RedPacketTabs.collectibles]: RoutePaths.CreateNftRedPacket,
+                        }}
+                        open
+                        onClose={onClose}
+                        classes={{ paper: classes.paper }}
+                        maxWidth="xs"
+                        fullWidth
+                        independent>
+                        <DialogContent className={classes.content}>
+                            <RestorableScrollContext>
+                                <RedPacketRoutes />
+                            </RestorableScrollContext>
+                        </DialogContent>
+                    </RouterDialog>
+                </RedPacketProvider>
+            </EVMWeb3ContextProvider>
         </MemoryRouter>
     )
 }

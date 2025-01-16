@@ -25,11 +25,7 @@ const useStyles = makeStyles<{ isDim: boolean }>()((theme, { isDim }) => {
     }
 })
 
-const pageMap: Record<RedPacketTabs, RoutePaths> = {
-    [RedPacketTabs.tokens]: RoutePaths.CreateErc20RedPacket,
-    [RedPacketTabs.collectibles]: RoutePaths.CreateNftRedPacket,
-}
-export function RouterDialog(props: InjectedDialogProps) {
+export function RouterDialog(props: InjectedDialogProps & { pageMap: Record<RedPacketTabs, RoutePaths> }) {
     const { pathname } = useLocation()
     const navigate = useNavigate()
     const theme = useTheme()
@@ -42,7 +38,7 @@ export function RouterDialog(props: InjectedDialogProps) {
     }, [pathname === RoutePaths.Exit, props.onClose])
 
     const { classes } = useStyles({ isDim: mode === 'dim' })
-    const [currentTab, onChange] = usePageTab<RedPacketTabs>(pageMap)
+    const [currentTab, onChange] = usePageTab<RedPacketTabs>(props.pageMap)
 
     const createTabs = (
         <TabContext value={currentTab}>
@@ -62,12 +58,14 @@ export function RouterDialog(props: InjectedDialogProps) {
         </TabContext>
     )
     const isCreate = matchPath(`${RoutePaths.Create}/*`, pathname)
+    const isEvmCreate =
+        matchPath(RoutePaths.CreateErc20RedPacket, pathname) || matchPath(RoutePaths.CreateNftRedPacket, pathname)
     const titleTabs =
         isCreate ? createTabs
         : matchPath(RoutePaths.History, pathname) ? historyTabs
         : null
     const networkTabs =
-        isCreate && currentTab === RedPacketTabs.collectibles ?
+        isEvmCreate && currentTab === RedPacketTabs.collectibles ?
             <div className={classes.tabWrapper}>
                 <NetworkTab
                     chains={nftDefaultChains}

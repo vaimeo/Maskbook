@@ -16,6 +16,7 @@
     }
   },
   "dependencies": {
+    "@coral-xyz/anchor": "^0.30.1",
     "@masknet/icons": "workspace:^",
     "@masknet/plugin-infra": "workspace:^",
     "@masknet/shared": "workspace:^",
@@ -30,12 +31,17 @@
     "@masknet/web3-providers": "workspace:^",
     "@masknet/web3-shared-base": "workspace:^",
     "@masknet/web3-shared-evm": "workspace:^",
+    "@masknet/web3-shared-solana": "workspace:^",
     "@masknet/web3-telemetry": "workspace:^",
+    "@solana/spl-token": "^0.4.9",
+    "@solana/web3.js": "^1.75.0",
     "@tanstack/react-query": "^5.49.2",
     "bignumber.js": "9.1.2",
     "date-fns": "^3.6.0",
+    "immer": "^10.1.1",
     "react-router-dom": "^6.24.0",
     "react-use": "^17.5.0",
+    "tweetnacl": "^1.0.3",
     "urlcat": "^3.1.0",
     "web3-core": "1.10.4",
     "web3-utils": "1.10.2"

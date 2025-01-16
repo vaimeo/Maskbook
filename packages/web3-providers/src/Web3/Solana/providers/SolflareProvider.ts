@@ -1,24 +1,55 @@
-import { injectedSolflareProvider } from '@masknet/injected-script'
-import { PhantomMethodType, ProviderType, type Transaction } from '@masknet/web3-shared-solana'
+import { injectedSolflareProvider, type InjectedWalletBridge } from '@masknet/injected-script'
+import {
+    ProviderType,
+    recoverTransactionFromUnit8Array,
+    serializeTransaction,
+    SolflareMethodType,
+    type Transaction,
+    type Web3Provider,
+} from '@masknet/web3-shared-solana'
+
 import { SolanaInjectedWalletProvider } from './BaseInjected.js'
+import { decode, encode } from 'bs58'
 
 export class SolanaSolflareProvider extends SolanaInjectedWalletProvider {
     protected override providerType = ProviderType.Solflare
-    protected override bridge = injectedSolflareProvider
-    override async signMessage(message: string): Promise<string> {
-        const { signature } = (await this.bridge.request({
-            method: PhantomMethodType.SIGN_MESSAGE,
-            params: [new TextEncoder().encode(message)],
-        })) as any
-        return signature
+    protected override bridge: InjectedWalletBridge = injectedSolflareProvider
+    private async validateSession() {
+        if (this.bridge.isConnected) return
+        await (this.bridge as unknown as Web3Provider).connect()
+    }
+    override async signTransaction(transaction: Transaction): Promise<Transaction> {
+        await this.validateSession()
+        const result = await this.bridge.request<{
+            transaction: string
+        }>({
+            method: SolflareMethodType.SIGN_TRANSACTION,
+            params: {
+                message: encode(serializeTransaction(transaction)),
+            },
+        })
+
+        const signedTransaction = decode(result.transaction)
+
+        return recoverTransactionFromUnit8Array(signedTransaction, transaction)
     }
 
-    override async signTransaction(transaction: Transaction): Promise<Transaction> {
-        const { signature, publicKey } = (await this.bridge.request({
-            method: PhantomMethodType.SIGN_TRANSACTION,
-            params: [transaction],
-        })) as any
-        transaction.addSignature(publicKey, signature)
-        return transaction
+    override async signTransactions(transactions: Transaction[]): Promise<Transaction[]> {
+        await this.validateSession()
+        const results = await this.bridge.request<{ transactions: string[] }>({
+            method: SolflareMethodType.SIGN_TRANSACTIONS,
+            params: {
+                message: transactions.map((transaction) => encode(serializeTransaction(transaction))),
+            },
+        })
+
+        return results.transactions.map((signedTransaction, index) => {
+            const transaction = transactions[index]
+            return recoverTransactionFromUnit8Array(decode(signedTransaction), transaction)
+        })
+    }
+
+    override signMessage(message: string): Promise<string> {
+        throw new Error('Method not implemented.')
     }
 }

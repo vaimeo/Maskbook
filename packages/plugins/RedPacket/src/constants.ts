@@ -11,6 +11,9 @@ export const RED_PACKET_DEFAULT_SHARES = 5
 export const RED_PACKET_MIN_SHARES = 1
 export const RED_PACKET_MAX_SHARES = 255
 
+export const SOL_REDPACKET_MAX_SHARES = 200
+export const SOL_REDPACKET_CREATE_DEFAULT_GAS = '10000000'
+export const DEFAULT_DURATION = 1000 * 60 * 60 * 24 // 24 hours
 export const enum RoutePaths {
     Create = '/create',
     CreateErc20RedPacket = '/create/erc20',
@@ -27,6 +30,9 @@ export const enum RoutePaths {
     SentHistory = '/history/sent',
     ClaimedHistory = '/history/claimed',
     NftHistory = '/nft-history',
+
+    CreateSolanaRedPacket = '/create/solana',
+    ConfirmSolanaRedPacket = '/confirm/solana',
 
     Exit = '/exit',
     Terms = '/terms',

@@ -6,11 +6,12 @@ import {
     multipliedBy,
     TokenType,
 } from '@masknet/web3-shared-base'
-import { ChainId, createClientEndpoint, SchemaType } from '@masknet/web3-shared-solana'
+import type * as SolanaWeb3 from /* webpackDefer: true */ '@solana/web3.js'
+import { type ChainId, createClientEndpoint, SchemaType } from '@masknet/web3-shared-solana'
 import type { RpcOptions } from '../types/index.js'
 
 export async function requestRPC<T = unknown>(chainId: ChainId, options: RpcOptions): Promise<T> {
-    const response = await globalThis.fetch(createClientEndpoint(ChainId.Mainnet), {
+    const response = await globalThis.fetch(createClientEndpoint(chainId), {
         method: 'POST',
         headers: {
             'Content-Type': 'application/json',
@@ -63,4 +64,22 @@ export function createFungibleAsset(
             [CurrencyType.USD]: multipliedBy(price?.usd ?? 0, leftShift(balance, token.decimals)).toFixed(),
         },
     }
+}
+
+export interface Solana {
+    isConnected: boolean
+    publicKey: SolanaWeb3.PublicKey
+    connect(): Promise<void>
+    signTransaction: <T extends SolanaWeb3.VersionedTransaction>(transaction: T) => Promise<T>
+    signAllTransactions: <T extends SolanaWeb3.VersionedTransaction>(transactions: T[]) => Promise<T[]>
+    signAndSendTransaction: <T extends SolanaWeb3.VersionedTransaction>(transaction: T) => Promise<string>
+}
+
+export async function getSolana() {
+    const solana = Reflect.get(window, 'solana') as Solana | undefined
+    console.log(solana)
+    if (!solana) throw new Error('No solana client found')
+    if (!solana.isConnected) await solana.connect()
+
+    return solana
 }

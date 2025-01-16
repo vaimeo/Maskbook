@@ -1,10 +1,9 @@
-/* eslint-disable no-irregular-whitespace */
 import { msg } from '@lingui/core/macro'
 import { useLingui } from '@lingui/react'
 import { useLastRecognizedIdentity, usePostInfoDetails, usePostLink } from '@masknet/plugin-infra/content-script'
 import { requestLogin, share } from '@masknet/plugin-infra/content-script/context'
 import { LoadingStatus, TransactionConfirmModal } from '@masknet/shared'
-import { EMPTY_LIST, EnhanceableSite, NetworkPluginID, Sniffings } from '@masknet/shared-base'
+import { EMPTY_LIST, NetworkPluginID, Sniffings } from '@masknet/shared-base'
 import { queryClient } from '@masknet/shared-base-ui'
 import { makeStyles } from '@masknet/theme'
 import type { HappyRedPacketV4 } from '@masknet/web3-contracts/types/HappyRedPacketV4.js'
@@ -77,7 +76,8 @@ export const RedPacket = memo(function RedPacket({ payload }: RedPacketProps) {
     const { _ } = useLingui()
     const token = payload.token
     const { pluginID } = useNetworkContext()
-    const payloadChainId = token?.chainId ?? EVMChainResolver.chainId(payload.network ?? '') ?? ChainId.Mainnet
+    const payloadChainId: ChainId =
+        (token?.chainId as ChainId) ?? EVMChainResolver.chainId(payload.network ?? '') ?? ChainId.Mainnet
     const { account } = useChainContext<NetworkPluginID.PLUGIN_EVM>({
         chainId: payloadChainId,
         account: pluginID === NetworkPluginID.PLUGIN_EVM ? undefined : '',
@@ -101,10 +101,8 @@ export const RedPacket = memo(function RedPacket({ payload }: RedPacketProps) {
     const postLink = usePostLink()
 
     const [{ loading: isClaiming, value: claimTxHash }, claimCallback] = useClaimCallback(account, payload)
-    const site = usePostInfoDetails.site()
     const source = usePostInfoDetails.source()
     const platform = source?.toLowerCase()
-    const isOnFirefly = site === EnhanceableSite.Firefly
     const postUrl = usePostInfoDetails.url()
     const handle = usePostInfoDetails.handle()
     const link = postLink.toString() || postUrl?.toString()
@@ -114,30 +112,7 @@ export const RedPacket = memo(function RedPacket({ payload }: RedPacketProps) {
 
     const getShareText = useCallback(
         (hasClaimed: boolean) => {
-            const sender = (handle ?? '').replace(/^@/, '')
             const promote_short = _(msg`🧧🧧🧧 Try sending Lucky Drop to your friends with Mask.io.`)
-            const farcaster_lens_claimed =
-                _(msg`🤑 Just claimed a #LuckyDrop  🧧💰✨ on https://firefly.mask.social from @${sender} !`) +
-                '\n\n' +
-                _(msg`Claim on Lens: ${link}`)
-            const notClaimed =
-                _(msg`🤑 Check this Lucky Drop  🧧💰✨ sent by @${sender}.`) +
-                '\n\n' +
-                _(
-                    msg`Grow your followers and engagement with Lucky Drop on Firefly mobile app or https://firefly.mask.social !`,
-                ) +
-                '\n'
-            if (isOnFirefly) {
-                if (platform === 'farcaster') {
-                    if (hasClaimed) {
-                        return farcaster_lens_claimed
-                    } else return notClaimed + '\n' + _(msg`Claim on Farcaster: ${link}`)
-                } else if (platform === 'lens') {
-                    if (hasClaimed) {
-                        return farcaster_lens_claimed
-                    } else return notClaimed + '\n' + _(msg`Claim on Lens: ${link}`)
-                } else return notClaimed + '\n' + _(msg`Claim on: ${link}`)
-            }
             const isOnTwitter = Sniffings.is_twitter_page
             const isOnFacebook = Sniffings.is_facebook_page
             const shareTextOption = {
@@ -165,7 +140,7 @@ export const RedPacket = memo(function RedPacket({ payload }: RedPacketProps) {
                         `\n${promote_short}\n#mask_io #LuckyDrop\n${shareTextOption.payload}`
                 :   `${head}\n${promote_short}\n${shareTextOption.payload}`
         },
-        [payload, link, claimTxHash, network?.name, platform, isOnFirefly, handle, _],
+        [payload, link, claimTxHash, network?.name, platform, handle, _],
     )
     const claimedShareText = useMemo(() => getShareText(true), [getShareText])
 

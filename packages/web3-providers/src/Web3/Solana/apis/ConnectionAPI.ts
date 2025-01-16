@@ -14,6 +14,7 @@ import {
     type ProviderType,
     type Operation,
     type Transaction,
+    serializeTransaction,
 } from '@masknet/web3-shared-solana'
 import {
     TransactionStatusType,
@@ -76,7 +77,13 @@ export class SolanaConnectionAPI
     }
 
     createAccount(initial?: SolanaConnectionOptions): Account<ChainId> {
-        throw new Error('Method not implemented.')
+        const { publicKey, secretKey } = SolanaWeb3.Keypair.generate()
+
+        return {
+            account: publicKey.toBase58(),
+            privateKey: Buffer.from(secretKey).toString('hex'),
+            chainId: ChainId.Mainnet,
+        }
     }
 
     async switchChain(chainId: ChainId, initial?: SolanaConnectionOptions) {
@@ -270,7 +277,7 @@ export class SolanaConnectionAPI
     ): Promise<FungibleToken<ChainId, SchemaType>> {
         const options = this.ConnectionOptions.fill(initial)
         if (!address || isNativeTokenAddress(address)) return this.getNativeToken(options)
-        const tokens = await SolanaFungible.getFungibleTokenList(options.chainId, [])
+        const tokens = await SolanaFungible.getFungibleTokenList(options.chainId)
         const token = tokens.find((x) => isSameAddress(x.address, address))
         return (
             token ??
@@ -365,17 +372,13 @@ export class SolanaConnectionAPI
 
     async sendTransaction(transaction: Transaction, initial?: SolanaConnectionOptions) {
         const signedTransaction = await this.signTransaction(transaction)
-        return SolanaWeb3.sendAndConfirmRawTransaction(
-            this.Web3.getConnection(initial),
-            signedTransaction.message.serialize() as Buffer,
-        )
+        const raw = serializeTransaction(signedTransaction)
+        return SolanaWeb3.sendAndConfirmRawTransaction(this.Web3.getConnection(initial), raw as Buffer)
     }
 
     sendSignedTransaction(signature: TransactionSignature, initial?: SolanaConnectionOptions): Promise<string> {
-        return SolanaWeb3.sendAndConfirmRawTransaction(
-            this.Web3.getConnection(initial),
-            signature.message.serialize() as Buffer,
-        )
+        const raw = serializeTransaction(signature)
+        return SolanaWeb3.sendAndConfirmRawTransaction(this.Web3.getConnection(initial), raw as Buffer)
     }
 
     replaceTransaction(hash: string, config: Transaction, options?: SolanaConnectionOptions): Promise<void> {
@@ -395,6 +398,6 @@ export class SolanaConnectionAPI
     }
 
     signTransactions(transactions: Transaction[], initial?: SolanaConnectionOptions) {
-        return Promise.all(transactions.map((x) => this.signTransaction(x, initial)))
+        return this.Web3.getProviderInstance(initial).signTransactions(transactions)
     }
 }
