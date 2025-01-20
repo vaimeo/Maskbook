@@ -224,7 +224,7 @@ export const RedPacket = memo(function RedPacket({ payload }: RedPacketProps) {
 
     const outdated = isEmpty || (!canRefund && listOfStatus.includes(RedPacketStatus.expired))
 
-    const { classes, theme } = useStyles()
+    const { classes } = useStyles()
 
     // RedPacket created from Mask has no cover settings
     const { data: cover, isLoading: isLoadingCover } = useRedPacketCover({
@@ -238,8 +238,6 @@ export const RedPacket = memo(function RedPacket({ payload }: RedPacketProps) {
 
     // the red packet can fetch without account
     if (!availability || !token || isLoadingCover) return <LoadingStatus minHeight={148} />
-
-    const claimedOrEmpty = listOfStatus.includes(RedPacketStatus.claimed) || isEmpty
 
     const card = (
         <Card className={classes.root} component="article" elevation={0}>
@@ -264,7 +262,7 @@ export const RedPacket = memo(function RedPacket({ payload }: RedPacketProps) {
             {cover ?
                 <Grow in={showRequirements} timeout={250}>
                     <Conditions
-                        showResults={!claimedOrEmpty}
+                        unsatisfied={!!account && claimStrategyStatus?.canClaim === false}
                         statusList={claimStrategyStatus?.claimStrategyStatus ?? EMPTY_LIST}
                         className={classes.conditions}
                         onClose={() => setShowRequirements(false)}
@@ -288,7 +286,7 @@ export const RedPacket = memo(function RedPacket({ payload }: RedPacketProps) {
             </>
         )
 
-    if (claimStrategyStatus?.canClaim === false) {
+    if (claimStrategyStatus?.canClaim === false && account) {
         return (
             <>
                 {card}
